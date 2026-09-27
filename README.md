@@ -12,9 +12,15 @@
 4. **部署上线** — 模型压缩、服务化、推理优化
 5. **监控与迭代** — 线上监控、数据漂移、持续再训练
 
-## 目录结构（建设中）
+## 分享材料
+
+- [`docs/superpowers/specs/2026-09-27-ai-model-lifecycle-talk-design.md`](docs/superpowers/specs/2026-09-27-ai-model-lifecycle-talk-design.md) — 分享设计文档（结构、时间分配、讲稿要点、事实出处）
+- [`docs/talk/slides-content.md`](docs/talk/slides-content.md) — 页面级 PPT 内容（48 页：标题/要点/讲稿备注/配图建议）
+- [`docs/research/deep-research-digest.md`](docs/research/deep-research-digest.md) — 调研事实库（25 来源 / 125 论断 / 13 条经对抗验证）
+
+## 目录结构
 
 ```
 docs/    # 分享材料与文档
-demo/    # 演示代码
+demo/    # 演示代码（建设中）
 ```
