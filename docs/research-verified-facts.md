@@ -1,7 +1,7 @@
 # 调研事实基础（已验证）
 
 > 本文件是《从数据到生产：AI 模型的完整生命周期》技术分享的事实底稿。
-> 标注说明：✅ = 3 票对抗验证逐字通过（deep-research 工作流，2026-09-27）；✅* = 本人对一手来源 curl 逐字核对；◆ = 工作流抓取代理提取的一手引文（单源，使用时注明出处）。
+> 标注说明：✅ = 3 票对抗验证逐字通过（deep-research 工作流，2026-09-27）；✅* = 本人对一手来源 curl 逐字核对；◆ = 工作流抓取代理提取的一手引文（单源，使用时注明出处）；✦ = 2026-10-07 补充调研：网页全文抓取逐字核对；「检索多源一致」= 多个独立来源口径一致但未逐字核对。
 
 ## A. 传统 ML 生命周期与方法论
 
@@ -65,6 +65,20 @@
 | E5 | LinkedIn 在 vLLM 服务栈中启用 n-gram 投机解码（无辅助 draft 模型）加速其招聘助手（长结构化输出场景） | ◆ | linkedin.com/blog（工程博客） |
 | E6 | Anthropic 多智能体研究系统内部评测：多智能体（Opus 4 主控+Sonnet 4 子代理）比单智能体 Opus 4 高 90.2%（breadth-first 查询收益最大）；token 消耗约 15 倍——"多智能体系统是广度优先搜索问题的吞吐量优化" | ◆ | anthropic.com/engineering/multi-agent-research-system |
 
+## F. 评测集的生命周期：生产/监控数据如何回流评测（2026-10-07 补充调研）
+
+> 起因：确认「从监控拿回来的数据是否也影响评测集」。结论：**是，且为业界标准实践**——反馈闭环有两个回流点：新样本 → 数据（训练燃料），坏案例 → 评测集（回归门禁）。
+
+| # | 事实 | 置信度 | 来源 |
+|---|------|--------|------|
+| F1 | Anthropic（evals 工程文）：已上线团队应从 bug 单与客服队列收集评测任务——"Converting user-reported failures into test cases ensures your suite reflects actual usage"；"In reality, 20-50 simple tasks drawn from real failures is a great start"；结论句 "development accelerates as failures become test cases, test cases prevent regressions, and metrics replace guesswork" | ✦ | anthropic.com/engineering/demystifying-evals-for-ai-agents（2026-01-09，全文抓取核对） |
+| F2 | 同文：回归评测（regression evals）应接近 100% 通过率、专防倒退；能力评测达到高通过率后"毕业"（graduate）转为回归套件持续运行；"An eval suite is a living artifact that needs ongoing attention and clear ownership"；自动化评测的已知弱点："Requires ongoing maintenance as product and model evolves to avoid drift" 与 "Can create false confidence if it doesn't match real usage patterns" | ✦ | 同上 |
+| F3 | 同文：评测集需双向用例（应触发/不应触发都要测），"One-sided evals create one-sided optimization"（Claude.ai 网页搜索评测案例）；"As more example problems come up, we continue to add to evals to improve our coverage"——评测集随遇到的问题持续增长 | ✦ | 同上 |
+| F4 | 工具侧共识工作流：监控捕获失败 trace → 标注失败模式 → 提升为数据集条目、复用为回归用例（Braintrust "promote spans into datasets"；Langfuse 建议被标记的生产 trace 自动接入成为新评测条目；LangChain/Arthur 同口径，并称生产失败是回归测试的最佳来源、胜过合成数据） | 检索多源一致 | braintrust.dev / langfuse.com / langchain.com / arthur.ai（2026-10 检索） |
+| F5 | 评测集的原料本就是生产数据：StackAI 金标集 = 50-200 条真实用户查询；Anthropic 多智能体系统从约 20 条真实使用模式查询起步（与 F1 的 20-50 互证） | ◆（底稿 E6 / StackAI） | stackai.com / anthropic multi-agent |
+| F6 | 静态评测会过期：漂移（A6 ✅）之下旧评测集不代表当前流量，需用近期生产数据刷新；Uber Michelangelo 的「抽样预测 ⋈ 回流结果 → 线上准确率」本质是生产环境充当在线评测集（A8 推论）；标签延迟期先用代理指标过渡（Evidently） | 推论（基于 ✅/◆ 底稿） | — |
+| F7 | 落地注意点：① 同一条监控样本不得同时进训练集与评测集（防泄漏，进训练前与评测集去重/held-out）；② 只按「失败/点踩」筛选会使评测集越来越偏难题，需配平正反例（见 F3）；③ 用户 query 入评测集需 PII 脱敏（同 C3 预训练管线的标准步骤） | 综合推论 | — |
+
 ## 表述红线（调研特别提醒）
 
 1. Google 8 步/3 级自述"主要适用于预测型 AI 系统"，不要说成 Google 对 LLM 生命周期的处方。
@@ -73,3 +87,4 @@
 4. DPO=RLHF 族 / PPO=RLVR 族的分类是单一综述框架，与 InstructGPT 时代"PPO 即 RLHF"的经典用法不同，须注明。
 5. FineWeb"优于其他开放数据集"是 2024-06 时点表述；Chinchilla 最优比被 2023 后"过训练"实践细化（非否定）。
 6. MLflow "production-grade" 等为厂商自称，只断言功能存在。
+7. F1-F3 的「20-50 个任务」出自 Anthropic 2026-01 evals 工程文（"drawn from real failures"），与多智能体研究系统文的「约 20 条查询」是两处独立出处、口径一致，引用时注明来源。F4 的工具侧工作流（Braintrust/Langfuse 等）为检索多源一致，未逐字核对，口头引用时说"多家评测工具厂商的共识做法"。
