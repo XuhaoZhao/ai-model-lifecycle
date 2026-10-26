@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>图解：别再给每个 Agent 塞一个 Sandbox — 下一代 Agent 架构</title>
+<style>
+  :root {
+    --ink: #1e293b;
+    --ink-2: #475569;
+    --ink-3: #64748b;
+    --line: #e2e8f0;
+    --paper: #f6f7f9;
+    --card: #ffffff;
+    --slate: #475569;   --slate-bg: #f1f5f9;
+    --blue:   #2563eb;  --blue-bg:   #eff6ff;
+    --indigo: #4f46e5;  --indigo-bg: #eef2ff;
+    --amber:  #b45309;  --amber-bg:  #fffbeb;
+    --teal:   #0f766e;  --teal-bg:   #f0fdfa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+    line-height: 1.6;
+  }
+  .mono { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* ---------- header ---------- */
+  .kicker { font-size: 12px; letter-spacing: .12em; color: var(--ink-3); text-transform: uppercase; }
+  .kicker b { color: var(--indigo); }
+  h1 { font-size: 27px; margin: 8px 0 6px; letter-spacing: .01em; }
+  .meta { font-size: 13px; color: var(--ink-3); }
+  .meta a { color: var(--blue); text-decoration: none; }
+  .meta a:hover { text-decoration: underline; }
+
+  /* ---------- thesis ---------- */
+  .thesis {
+    margin: 26px 0 0; padding: 26px 30px; border-radius: 14px;
+    background: linear-gradient(135deg, #eef2ff 0%, #f0fdfa 100%);
+    border: 1px solid #e0e7ff;
+  }
+  .thesis blockquote { margin: 0; font-size: 20px; font-weight: 600; line-height: 1.55; }
+  .thesis blockquote em { font-style: normal; color: var(--indigo); }
+  .thesis p { margin: 10px 0 0; font-size: 13.5px; color: var(--ink-2); }
+
+  /* ---------- before / after ---------- */
+  .contrast { display: grid; grid-template-columns: 1fr 56px 1fr; gap: 0; align-items: stretch; margin-top: 18px; }
+  .contrast .old, .contrast .new { border-radius: 12px; padding: 16px 18px; border: 1px solid var(--line); background: var(--card); }
+  .contrast .old { border-top: 3px solid #94a3b8; }
+  .contrast .new { border-top: 3px solid var(--indigo); }
+  .contrast .arrow { display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--ink-3); }
+  .contrast h3 { margin: 0 0 8px; font-size: 14px; }
+  .contrast .old h3 { color: #64748b; }
+  .contrast .new h3 { color: var(--indigo); }
+  .contrast ul { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--ink-2); }
+  .contrast li { margin: 3px 0; }
+  .tag-bad, .tag-good { display: inline-block; font-size: 10.5px; padding: 0 7px; border-radius: 999px; margin-left: 6px; vertical-align: 2px; }
+  .tag-bad { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+  .tag-good { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+
+  /* ---------- sections ---------- */
+  section { margin-top: 44px; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+  .sec-no { font-size: 12px; font-weight: 700; color: #fff; background: var(--indigo); border-radius: 999px; padding: 2px 10px; letter-spacing: .08em; }
+  .sec-head h2 { margin: 0; font-size: 20px; }
+  .sec-sub { font-size: 13px; color: var(--ink-2); margin: 0 0 14px; max-width: 900px; }
+
+  /* ---------- diagram 1 : absolute-position blueprint ---------- */
+  .scroller { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+  .diagram {
+    position: relative; width: 1140px; height: 830px; margin: 0 auto;
+    background-image: linear-gradient(#f4f6f9 1px, transparent 1px), linear-gradient(90deg, #f4f6f9 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  svg.wires { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+  .zone {
+    position: absolute; left: 10px; z-index: 1; width: 36px;
+    writing-mode: vertical-rl; text-orientation: mixed;
+    font-size: 10.5px; letter-spacing: .35em; color: #94a3b8; font-weight: 600;
+  }
+  .box {
+    position: absolute; z-index: 2; background: var(--card);
+    border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 13px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .05);
+  }
+  .box .t { font-size: 13px; font-weight: 700; margin: 0 0 4px; }
+  .box .d { font-size: 11.5px; color: var(--ink-2); margin: 0; }
+  .box .chips { margin-top: 7px; display: flex; flex-wrap: wrap; gap: 5px; }
+  .chip {
+    font-size: 10.5px; padding: 1px 8px; border-radius: 999px;
+    border: 1px solid; background: #fff; white-space: nowrap;
+  }
+  .b-client  { border-color: #cbd5e1; background: #f8fafc; }
+  .b-client .t { color: #334155; }
+  .b-api     { border-color: #94a3b8; }
+  .b-api .t { color: #334155; }
+  .b-state   { border-color: #bfdbfe; background: var(--blue-bg); }
+  .b-state .t { color: #1d4ed8; }
+  .b-state .chip { border-color: #bfdbfe; color: #1d4ed8; background: #fff; }
+  .b-runtime { border: 2px solid var(--indigo); background: var(--indigo-bg); }
+  .b-runtime .t { color: var(--indigo); font-size: 14.5px; }
+  .b-runtime .d { color: #4338ca; }
+  .b-runtime .chip { border-color: #c7d2fe; color: #4338ca; background: #fff; }
+  .b-cred    { border-color: #fcd34d; background: var(--amber-bg); }
+  .b-cred .t { color: var(--amber); }
+  .b-cred .chip { border-color: #fcd34d; color: var(--amber); background: #fff; }
+  .b-compute { border-color: #99f6e4; background: var(--teal-bg); }
+  .b-compute .t { color: var(--teal); }
+  .b-compute .chip { border-color: #99f6e4; color: var(--teal); background: #fff; }
+  .footnote { font-size: 10.5px; color: var(--ink-3); margin-top: 6px; }
+  .edge {
+    position: absolute; z-index: 3; font-size: 10.5px; color: #334155;
+    background: #fff; border: 1px solid #cbd5e1; border-radius: 6px;
+    padding: 1px 7px; white-space: nowrap;
+  }
+  .edge.hot { border-color: #fcd34d; background: var(--amber-bg); color: var(--amber); }
+
+  /* ---------- legend ---------- */
+  .legend { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 22px; margin-top: 16px; font-size: 12.5px; color: var(--ink-2); }
+  .legend .n { display: inline-flex; align-items: center; justify-content: center; width: 17px; height: 17px; border-radius: 50%; background: var(--indigo); color: #fff; font-size: 10.5px; font-weight: 700; margin-right: 7px; flex: none; }
+  .legend div { display: flex; align-items: flex-start; }
+  .legend b { color: var(--ink); }
+
+  /* ---------- diagram 2 : nested ---------- */
+  .d2 { border: 1px solid var(--line); border-radius: 14px; background: var(--card); padding: 18px; }
+  .ws { border: 1.5px dashed #94a3b8; border-radius: 12px; padding: 14px; background: #fafbfc; }
+  .ws > .t { font-size: 13.5px; font-weight: 700; color: #334155; margin-bottom: 3px; }
+  .ws > .d { font-size: 12px; color: var(--ink-2); margin-bottom: 12px; }
+  .sessions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sess { border: 1.5px solid #bfdbfe; background: var(--blue-bg); border-radius: 10px; padding: 12px; }
+  .sess > .t { font-size: 13px; font-weight: 700; color: #1d4ed8; }
+  .sess > .d { font-size: 11.5px; color: var(--ink-2); margin: 2px 0 9px; }
+  .threads { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .th { font-size: 11px; padding: 2px 9px; border-radius: 999px; border: 1px solid #c7d2fe; background: #fff; color: #4338ca; }
+  .th.root { background: var(--indigo); color: #fff; border-color: var(--indigo); }
+  .th.spawn { border-style: dashed; }
+  .fork { color: #94a3b8; font-size: 12px; }
+  .d2-note { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  .d2-note div { font-size: 12px; color: var(--ink-2); background: #fafbfc; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .d2-note b { color: var(--ink); display: block; margin-bottom: 3px; }
+
+  /* ---------- diagram 3 : timeline ---------- */
+  .flow { border: 1px solid var(--line); border-radius: 14px; background: var(--card); padding: 20px 22px; position: relative; }
+  .step { display: flex; gap: 14px; position: relative; padding-bottom: 16px; }
+  .step:last-of-type { padding-bottom: 0; }
+  .step::before { content: ""; position: absolute; left: 14px; top: 30px; bottom: 0; width: 2px; background: #e2e8f0; }
+  .step:last-of-type::before { display: none; }
+  .step .no {
+    flex: none; width: 30px; height: 30px; border-radius: 50%; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #fff; background: var(--indigo);
+  }
+  .step.warn .no { background: var(--amber); }
+  .step .bd { font-size: 13px; }
+  .step .bd b { display: block; font-size: 13.5px; }
+  .step .bd span { color: var(--ink-2); font-size: 12.5px; }
+  .flow-quote {
+    margin-top: 18px; padding: 14px 18px; border-radius: 10px;
+    background: var(--amber-bg); border: 1px solid #fcd34d;
+    font-size: 14px; font-weight: 600; color: #92400e;
+  }
+  .flow-note { margin-top: 10px; font-size: 12.5px; color: var(--ink-2); }
+
+  /* ---------- principles ---------- */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 15px 16px; border-top: 3px solid var(--indigo); }
+  .card:nth-child(2) { border-top-color: var(--amber); }
+  .card:nth-child(3) { border-top-color: var(--teal); }
+  .card:nth-child(4) { border-top-color: var(--blue); }
+  .card:nth-child(5) { border-top-color: #7c3aed; }
+  .card:nth-child(6) { border-top-color: #0f172a; }
+  .card h3 { margin: 0 0 6px; font-size: 14px; }
+  .card p { margin: 0; font-size: 12.5px; color: var(--ink-2); }
+
+  footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-3); }
+
+  @media (max-width: 900px) {
+    .contrast { grid-template-columns: 1fr; }
+    .contrast .arrow { transform: rotate(90deg); padding: 6px 0; }
+    .cards { grid-template-columns: 1fr; }
+    .legend { grid-template-columns: 1fr; }
+    .d2-note { grid-template-columns: 1fr; }
+    .sessions { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">阅读图解 · <b>Agent Architecture</b></div>
+    <h1>别再给每个 Agent 塞一个 Sandbox：下一代 Agent 架构</h1>
+    <div class="meta">
+      原文：微信公众号「人工智能前线」· 2026-09-30 ·
+      <a href="https://mp.weixin.qq.com/s/0GOYMWUJt20Auol5dRshXg">mp.weixin.qq.com</a> ·
+      全文存档：<span class="mono">original-article.md</span> ·
+      文中产品 Tetral 已 MIT 开源
+    </div>
+  </header>
+
+  <div class="thesis">
+    <blockquote>“一台计算机，应该是 Agent <em>调用的一种资源</em>，而不是 Agent <em>所在的地方</em>。”</blockquote>
+    <p>真正需要扩展的不是 Sandbox，而是一个长期运行、可恢复、可跨设备、可独立调度资源的 Agent 系统 —— 作者称之为 <b>The Next Scaling Problem</b>。</p>
+  </div>
+
+  <div class="contrast">
+    <div class="old">
+      <h3>旧架构：Agent 住在 Sandbox 里<span class="tag-bad">扩容 = 扩完整捆绑单元</span></h3>
+      <ul>
+        <li>整个 Agent Loop + 会话历史 + Trace + 临时文件都留在 Sandbox 内</li>
+        <li>排查问题要进入持有用户私有数据的环境</li>
+        <li>API Key 不敢放进 Sandbox，只好外挂 Gateway 打补丁</li>
+        <li>Runtime 一死，Agent 跟着死；容量被“能提供多少台计算机”限死</li>
+      </ul>
+    </div>
+    <div class="arrow">➜</div>
+    <div class="new">
+      <h3>新架构：Agent 在 Sandbox 外<span class="tag-good">各部分独立扩缩</span></h3>
+      <ul>
+        <li>Runtime 只负责“计算下一步”，是可替换的计算宿主</li>
+        <li>状态在 PostgreSQL、凭证在 Gateway、投递靠 Queue</li>
+        <li>Computer 按需分配（Lazy Allocation），只是资源之一</li>
+        <li>执行可以失败、Runtime 可替换、Computer 可更换 —— 身份与历史不丢</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ================= diagram 1 ================= -->
+  <section>
+    <div class="sec-head"><span class="sec-no">图一</span><h2>系统总体架构：Runtime 只保留“计算下一步”</h2></div>
+    <p class="sec-sub">所有具有不同生命周期、不同所有权、不同扩展模式的职责都被移出 Runtime，各自成为可独立扩容的服务；Runtime 变成无状态、可替换的计算宿主。</p>
+    <div class="scroller">
+      <div class="diagram">
+        <svg class="wires" viewBox="0 0 1140 830" fill="none">
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto">
+              <path d="M0,0 L7.5,4 L0,8 Z" fill="#64748b"/>
+            </marker>
+          </defs>
+          <!-- clients -> Public API -->
+          <path d="M 360 104 V 149" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+          <!-- Event Stream -> clients (dashed, upward) -->
+          <path d="M 780 152 V 107" stroke="#64748b" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+          <!-- Public API -> PostgreSQL (same tx) -->
+          <path d="M 300 240 V 266 H 230 V 289" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+          <!-- Public API -> Queue (same tx) -->
+          <path d="M 440 240 V 266 H 910 V 289" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+          <!-- Queue -> Runtime -->
+          <path d="M 910 410 V 467" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+          <!-- Runtime -> Bridge : declare intent (down) -->
+          <path d="M 555 410 V 467" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+          <!-- Bridge -> Runtime : commit result (up) -->
+          <path d="M 585 470 V 413" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+          <!-- PostgreSQL <-> Bridge -->
+          <path d="M 390 341 H 407" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+          <path d="M 410 361 H 393" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+          <!-- PostgreSQL -> Runtime : recovery replay (dashed) -->
+          <path d="M 230 410 V 467" stroke="#64748b" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+          <!-- Runtime -> Gateway -->
+          <path d="M 230 620 V 679" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+          <!-- Runtime -> Sandbox Service -->
+          <path d="M 570 620 V 679" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+          <!-- Runtime -> MCP Connector -->
+          <path d="M 910 620 V 679" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+        </svg>
+
+        <span class="zone" style="top: 34px;">客户端</span>
+        <span class="zone" style="top: 166px;">产品接口</span>
+        <span class="zone" style="top: 322px;">状态与投递</span>
+        <span class="zone" style="top: 522px;">计算</span>
+        <span class="zone" style="top: 726px;">资源</span>
+
+        <div class="box b-client" style="left: 70px; top: 20px;  width: 1060px; height: 84px;">
+          <p class="t">客户端 —— Agent 是“可寻址的参与者”，以同一身份跨界面持续存在</p>
+          <div class="chips">
+            <span class="chip">Terminal</span><span class="chip">浏览器</span><span class="chip">手机</span>
+            <span class="chip">GitHub</span><span class="chip">Slack · 团队产品</span>
+            <span class="chip" style="border-style: dashed;">关闭客户端 ≠ 结束 Session；连续的是有序的 Session History</span>
+          </div>
+        </div>
+
+        <div class="box b-api" style="left: 170px; top: 152px; width: 380px; height: 88px;">
+          <p class="t mono">Public API</p>
+          <p class="d">接收用户请求，不执行 Agent。接受请求 = 同一事务写入 Input + Inbox + Queue Job（Outbox）：可直接返回“已接受”，送达异步完成。</p>
+        </div>
+        <div class="box b-api" style="left: 590px; top: 152px; width: 380px; height: 88px;">
+          <p class="t mono">Event Stream</p>
+          <p class="d">向外部客户端暴露状态更新。只是产品接口，不保存 Agent 会话状态，不执行 Agent。</p>
+        </div>
+
+        <div class="box b-state" style="left: 70px; top: 292px; width: 320px; height: 118px;">
+          <p class="t"><span class="mono">PostgreSQL</span> · 最终事实来源</p>
+          <p class="d">用户输入 · 执行进度 · 工具结果 · 审核结果。Session Log = 完整逻辑执行记录（≠ 聊天记录）；另有 Context Projection 供模型加载。</p>
+        </div>
+        <div class="box b-state" style="left: 410px; top: 292px; width: 320px; height: 118px;">
+          <p class="t"><span class="mono">Bridge</span> · 状态边界与事务</p>
+          <p class="d">Runtime 只声明“下一步想做什么”；Bridge 验证它是否仍拥有该 Session、检查执行顺序，再决定能否提交。</p>
+        </div>
+        <div class="box b-state" style="left: 750px; top: 292px; width: 320px; height: 118px;">
+          <p class="t"><span class="mono">Queue</span> · 可靠投递</p>
+          <p class="d">顺序 · 租约 · 重试 · 取消 · 死信。数据库解决“存没存下”，Queue 解决“送没送到正确的执行者”。</p>
+        </div>
+
+        <div class="box b-runtime" style="left: 170px; top: 470px; width: 900px; height: 150px;">
+          <p class="t">Agent Runtime —— 只负责“计算下一步”</p>
+          <div class="chips">
+            <span class="chip">Reducer 纯函数（不碰库 · 不联网 · 不执行工具）</span>
+            <span class="chip">Session / Thread 计算</span>
+            <span class="chip">Tool Gate 授权边界</span>
+            <span class="chip">Context Projection</span>
+            <span class="chip">子 Agent 协调</span>
+          </div>
+          <p class="footnote">可替换的计算宿主（K8s Pod）：不持有状态、不持有明文凭证 —— Pod 消失，就在另一台 Pod 重载已提交事实，继续计算（Durable Agent Work）。</p>
+        </div>
+
+        <div class="box b-cred" style="left: 70px; top: 682px; width: 320px; height: 120px;">
+          <p class="t"><span class="mono">Gateway</span> · 模型接入（凭证终点）</p>
+          <p class="d">统一 Provider 协议；API Key / OAuth 只到这里，刷新也在这里；先验证 Runtime 的 K8s 身份与 Session 所有权，再注入凭证。</p>
+          <div class="chips"><span class="chip">OpenAI</span><span class="chip">Anthropic</span><span class="chip">…</span></div>
+        </div>
+        <div class="box b-compute" style="left: 410px; top: 682px; width: 320px; height: 120px;">
+          <p class="t"><span class="mono">Sandbox Service</span> · Computer 生命周期</p>
+          <p class="d">复用 / 启动 / 创建 / 替换 / 注入状态；多个等待者可共享同一次冷启动激活。执行 Shell 与文件系统操作。</p>
+          <div class="chips"><span class="chip">Daytona VM（当前实现）</span><span class="chip">轻量容器</span><span class="chip">虚拟文件系统</span><span class="chip">Linux / macOS / Windows</span></div>
+        </div>
+        <div class="box b-api" style="left: 750px; top: 682px; width: 320px; height: 120px;">
+          <p class="t"><span class="mono">MCP Connector</span> · 工具接入</p>
+          <p class="d">Runtime 只见工具名 / 描述 / 输入 Schema，看不到 Server 凭证；Connector 验证权限、注入凭证、执行请求，结果先经 Bridge 再进上下文。</p>
+        </div>
+
+        <span class="edge" style="left: 792px; top: 116px;">事件推送</span>
+        <span class="edge" style="left: 470px; top: 254px;">① Outbox：同一事务写入 Input · Inbox · Queue Job</span>
+        <span class="edge" style="left: 922px; top: 428px;">投递任务</span>
+        <span class="edge" style="left: 240px; top: 428px;">恢复：重放已提交事实</span>
+        <span class="edge" style="left: 600px; top: 428px;">② 先记录，再执行（声明带稳定 ID ＝ 幂等键）</span>
+        <span class="edge hot" style="left: 245px; top: 640px;">③ 模型请求（不含任何凭证）</span>
+        <span class="edge" style="left: 585px; top: 640px;">④ 声明需要 Computer</span>
+        <span class="edge" style="left: 922px; top: 640px;">工具调用（声明）</span>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div><span class="n">①</span><span><b>保存 ≠ 已送达：</b>消息接受与 Queue Job 同事务落库（Outbox），通知丢失也能靠轮询发现。</span></div>
+      <div><span class="n">②</span><span><b>先记录，再执行（类 WAL）：</b>任何推进状态或制造副作用的动作先经 Bridge 提交，再真正执行。</span></div>
+      <div><span class="n">③</span><span><b>凭证边界：</b>明文凭证只存在于 Gateway / Connector，不进入 Runtime、Bridge、Session Log、Sandbox。</span></div>
+      <div><span class="n">④</span><span><b>Lazy Allocation：</b>Computer 在首次真正需要时才分配，可复用则复用，不再是每个会话的默认配置。</span></div>
+    </div>
+  </section>
+
+  <!-- ================= diagram 2 ================= -->
+  <section>
+    <div class="sec-head"><span class="sec-no">图二</span><h2>扩展的两个维度：Workspace / Session / Thread</h2></div>
+    <p class="sec-sub">Thread 用来扩同一个任务里的并行路径；Session 用来扩不同任务；Workspace 让不同 Session 共享长期资源。同一条 Thread 严格有序，不同执行路径尽可能并行。</p>
+    <div class="d2">
+      <div class="ws">
+        <div class="t">Workspace —— 长期资源空间</div>
+        <div class="d">文件 · Memory · 代码仓库 · 凭证 · Agent Version（生命周期最长，跨 Session 共享）</div>
+        <div class="sessions">
+          <div class="sess">
+            <div class="t">Session A：代码实现</div>
+            <div class="d">Agent Version · 资源配置 · 历史 · 生命周期</div>
+            <div class="threads">
+              <span class="th root">Root Thread</span><span class="fork">➜</span>
+              <span class="th spawn">Child Thread（实现）</span>
+              <span class="th spawn">Child Thread（对抗式评审）</span>
+            </div>
+          </div>
+          <div class="sess">
+            <div class="t">Session B：安全审计</div>
+            <div class="d">不同的根 Agent · 上下文 · 凭证 · 生命周期</div>
+            <div class="threads">
+              <span class="th root">Root Thread</span><span class="fork">➜</span>
+              <span class="th spawn">Child Thread</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d2-note">
+        <div><b>Thread 内严格有序</b>后到的消息不能“超车”正在重试的投递，否则同一上下文顺序错乱；中断作为特殊消息，不被普通消息堵住。</div>
+        <div><b>Subagent 也是持久化实体</b>Spawn 是一个事务：创建 Child Thread、父子关系、Inbox、Delivery Job 同事务提交；重试同一 Spawn 返回同一个 Child Thread，绝不重复创建。</div>
+        <div><b>父子上下文独立</b>Parent 新消息不自动进入 Child，Child 不能直接改 Parent 上下文；所有通信都重新经过有序投递。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= diagram 3 ================= -->
+  <section>
+    <div class="sec-head"><span class="sec-no">图三</span><h2>一次高风险工具调用的完整路径</h2></div>
+    <p class="sec-sub">授权（这一次操作可不可以执行）与权限隔离（有没有资格用这个能力）是两回事；授权决策必须发生在 Agent 之外、执行之前。</p>
+    <div class="flow">
+      <div class="step">
+        <span class="no">1</span>
+        <div class="bd"><b>提案</b><span>模型提出 Tool Call —— 此时它只是一个“提案”，还不是可执行的调用。</span></div>
+      </div>
+      <div class="step warn">
+        <span class="no">2</span>
+        <div class="bd"><b>Tool Gate（第一次）</b><span>按 Session 的 Approval Mode、Tool Catalog、该类工具的 Policy，判断是否必须经过独立审核。</span></div>
+      </div>
+      <div class="step warn">
+        <span class="no">3</span>
+        <div class="bd"><b>Reviewer（独立 Thread）</b><span>看到待执行动作、上下文、主 Agent 输出、同轮其他 Tool Call、实际 Policy —— 这些只是“证据”，不是指令（文件 / 网页 / Tool Result 都可能携带 Prompt Injection）。返回：风险等级 · 允许或拒绝 · 原因；输出格式异常 = 审核失败，而非默认允许。</span></div>
+      </div>
+      <div class="step">
+        <span class="no">4</span>
+        <div class="bd"><b>落库</b><span>审核判断先经 Bridge 写入 PostgreSQL —— 记录成功才有效。</span></div>
+      </div>
+      <div class="step warn">
+        <span class="no">5</span>
+        <div class="bd"><b>Tool Gate（第二次）</b><span>拿到已提交的审核结果后再决定：允许 / 拒绝 / 升级到用户审批。</span></div>
+      </div>
+      <div class="step">
+        <span class="no">6</span>
+        <div class="bd"><b>执行</b><span>Tool Use 正式提交 → 进入 Queue → 由 Sandbox Service / MCP Connector 执行。</span></div>
+      </div>
+      <div class="step">
+        <span class="no">7</span>
+        <div class="bd"><b>回收</b><span>结果先经 Bridge 落库，再进入 Agent Context —— 执行环境可以消失，产出必须留下。</span></div>
+      </div>
+      <div class="flow-quote">“审核结果本身不是权限；被系统正式记录并重新验证后的结果，才是权限。”</div>
+      <p class="flow-note">保守边界：若 Runtime 在“提案已产生、授权尚未完成”之间崩溃，恢复后提案<b>不会</b>自动继续执行 —— 宁可牺牲这一步的恢复能力，也不让失去上下文的孤儿授权继续生效。</p>
+    </div>
+  </section>
+
+  <!-- ================= principles ================= -->
+  <section>
+    <div class="sec-head"><span class="sec-no">附</span><h2>六个关键原则</h2></div>
+    <div class="cards">
+      <div class="card">
+        <h3>先记录，再执行</h3>
+        <p>任何推进状态或制造副作用的动作，先提交声明、后真正执行（类 WAL）。声明带稳定 ID，即幂等键：重试返回已存结果；同 ID 不同内容直接拒绝。</p>
+      </div>
+      <div class="card">
+        <h3>凭证边界</h3>
+        <p>明文凭证只存在于 Gateway / Connector。“能使用某能力”≠“持有密钥”；Credential Isolation 解决资格，Authorization 解决这一次动作可不可以。</p>
+      </div>
+      <div class="card">
+        <h3>Computer 是资源，不是住所</h3>
+        <p>Lazy Allocation：首次需要才分配，能复用就复用。执行环境可以消失，产出必须留下 —— 代码与 Artifact 回到仓库和对象存储。</p>
+      </div>
+      <div class="card">
+        <h3>共享 Accepted Artifact</h3>
+        <p>聊天只协调工作；只有经过对抗式评审 + 人审核接纳的 Artifact，才改变所有 Agent 共同信任的事实 —— 像只有 review 过的 commit 才进主干。</p>
+      </div>
+      <div class="card">
+        <h3>扩展瓶颈会不断外移</h3>
+        <p>模型越强、跑得越久，压力依次落在身份、授权、历史、工具、存储、执行环境，甚至编译与测试工具链（Bun 转 Rust、TS 原生 Go 提速约 10 倍）。最短板即新瓶颈。</p>
+      </div>
+      <div class="card">
+        <h3>三个不变的下注</h3>
+        <p>① Agent 是 Cloud Native 的；② 需要扩展的是整个 Agent System，而不只是模型；③ Runtime 只管计算下一步，外围系统负责连续性与控制（你是谁 / 做到哪 / 能访问什么 / 是否被允许）。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    依据微信公众号「人工智能前线」2026-09-30 文章整理绘制（全文存档见 <span class="mono">original-article.md</span>）·
+    文中系统为 Tetral（MIT License，当前为个人 k3s 上的 Alpha）· 本页为阅读笔记式图解，非官方架构图。
+  </footer>
+
+</div>
+</body>
+</html>
