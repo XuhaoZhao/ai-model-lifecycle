@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-themes="tokyo-night,dracula,catppuccin-mocha,nord,corporate-clean">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>从数据到生产：AI 模型的完整生命周期</title>
+<link rel="stylesheet" href="../.claude/skills/html-ppt/assets/fonts.css">
+<link rel="stylesheet" href="../.claude/skills/html-ppt/assets/base.css">
+<link rel="stylesheet" id="theme-link" href="../.claude/skills/html-ppt/assets/themes/tokyo-night.css">
+<link rel="stylesheet" href="../.claude/skills/html-ppt/assets/animations/animations.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="tpl-presenter-mode-reveal">
+<div class="deck">
+
+  <!-- ============ S1 · 封面 ============ -->
+  <section class="slide" data-title="S1 封面" style="padding:0">
+    <div class="bleed">
+      <figure class="img-frame fill">
+        <img src="cover.png" alt="从数据到生产：AI 模型的完整生命周期">
+        <div class="img-scrim"></div>
+      </figure>
+      <div class="cap">
+        <p class="sub">From Data to Production: The Complete Lifecycle of AI Models</p>
+        <span class="pill">XuhaoZhao · 2026-10</span>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>大家好，我是 XuhaoZhao。今天想跟大家聊一个问题：一个 AI 能力，是怎么从一堆原始数据，一步步走到线上，还能一直迭代的？</p>
+      <p>看这张封面，数据、训练、评估、部署、生产，五个环节连成一条线，这条线就是今天的地图。接下来一个小时，我们把这条线走两遍。第一遍看传统机器学习时代它是怎么转的，第二遍看大模型时代它变成了什么样。</p>
+      <p>不讲公式，讲的是流程和工程做法。开始。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S2 · 今天的地图 ============ -->
+  <section class="slide" data-title="S2 今天的地图">
+    <p class="kicker">// 今天的地图</p>
+    <h2 class="h2" data-anim="fade-up">一条流水线，<span class="accent">走两遍</span></h2>
+    <p class="lede">先看传统机器学习怎么把它转起来，再看大模型时代它变成了什么样。</p>
+
+    <div class="pipeline" data-anim="fade-up">
+      <div class="pipe-row">
+        <div class="node">数据</div><span class="pipe-arrow">→</span>
+        <div class="node">训练</div><span class="pipe-arrow">→</span>
+        <div class="node">评测</div><span class="pipe-arrow">→</span>
+        <div class="node">部署</div><span class="pipe-arrow">→</span>
+        <div class="node">监控</div>
+      </div>
+      <div class="pipe-return">
+        <span class="ret-arrow up" style="left:-7px">▲</span>
+        <span class="ret-arrow up" style="left:calc(50% - 7px)">▲</span>
+        <span class="ret-arrow down">▼</span>
+        <span class="ret-tag" style="left:20%">新样本 → 回到数据</span>
+        <span class="ret-tag" style="left:50%">坏案例 → 进入评测集</span>
+        <span class="ret-tag ret-start" style="left:81%">反馈</span>
+      </div>
+    </div>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card card-accent">
+        <div class="pass-head"><span class="pass-num">①</span><div><b>传统机器学习</b><span class="pass-meta">第 1 节 · ~20 min</span></div></div>
+        <p class="dim">1999 年的 CRISP-DM、Google 的 8 步流程、Uber 的 Michelangelo 平台，讲的都是这条线</p>
+        <p class="teaser">25 万+ QPS · P95 &lt; 10ms 的生产服务</p>
+      </div>
+      <div class="card card-accent">
+        <div class="pass-head"><span class="pass-num">②</span><div><b>LLM 与 Agent</b><span class="pass-meta">第 2-3 节 · ~35 min</span></div></div>
+        <p class="dim">模型底座、RAG、Agent，以及上线之后的监控和迭代</p>
+        <p class="teaser">15T tokens · 多智能体 +90.2% · 幻觉率 5-10%</p>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">CRISP-DM 1999 · Google Cloud · Uber Eng 2017 · Meta · Anthropic</span>
+      <span class="slide-number" data-current="2" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>先看今天的地图。中间这条线，数据、训练、评测、部署、监控，最后反馈绕回来，今天讲的所有内容都挂在这条线上。</p>
+      <p>这条线不是我发明的。1999 年的 CRISP-DM 是六个阶段，Google Cloud 把交付流程定义成八步，Uber 的 Michelangelo 平台管这叫六步，2016 年就在生产环境跑了。同一条线，业界转了二十多年。</p>
+      <p>Google 那篇文章里还有句话值得记住：<strong>这些步骤的自动化程度，就是你的 MLOps 成熟度</strong>。第 1 节会展开。</p>
+      <p>再注意反馈有两个去向：<strong>新样本回到数据，坏案例进评测集</strong>。Anthropic 的说法是把用户上报的失败转成测试用例，也就是说评测集会跟着线上问题一直长。第 3 节展开。</p>
+      <p>今天这条线走两遍。路上会碰到不少真实数字，Uber 的 25 万 QPS、Llama 3 的 15 万亿 token、Anthropic 多智能体比单智能体高 90.2%，每个都有出处，欢迎随时打断。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S3 · 提个问题 ============ -->
+  <section class="slide" data-title="S3 互动提问">
+    <p class="kicker">// 开场 · 提个问题</p>
+    <h2 class="h2" data-anim="fade-up">先问大家一个问题</h2>
+    <p class="lede">做一个 AI 功能，花在<span class="accent">数据</span>上的工作量，采集、清洗、标注、特征工程，占整个项目的百分之多少？</p>
+
+    <div class="quiz-grid" data-anim="fade-up">
+      <div class="quiz-card"><span class="letter">A</span><div class="pct">10%</div></div>
+      <div class="quiz-card"><span class="letter">B</span><div class="pct">30%</div></div>
+      <div class="quiz-card"><span class="letter">C</span><div class="pct">60%</div></div>
+      <div class="quiz-card"><span class="letter">D</span><div class="pct">80%</div></div>
+    </div>
+
+    <p class="hint">提示：答案 1999 年就有人写下来了，下一页揭晓</p>
+
+    <div class="deck-footer">
+      <span class="mono">答案在下一页</span>
+      <span class="slide-number" data-current="3" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>先来个互动。读一遍题：做一个 AI 功能，花在数据上的工作量，采集、清洗、标注、特征，占整个项目的百分之多少？</p>
+      <p>四个选项念一遍，停十到十五秒，举手或者喊出来都行。可以记一下每个选项多少人，下一页揭晓时对比着看。要是 B、C 的声音多，正好，反差最大。</p>
+      <p>答案是 D，80%。这不是新结论，CRISP-DM 官方介绍里白纸黑字写的经验法则，那套方法论 1999 年就发布了。80% 具体花在哪，下一页说。</p>
+      <p>收一句：猜 B 或 C 的同学，今天这一个小时应该挺值。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S4 · 答案 ============ -->
+  <section class="slide" data-title="S4 答案 80% 在数据">
+    <p class="kicker">// 开场 · 答案</p>
+
+    <div class="reveal-hero" data-anim="fade-up">
+      <div class="reveal-left">
+        <div class="reveal-num">80<span class="sign">%</span></div>
+        <p class="reveal-cap">在数据上（data munging）</p>
+      </div>
+      <div class="reveal-facts">
+        <div class="feature-row"><span class="num blue">①</span><div><b>数据准备占项目的 80%</b><p class="dim">行业经验法则，写在 CRISP-DM 官方介绍里。这套方法论 1999 年发布，KDnuggets 做过四次调查，每次使用率第一</p></div></div>
+        <div class="feature-row"><span class="num green">②</span><div><b>数据准备的五个任务：选择、清洗、构建、整合、格式化</b><p class="dim">官方原话：清洗往往是最耗时的任务</p></div></div>
+        <div class="feature-row"><span class="num orange">③</span><div><b>建模通常是整个项目里最短的阶段</b><p class="dim">时间都花在模型外面了</p></div></div>
+      </div>
+    </div>
+
+    <div class="card card-accent llm-echo" data-anim="fade-up">
+      <b>LLM 时代也一样</b>：HuggingFace 做 FineWeb 数据集，从 15T 原始网页里过滤出 1.3T 高质量文本，训练预算相同，MMLU 从 33 涨到 37，ARC 从 46 涨到 57。<span class="dim">数据质量比数量重要，第 2 节细讲</span>
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：CRISP-DM · datascience-pm.com · KDnuggets ×4 · FineWeb arXiv:2406.17557</span>
+      <span class="slide-number" data-current="4" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>答案是 D，80% 在数据上。行业经验法则：数据准备占整个项目的大约 80%，行话叫 data munging。这话写在 CRISP-DM 官方介绍里。</p>
+      <p>有人可能觉得 1999 年的资料太老了。KDnuggets 在 2002 到 2014 年间做过四次调查，CRISP-DM 每次都是使用率第一，这套框架用到现在。</p>
+      <p>80% 花在哪？数据准备有五个任务：选择、清洗、构建、整合、格式化。官方原话，清洗往往是最耗时的任务。而建模通常是整个项目里最短的阶段，时间都花在模型外面了。</p>
+      <p>底下这条留给后面：2024 年 HuggingFace 做 FineWeb 数据集，15 万亿条原始网页过滤出 1.3 万亿高质量文本，同样的训练预算，MMLU 从 33 涨到 37，ARC 从 46 涨到 57。数据质量比数量重要，LLM 时代还是这个规律，第 2 节细讲。</p>
+      <p>所以今天从数据讲起。进第 1 节。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S5 · 今天的收获 ============ -->
+  <section class="slide" data-title="S5 今天的收获">
+    <p class="kicker">// 今天的收获</p>
+    <h2 class="h2" data-anim="fade-up">今天希望大家带走什么</h2>
+    <p class="lede">不讲公式，讲生命周期。用到的数字都有出处。</p>
+
+    <div class="stack mt-l" data-anim="fade-up">
+      <div class="rule-row">
+        <span class="num">01</span>
+        <div>
+          <b>一张<span class="accent">流程图</span></b>
+          <p class="dim">AI 功能从数据到生产要经过哪些环节，自己在这条线的哪一段，上下游是谁</p>
+          <p class="mini-map">数据 → 训练 → 评测 → 部署 → 监控 ↺ 反馈</p>
+        </div>
+      </div>
+      <div class="rule-row">
+        <span class="num">02</span>
+        <div>
+          <b>一个<span class="accent">参照系</span></b>
+          <p class="dim">Google 怎么定义流程，Uber、Meta、Anthropic 在各环节做到过什么，边讲边对照，量量自己在什么水平</p>
+        </div>
+      </div>
+      <div class="rule-row">
+        <span class="num">03</span>
+        <div>
+          <b>一份<span class="accent">起步清单</span></b>
+          <p class="dim">最后给一份务实清单：评测集先行、先 workflow 后 agent、直接调 API，回去就能照着做</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">每个数字都有出处 · 欢迎随时打断</span>
+      <span class="slide-number" data-current="5" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>开场最后说说今天能带走什么，三样。</p>
+      <p>第一，流程图。AI 功能从数据到生产要经过哪些环节，听完能找到自己在哪一段，上下游是谁。</p>
+      <p>第二，参照系。一路会拿真实做法做对照：Google 怎么定义流程，Uber 的平台跑出什么数字，Meta 训练 Llama 3 用了多少资源，Anthropic 的多智能体收益和成本是多少。对照着看，自己团队在什么水平，心里有数。</p>
+      <p>第三，起步清单。最后给一份小团队务实清单，今天听完就能用。</p>
+      <p>规矩说一遍：不讲公式，讲生命周期；每个数字都有出处，随时打断来问。进第 1 节。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S6 · 章节页：第 1 节 ============ -->
+  <section class="slide" data-title="S6 第 1 节 传统机器学习">
+    <p class="kicker">// 第 1 节</p>
+    <div class="section-head" data-anim="fade-up">
+      <div class="section-num">01</div>
+      <div class="t">
+        <h2 class="h2">传统机器学习</h2>
+        <p class="sub">这条流水线是怎么转起来的 · 约 20 分钟</p>
+      </div>
+    </div>
+
+    <div class="pipeline lg" data-anim="fade-up">
+      <div class="pipe-row">
+        <div class="node">数据</div><span class="pipe-arrow">→</span>
+        <div class="node">训练</div><span class="pipe-arrow">→</span>
+        <div class="node">评测</div><span class="pipe-arrow">→</span>
+        <div class="node">部署</div><span class="pipe-arrow">→</span>
+        <div class="node">监控</div>
+      </div>
+      <div class="pipe-return">
+        <span class="ret-arrow up" style="left:-7px">▲</span>
+        <span class="ret-arrow down">▼</span>
+        <span class="ret-tag ret-start" style="left:50%">反馈</span>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">第 1 节 · S6-S18</span>
+      <span class="slide-number" data-current="6" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>进入第 1 节，传统机器学习。这一节把这条线完整走一圈，看每个环节具体做什么、业界把它做成了什么样。</p>
+      <p>顺序是：先说标准流程长什么样，然后按数据、训练、部署、监控的顺序往下走，最后讲这套闭环怎么变成自动化的。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S7 · Google 的 8 步 ============ -->
+  <section class="slide" data-title="S7 Google 的 8 步">
+    <p class="kicker">// 第 1 节 · 标准流程</p>
+    <h2 class="h2" data-anim="fade-up">标准流程：Google 的 <span class="accent">8 步</span></h2>
+    <p class="lede">Google Cloud 架构中心对"把一个 ML 模型交付上线"的定义。</p>
+
+    <div class="pipeline" data-anim="fade-up">
+      <div class="pipe8-row">
+        <div class="step-chip"><span class="n">01</span><span class="t">数据抽取</span></div><span class="step-arrow">→</span>
+        <div class="step-chip"><span class="n">02</span><span class="t">数据分析</span></div><span class="step-arrow">→</span>
+        <div class="step-chip"><span class="n">03</span><span class="t">数据准备</span></div><span class="step-arrow">→</span>
+        <div class="step-chip"><span class="n">04</span><span class="t">模型训练</span></div><span class="step-arrow">→</span>
+        <div class="step-chip"><span class="n">05</span><span class="t">模型评估</span></div><span class="step-arrow">→</span>
+        <div class="step-chip"><span class="n">06</span><span class="t">模型验证</span></div><span class="step-arrow">→</span>
+        <div class="step-chip"><span class="n">07</span><span class="t">模型服务</span></div><span class="step-arrow">→</span>
+        <div class="step-chip last"><span class="n">08</span><span class="t">模型监控</span></div>
+      </div>
+      <div class="pipe-return" style="margin: 0 6%">
+        <span class="ret-arrow up" style="left:-7px">▲</span>
+        <span class="ret-arrow down">▼</span>
+        <span class="ret-tag ret-start" style="left:50%">监控发现问题，触发新一轮</span>
+      </div>
+    </div>
+
+    <p class="dim step-notes">第 3 步数据准备：清洗、划分训练/验证/测试集、特征工程（80% 的去处）。第 6 步模型验证：不是看效果好不好，是检查够不够格上线。</p>
+
+    <div class="card card-accent maturity-callout" data-anim="fade-up">
+      <b>这些步骤的自动化程度，就是你的 MLOps 成熟度</b>。手动做、流水线自动跑，是两个档次
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">Google Cloud Architecture Center · 三票验证 3-0</span>
+      <span class="slide-number" data-current="7" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>先看业界怎么定义标准流程。Google Cloud 架构中心给过一个八步的交付流程：数据抽取、数据分析、数据准备，然后训练、评估、验证，最后服务化和监控。这一页经过三票对抗验证，原文如此。</p>
+      <p>有两步多说一句。第 3 步数据准备，包括清洗、划分训练验证测试集、特征工程，就是刚才那个 80% 的去处。第 6 步模型验证，不是看模型效果好不好，是检查它够不够格上线，能不能达到预测服务的标准。</p>
+      <p>重点在第 8 步。Google 原文说，监控发现性能问题，会 invoke a new iteration，触发新的一轮迭代。流程从终点绕回起点，就是地图上那个反馈环，这是它第一次在标准里出现。</p>
+      <p>还有一句更要记住：<strong>这八步的自动化程度，就是你的 MLOps 成熟度</strong>。手动做、流水线自动跑，是两个档次。这句话先记住，这一节收尾的时候，拿它给自己团队打个分。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S8 · CRISP-DM ============ -->
+  <section class="slide" data-title="S8 CRISP-DM">
+    <p class="kicker">// 第 1 节 · 方法论</p>
+    <h2 class="h2" data-anim="fade-up">更老，但更流行：CRISP-DM</h2>
+    <p class="lede">1999 年发布的六阶段，到现在还是数据科学项目最常用的方法论。</p>
+
+    <div class="pipe8-row phase-row" data-anim="fade-up">
+      <div class="step-chip"><span class="n">01</span><span class="t">业务理解</span></div><span class="step-arrow">→</span>
+      <div class="step-chip"><span class="n">02</span><span class="t">数据理解</span></div><span class="step-arrow">→</span>
+      <div class="step-chip"><span class="n">03</span><span class="t">数据准备</span></div><span class="step-arrow">→</span>
+      <div class="step-chip"><span class="n">04</span><span class="t">建模</span></div><span class="step-arrow">→</span>
+      <div class="step-chip"><span class="n">05</span><span class="t">评估</span></div><span class="step-arrow">→</span>
+      <div class="step-chip"><span class="n">06</span><span class="t">部署</span></div>
+    </div>
+    <p class="iter-quote">⟲ 官方指南原话：阶段的顺序不是刚性的，来回移动总是必需的</p>
+
+    <div class="grid g3 mt-l" data-anim="fade-up">
+      <div class="card card-accent">
+        <h4>流行了二十多年</h4>
+        <p class="dim">KDnuggets 在 2002、2004、2007、2014 年做了四次调查，每次约 150-200 人，CRISP-DM 四次都是使用率第一。2020 年另一个 109 票的小调查，它拿了近一半。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>局限：只管到项目结束</h4>
+        <p class="dim">部署阶段要求制定监控与维护计划，但项目结束之后的长期运营没有定义。这个空白后来由 MLOps 补上。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>加强版：CRISP-ML(Q)</h4>
+        <p class="dim">给每个阶段加四样质量要求：需求与约束、任务、风险、对策。风险清单里有偏见、过拟合、不可复现。</p>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：datascience-pm.com · ml-ops.org</span>
+      <span class="slide-number" data-current="8" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>Google 的八步是现代版。再往前看，有个 1999 年发布的老方法论到现在还在用：CRISP-DM，六个阶段，业务理解、数据理解、数据准备、建模、评估、部署。</p>
+      <p>它有多流行？KDnuggets 在 2002 到 2014 年间做了四次调查，每次一百五到两百人，四次都是使用率第一。2020 年另一个站点搞了个 109 票的小调查，它拿了将近一半。一个 1999 年的框架能用到现在，说明抓到了本质。</p>
+      <p>官方指南里有句话：阶段的顺序不是刚性的，来回移动总是必需的。注意它跟流水线的区别，这是个迭代圈，不是单行道。</p>
+      <p>但它有个明确的局限。部署阶段虽然要求制定监控和维护计划，可那是以项目为单位的，项目结束之后的长期运营它没定义。这个空白后来就是 MLOps 补上的。顺带一提，后来还有个加强版叫 CRISP-ML(Q)，给每个阶段加了质量要求，风险清单里包括偏见、过拟合、不可复现，感兴趣可以看 ml-ops.org。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S9 · 数据环节 ============ -->
+  <section class="slide" data-title="S9 数据环节">
+    <p class="kicker">// 第 1 节 · 数据环节</p>
+    <h2 class="h2" data-anim="fade-up">80% 的精力花在哪</h2>
+    <p class="lede">CRISP-DM 把数据准备拆成五个任务：选择、清洗、构建、整合、格式化。工程上一般按五件事组织。</p>
+
+    <div class="mt-l" data-anim="fade-up">
+      <div class="task-row"><b>采集</b><p class="dim">日志、数据库、第三方接口、爬虫，先解决原料从哪来</p><span></span></div>
+      <div class="task-row"><b>清洗</b><p class="dim">缺失、异常、重复、格式问题，官方说法里它是最耗时的任务</p><span class="tag">最耗时</span></div>
+      <div class="task-row"><b>标注</b><p class="dim">人工打标签，传统 ML 里最大的人力投入</p><span></span></div>
+      <div class="task-row"><b>划分</b><p class="dim">训练/验证/测试三份分开。最怕数据泄漏：未来信息混进训练，评测虚高，上线翻车</p><span class="tag tag-red">防泄漏</span></div>
+      <div class="task-row"><b>特征工程</b><p class="dim">把原始数据变成模型能用的信号。这件事怎么做成平台，下一页看 Uber 的做法</p><span></span></div>
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">CRISP-DM 数据准备五任务 · datascience-pm.com</span>
+      <span class="slide-number" data-current="9" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>进到数据环节，把 80% 拆开看。CRISP-DM 的说法是五个任务：选择、清洗、构建、整合、格式化。工程上一般按五件事组织：采集、清洗、标注、划分、特征工程。</p>
+      <p>采集解决原料从哪来，日志、数据库、第三方接口、爬虫。清洗处理缺失、异常、重复、格式，这是最耗时的一件。标注是人工打标签，传统机器学习里最大的人力投入，后面讲数据飞轮的时候会回到这点。</p>
+      <p>划分要多说两句。把数据分成训练、验证、测试三份，这一步最容易犯的错是<strong>数据泄漏</strong>，就是让未来的信息混进训练数据，评测分数虚高，一上线就翻车。所以评测集的独立性，从第一天就要守住，这件事值多少钱都不过分。</p>
+      <p>特征工程把原始数据变成模型能用的信号。这件事单独做很亏，每个团队重复造轮子。下一页看 Uber 怎么把它做成平台。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S10 · Uber Feature Store ============ -->
+  <section class="slide" data-title="S10 Uber Feature Store">
+    <p class="kicker">// 第 1 节 · 案例</p>
+    <h2 class="h2" data-anim="fade-up">特征也能做成平台：Uber 的 Feature Store</h2>
+    <p class="lede">公司级 ML 平台 Michelangelo（2016 年起生产运行）里，最有生命力的一件设计。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card card-accent fs-hero">
+        <div class="fs-num">10,000<span class="u">个特征</span></div>
+        <p class="dim">跨团队共享，自动计算、每日更新（2017 年博客时点）</p>
+        <p class="stack-line">HDFS · Spark · Samza · Cassandra · XGBoost · TensorFlow</p>
+      </div>
+      <div>
+        <div class="feature-row"><span class="num blue">①</span><div><b>特征复用</b><p class="dim">做新模型先来库里找现成特征，不用每个团队从头算一遍</p></div></div>
+        <div class="feature-row"><span class="num green">②</span><div><b>训练/服务一致性</b><p class="dim">同一套特征逻辑：训练时 Spark 批量算，上线后 Cassandra 点查，P95 &lt; 10ms。两边算不一致，线上效果就跟离线评估对不上</p></div></div>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>training-serving skew，训练服务偏差</b>：离线一套代码、在线再写一套，是经典事故源，Evidently 把它列为生产故障的一级类别。Uber 这个设计后来成了开源特征平台 Feast 的原型。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Uber Engineering 2017（一手）· Evidently</span>
+      <span class="slide-number" data-current="10" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>第一个案例。Uber 从 2016 年开始跑一个公司级平台 Michelangelo，里面的 Feature Store 是后来所有特征平台的原型，开源的 Feast 就是从这来的。</p>
+      <p>先看数字：2017 年他们写博客的时候，里面已经有大约一万个特征，全公司共享，自动计算、每天更新。任何团队做新模型，先来库里找现成的，不用自己从头算。</p>
+      <p>它解决两个问题。第一是复用，刚才说了。第二个更重要，<strong>训练和服务的一致性</strong>。同一套特征逻辑，训练的时候用 Spark 批量算，上线之后从 Cassandra 点查，P95 十毫秒以内。如果离线一套代码、在线再手写一套，两边算出来的数对不上，线上效果就跟离线评估完全两回事。这个东西有个名字叫 training-serving skew，训练服务偏差，是经典事故源，Evidently 的故障分类学把它列为一级类别，第 15 页还会见到它。</p>
+      <p>技术栈也值得看一眼：HDFS、Spark、Samza、Cassandra、XGBoost，全是现成大数据组件拼的。平台化不等于买昂贵系统，把公共逻辑抽出来共享，就是平台的起点。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S11 · 训练与实验管理 ============ -->
+  <section class="slide" data-title="S11 训练与实验管理">
+    <p class="kicker">// 第 1 节 · 训练环节</p>
+    <h2 class="h2" data-anim="fade-up">训练不难，难的是管住几百次实验</h2>
+    <p class="lede">业界把这个环节的平台能力归纳成四件，正好是 MLflow 官网给自己的定位。</p>
+
+    <div class="grid g4 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>实验跟踪</h4>
+        <p class="dim">参数、数据版本、指标，每次训练自动记账</p>
+      </div>
+      <div class="card">
+        <h4>模型评测</h4>
+        <p class="dim">不同实验的结果，统一口径比较</p>
+      </div>
+      <div class="card">
+        <h4>模型注册</h4>
+        <p class="dim">版本、状态、去处，有账可查</p>
+      </div>
+      <div class="card">
+        <h4>模型部署</h4>
+        <p class="dim">从注册表到线上服务，一条链路</p>
+      </div>
+    </div>
+
+    <div class="grid g2 mt-m" data-anim="fade-up">
+      <div class="card card-accent">
+        <h4>事实标准之一：MLflow</h4>
+        <div class="stat-chips">
+          <span>月下载 3000 万+</span><span>Apache 2.0</span><span>Linux 基金会托管</span>
+        </div>
+        <p class="dim">四大能力的说法来自 mlflow.org 官网自述，这条论断经过三票对抗验证。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>模型怎么选</h4>
+        <p class="dim">先看离线指标：交叉验证、留出集。再看分段误差：整体指标好看，不代表每个子段都好，弱段要单独拎出来分析。</p>
+      </div>
+    </div>
+
+    <p class="era-note">时代注脚：当时的主力模型是 XGBoost 一类的 GBDT，UberEATS 预测送餐时长用的就是它，不是深度学习。这套平台流程先于深度学习就成熟了。</p>
+
+    <div class="deck-footer">
+      <span class="mono">出处：mlflow.org（三票验证 3-0）· Uber Eng 2017 · Evidently</span>
+      <span class="slide-number" data-current="11" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>训练环节。训练代码本身不难写，难的是管住它长出来的东西：一次调参就是一次新实验，几百次下来，哪个模型好、怎么训出来的，说不清就等于白做。</p>
+      <p>所以业界把这个环节的平台能力归纳成四件：<strong>实验跟踪、模型评测、模型注册、模型部署</strong>。这四件正好是 MLflow 官网给自己的定位，这句话经过三票对抗验证。MLflow 现在月下载三千万次以上，Apache 2.0，Linux 基金会托管，事实标准之一。</p>
+      <p>实验管理本质解决的是<strong>可复现</strong>：三个月以后，你还能回答这个模型是用哪份数据、哪组参数训出来的。做不到，出了问题连排查的起点都没有。</p>
+      <p>模型怎么选？先看离线指标，交叉验证、留出集。然后看分段误差，整体指标好看，不代表每个子段都好，弱段要单独拎出来。Evidently 的故障分类学里，弱势子段表现差就是一级类别。</p>
+      <p>最后一个时代注脚：那几年的主力是 XGBoost 一类的 GBDT，UberEATS 预测送餐时长用的就是它。也就是说，这套平台流程先于深度学习就成熟了，跟模型复杂度无关。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S12 · 部署上线 ============ -->
+  <section class="slide" data-title="S12 部署上线">
+    <p class="kicker">// 第 1 节 · 部署环节</p>
+    <h2 class="h2" data-anim="fade-up">模型怎么变成线上服务</h2>
+    <p class="lede">三种形态，按延迟预算和场景选。</p>
+
+    <div class="grid g3 mt-l" data-anim="fade-up">
+      <div class="card card-accent">
+        <h4>实时推理 API</h4>
+        <p class="dim">请求来了当场算，线上产品的主流形态，延迟预算毫秒级</p>
+      </div>
+      <div class="card card-accent">
+        <h4>批量预测</h4>
+        <p class="dim">离线把一批跑完写回，评分、清单类场景够用，不占线上容量</p>
+      </div>
+      <div class="card card-accent">
+        <h4>嵌入边缘设备</h4>
+        <p class="dim">模型塞进手机、IoT 端上，数据不出设备</p>
+      </div>
+    </div>
+
+    <div class="qps-band" data-anim="fade-up">
+      <div class="stat">
+        <div class="v">25 万+</div>
+        <div class="k">预测 / 秒 · 单个模型</div>
+      </div>
+      <div class="stat">
+        <div class="v">P95 &lt; 10ms</div>
+        <div class="k">含 Cassandra 特征点查</div>
+      </div>
+      <p class="src">Uber Michelangelo 流量最高的模型，2017 年工程博客数字。模型打包成容器，挂在负载均衡后面。</p>
+    </div>
+
+    <p class="era-note">记住这个毫秒级的延迟预算。第 3 节讲 LLM 推理时会回到这个对比：那边生成一个回答是秒级起步，服务架构完全另一个打法。</p>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Uber Engineering 2017（一手）</span>
+      <span class="slide-number" data-current="12" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>模型训好了，怎么变成服务？业界三种形态。实时推理 API，请求来了当场算，线上产品的主流。批量预测，离线把一批跑完写回去，评分、清单类场景够用。第三种嵌到端上，手机、IoT，数据不出设备。</p>
+      <p>传统 ML 的线上服务能跑到什么量级？Uber 2017 年的数字：<strong>流量最高的模型每秒 25 万次以上预测，P95 延迟十毫秒以内</strong>，这还是含了从 Cassandra 点查特征的路径。模型打包成容器，挂在负载均衡后面。</p>
+      <p>注意这个毫秒级的延迟预算，记住它。<strong>第 3 节讲 LLM 推理的时候对比：那边生成一个回答是秒级起步</strong>，显存、批处理、吞吐的算法全变了。这里先按下。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S13 · 三种验证策略 ============ -->
+  <section class="slide" data-title="S13 上线验证策略">
+    <p class="kicker">// 第 1 节 · 上线策略</p>
+    <h2 class="h2" data-anim="fade-up">上线不等于全量</h2>
+    <p class="lede">三个验证策略，风险从低到高，模型和代码一样要有灰度思维。</p>
+
+    <div class="grid g3 mt-l" data-anim="fade-up">
+      <div class="card card-accent">
+        <h4>影子部署 · Shadow</h4>
+        <p class="dim">新旧模型同时收线上请求，新的只记录预测、不生效。线上零风险，用来攒对照数据。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>金丝雀 · Canary</h4>
+        <p class="dim">一小部分真实流量先走新模型。出了问题影响面小，盯着指标再逐步放量。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>A/B 测试</h4>
+        <p class="dim">流量切分，新旧真实对照。比的是业务结果，不是离线指标。</p>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>回退预案是标准配置，不是可选项</b>。新模型崩了怎么切回旧版本，答案要在上线前就准备好。出处：Evidently 把生产、影子、A/B 列为三类需要监控的场景；CRISP-ML(Q) 把 A/B、金丝雀、蓝绿部署和回退预案写进标准部署任务；Google 文档同样要求新模型先过金丝雀或 A/B 再接全量流量。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Evidently · ml-ops.org · Google Cloud</span>
+      <span class="slide-number" data-current="13" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>上线不等于全量。三个验证策略，风险从低到高。</p>
+      <p>影子部署，新旧模型同时收线上请求，但新模型只记录预测、不生效，线上零风险，适合攒对照数据。金丝雀，放一小部分真实流量给新模型，出了问题影响面小，盯着指标再逐步放量。A/B，按流量切分做真实对照，比的是业务指标，不是离线分数。</p>
+      <p>这个排列不是我编的。Evidently 的监控课程明确说，需要监控的就三类场景：生产、影子、A/B。CRISP-ML(Q) 把 A/B、金丝雀、蓝绿和回退预案直接写进标准部署任务。Google 的文档也要求新模型先过金丝雀或 A/B，再接全量流量。</p>
+      <p>最后一条最容易被忽略：<strong>回退预案是标准配置，不是可选项</strong>。新模型崩了怎么切回旧版本，这个答案要在上线前就准备好，不是出事之后再想。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S14 · 模型会腐烂 ============ -->
+  <section class="slide" data-title="S14 模型漂移">
+    <p class="kicker">// 第 1 节 · 监控</p>
+    <h2 class="h2" data-anim="fade-up">上线之后，模型会自己坏掉</h2>
+    <p class="lede">代码一行没动，线上效果也可能持续变差。</p>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>Google Cloud 原话</b>：模型衰减的方式，比传统软件系统更多（decay in more ways than conventional software systems）。不止因为代码缺陷，更因为数据分布在持续演变。三票验证 3-0。
+    </div>
+
+    <div class="grid g2 mt-m" data-anim="fade-up">
+      <div class="card">
+        <h4>数据漂移 · Data drift</h4>
+        <p class="dim">输入的分布变了。用户群体迁移、渠道占比变化，喂进模型的数据跟训练时不是一个样子了。X 变了。</p>
+      </div>
+      <div class="card">
+        <h4>概念漂移 · Concept drift</h4>
+        <p class="dim">输入和目标的关系变了，可渐变、可突变。风控模型遇到新型欺诈：同样的特征，含义已经变了。X 到 Y 的映射变了。</p>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Google Cloud（三票验证 3-0）· Evidently</span>
+      <span class="slide-number" data-current="14" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>上线之后最反直觉的一件事：代码一行没动，模型也会自己坏掉。</p>
+      <p>Google 的原话，这句经过三票验证：<strong>模型衰减的方式比传统软件系统更多</strong>。传统软件你不改它就不会坏；<strong>模型什么都不做也会坏</strong>，因为世界在变，数据在变。</p>
+      <p>变法分两类，Evidently 给的区分。一类叫<strong>数据漂移</strong>，输入的分布变了，比如用户群迁移、渠道占比变化，喂进模型的数据跟训练时不是一个样子。另一类叫<strong>概念漂移</strong>，输入和目标的关系变了，可以渐变也可以突变。最典型的例子是风控：骗子换了新手法，同样的特征，含义已经变了，模型还在按老规律打分。</p>
+      <p>所以监控不是可选项，是模型的体检。具体盯什么、故障从哪来，下一页给分类学。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S15 · 故障分类学与代理指标 ============ -->
+  <section class="slide" data-title="S15 故障分类与代理指标">
+    <p class="kicker">// 第 1 节 · 监控</p>
+    <h2 class="h2" data-anim="fade-up">故障从哪来，盯什么指标</h2>
+    <p class="lede">Evidently 的生产故障分类学，按出现频率排。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>故障来源</h4>
+        <ul class="fail-list">
+          <li><b>数据质量与完整性</b>（多数故障的来源）：管道断裂、上游 schema 变更、源头丢数据</li>
+          <li><b>训练-服务偏差</b>：离线在线两套代码对不上，就是 Uber 那页讲过的 skew</li>
+          <li><b>上游模型级联故障</b>：模型链里前一个坏了，带崩一串</li>
+          <li><b>弱势子段表现差</b>：整体指标好看，某个段很差</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>标签延迟与代理指标</h4>
+        <div class="feature-row"><span class="num red">!</span><div><b>难题：真实标签有延迟</b><p class="dim">转化可能几天后才发生，标签没回来，线上准确率算不出来。</p></div></div>
+        <div class="feature-row"><span class="num green">→</span><div><b>对策：代理指标当烟雾报警器</b><p class="dim">预测分布漂移、输入漂移、新类别占比。响了再去查根因，不等标签。</p></div></div>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>监控 vs 可观测性</b>：监控盯预先定义的指标，反应式，找已知的未知；可观测性做根因分析，主动式，找未知的未知。监控是可观测性的子集，小团队先把监控做起来就够了。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Evidently（单源，引文直录）</span>
+      <span class="slide-number" data-current="15" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>知道了会坏，还得知道从哪坏起。Evidently 的故障分类学，按出现频率排。</p>
+      <p>第一位，<strong>数据质量和完整性</strong>，多数生产故障的来源：管道断了、上游改了 schema、源头数据丢了。第二位常客是<strong>训练服务偏差</strong>，前面讲 Uber 特征平台时说过，离线在线两套代码对不上。还有两类：模型链里上游模型坏了带崩下游；弱势子段表现差，整体指标好看，某个段很差。</p>
+      <p>监控有个根本难题：<strong>真实标签是有延迟的</strong>。转化可能几天后才发生，标签没回来，线上准确率就算不出来。对策是用代理指标先盯着：预测分布漂没漂、输入分布漂没漂、新类别占比有没有涨。这些当烟雾报警器用，响了再去查根因。</p>
+      <p>再送一对概念：监控盯预先定义的指标，反应式，找已知的未知；可观测性做根因分析，主动式，找未知的未知，前者是后者的子集。小团队先把监控做起来，就够用了。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S16 · Michelangelo 闭环实现 ============ -->
+  <section class="slide" data-title="S16 Michelangelo 闭环实现">
+    <p class="kicker">// 第 1 节 · 案例</p>
+    <h2 class="h2" data-anim="fade-up">闭环落地：把预测和结果 join 起来</h2>
+    <p class="lede">Uber Michelangelo 对监控和反馈两步的工程实现。</p>
+
+    <div class="join-grid mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>① 线上预测，自动抽样</h4>
+        <p class="dim">服务端记预测日志，可选扣留一小部分流量专门用于评估。</p>
+      </div>
+      <div class="join-mid"><span class="op">⋈</span><span class="w">join</span></div>
+      <div class="card">
+        <h4>② 真实结果回流</h4>
+        <p class="dim">数据管道把 outcome 送回来，有延迟：送餐实际用了多久、转化最终有没有发生。</p>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      ③ join 之后：<strong>持续更新的线上准确率时序</strong>（RMSE · RMSLE · R²），喂进时序监控，配阈值告警，越线报警。地图上监控到反馈这两步，工程上就这么朴素：难的不是 join，是<strong>结果回流的数据管道要先建好</strong>。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Uber Engineering 2017（一手，引文直录）</span>
+      <span class="slide-number" data-current="16" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>讲了半天闭环，落地到底长什么样？Uber 的实现，三步。</p>
+      <p>第一步，自动抽样记录线上预测，还可以扣留一小部分流量专门用于评估。第二步，等真实结果回流，比如送餐订单最后实际用了多久，这由数据管道送回来，有延迟。第三步，把预测日志和结果表 join 起来，算出持续更新的线上准确率，RMSE、R 平方这些，做成时序指标，配阈值告警。</p>
+      <p>你会发现所谓反馈闭环，工程上朴素得很，就是两张表 join 一下。真正难的是前面那步：<strong>结果回流的数据管道要先建好</strong>。标签从哪来、多久回来、格式对不对，这些不通，闭环就停在最朴素的那一步。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S17 · CI / CD / CT ============ -->
+  <section class="slide" data-title="S17 CI CD CT">
+    <p class="kicker">// 第 1 节 · 闭环的本质</p>
+    <h2 class="h2" data-anim="fade-up">CI、CD 之外，还有个 <span class="accent">CT</span></h2>
+    <p class="lede">MLOps 和 DevOps 的三个区别，Google 的定义，全部三票验证。</p>
+
+    <div class="stack mt-l" data-anim="fade-up">
+      <div class="rule-row">
+        <span class="num">CI</span>
+        <div>
+          <b>持续集成：不只测代码</b>
+          <p class="dim">还要测数据、数据 schema、模型。数据也是会提交的东西，它变了一样要跑检查。</p>
+        </div>
+      </div>
+      <div class="rule-row">
+        <span class="num">CD</span>
+        <div>
+          <b>持续交付：部署的不是模型，是训练流水线</b>
+          <p class="dim">流水线部署出去，由它再去部署预测服务。</p>
+        </div>
+      </div>
+      <div class="rule-row">
+        <span class="num">CT</span>
+        <div>
+          <b>持续训练：ML 独有</b>
+          <p class="dim">新数据到位，自动重训、自动上线。上一页那个 join 管道通了，这一环才能自动转。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      部署出去的产物是一条<strong>会不断生产模型的流水线</strong>，不是一份固定的模型文件。想通这一点，MLOps 的工具地图就都顺了。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Google Cloud（三票验证 3-0）</span>
+      <span class="slide-number" data-current="17" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>把前面的东西串起来：MLOps 和 DevOps 的区别，Google 给了三条，全部三票验证。</p>
+      <p>CI，持续集成，不只测代码了，还要测数据、数据 schema 和模型。数据也是会提交的东西，它变了一样要跑检查。CD，持续交付，部署对象变了：不是部署一个模型文件，是部署整条训练流水线，流水线跑完自动把预测服务发布出去。第三条 CT，持续训练，ML 独有：新数据到了，自动重训、自动上线。上一页那个 join 管道通了，这一环才能自动转。</p>
+      <p>换个说法收尾：<strong>传统软件部署出去的是一个程序，ML 部署出去的是一条会不断生产模型的流水线</strong>。想通这一点，MLOps 的所有工具就都顺了。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S18 · 成熟度模型（第 1 节收束） ============ -->
+  <section class="slide" data-title="S18 成熟度模型">
+    <p class="kicker">// 第 1 节 · 小结</p>
+    <h2 class="h2" data-anim="fade-up">你在哪一级：成熟度模型</h2>
+    <p class="lede">自动化程度就是成熟度。两把尺子：Google 三级，微软五级，都经过三票验证。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>Google 三级</h4>
+        <div class="lvl"><span class="badge" style="--lv:16%">L0</span><p>全手动：notebook / 脚本驱动</p></div>
+        <div class="lvl"><span class="badge" style="--lv:45%">L1</span><p>训练流水线自动化，加持续训练</p></div>
+        <div class="lvl"><span class="badge solid">L2</span><p>再加 CI/CD，整条闭环自动跑</p></div>
+        <p class="dim scope-note">Google 自己声明：这套分级主要适用于预测型 AI 系统。</p>
+      </div>
+      <div class="card">
+        <h4>微软五级</h4>
+        <div class="lvl"><span class="badge" style="--lv:14%">L0</span><p>无 MLOps：构建、部署、测试、训练全手动，性能追踪不集中</p></div>
+        <div class="lvl"><span class="badge" style="--lv:28%">L1</span><p>有 DevOps，无 MLOps</p></div>
+        <div class="lvl"><span class="badge" style="--lv:42%">L2</span><p>训练自动化 + 特征平台，发布仍手动</p></div>
+        <div class="lvl"><span class="badge" style="--lv:62%">L3</span><p>部署自动化：可回溯到原始数据，A/B 进流程</p></div>
+        <div class="lvl"><span class="badge solid">L4</span><p>漂移/回归信号自动触发重训</p></div>
+      </div>
+    </div>
+
+    <p class="era-note">自查：我们团队在哪一级？两家编号不同（Google 到 L2、微软到 L4），引用要带名字。微软还补了一句：生成式 AI 的运营（GenAIOps）是对这套级别的补充，不是替代。正好，第二节见。</p>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Google Cloud · Microsoft Learn（两家均三票验证 3-0）</span>
+      <span class="slide-number" data-current="18" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>第 1 节收尾。前面留过一句话：八步的自动化程度，就是你的 MLOps 成熟度。现在兑现，给两把尺子。</p>
+      <p>Google 的三级。L0 全手动，notebook 和脚本驱动，一次部署靠人肉。L1 训练流水线自动化，加上持续训练。L2 再把 CI/CD 也自动化，整条闭环无人值守。微软的五级更细：L0 无 MLOps，构建、部署、测试、训练全手动，性能追踪也不集中，这是微软原文，三票验证过。L2 训练自动化、上了特征平台，但发布还手动。L3 部署自动化，部署能一路回溯到原始数据，A/B 测试进流程。L4 漂移和回归信号自动触发重训，闭环全自动。</p>
+      <p>两个提醒。一是两家编号不一样，Google 到 L2，微软到 L4，引用要带名字，别混。二是微软同一页还写了：这套级别针对预测型系统，生成式 AI 的运营是补充而不是替代。</p>
+      <p>现在可以自查一下，我们团队在哪一级？不着急对号，心里有数就行。接下来第二节，看这条流水线到大模型时代变成了什么样。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S19 · 章节页：第 2 节 ============ -->
+  <section class="slide" data-title="S19 第 2 节 LLM 时代">
+    <p class="kicker">// 第 2 节</p>
+    <div class="section-head" data-anim="fade-up">
+      <div class="section-num">02</div>
+      <div class="t">
+        <h2 class="h2">LLM 时代</h2>
+        <p class="sub">从一个模型，到一组系统 · 约 20 分钟</p>
+      </div>
+    </div>
+
+    <div class="stage-flow" data-anim="fade-up">
+      <div class="stage"><b>模型底座</b><p>3 分钟背景：模型从哪来</p></div>
+      <span class="stage-arrow">→</span>
+      <div class="stage"><b>RAG</b><p>给模型外挂知识</p></div>
+      <span class="stage-arrow">→</span>
+      <div class="stage hot"><b>Agent</b><p>让模型自己干活 · 本节重心</p></div>
+    </div>
+
+    <p class="era-note">这三样都长在地图的训练与构建这一侧。上线之后的监控和飞轮，第三节讲。</p>
+
+    <div class="deck-footer">
+      <span class="mono">第 2 节 · S19-S33</span>
+      <span class="slide-number" data-current="19" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>第二节，LLM 时代。先把边界说清楚：不讲 Transformer 的历史，也不推任何公式。只花三分钟把一件事讲明白：模型是从哪来的。然后就尽快到应用层。</p>
+      <p>这节路线三站：模型底座、RAG、Agent，重心放在 Agent。你会发现地图还是那张地图，但每一站的形态都变了。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S20 · 模型从哪来 ============ -->
+  <section class="slide" data-title="S20 模型从哪来">
+    <p class="kicker">// 第 2 节 · 模型底座</p>
+    <h2 class="h2" data-anim="fade-up">模型从哪来：两个阶段</h2>
+    <p class="lede">Meta 在 Llama 3 报告里对基础模型开发生命周期的官方定义，原文逐字核对。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>预训练 · Pre-training</h4>
+        <p class="dim">海量文本上做下一词预测，学会语言和世界知识。</p>
+        <p class="dim">它的数据管线本身是完整工程（RUC 综述标准管线，三票验证）：</p>
+        <p class="mini-map">质量过滤 → 多级去重 → 隐私脱敏 → 分词</p>
+        <p class="dim">第一节讲的数据清洗，放大一万倍就是这条线。</p>
+      </div>
+      <div class="card">
+        <h4>后训练 · Post-training</h4>
+        <p class="dim">在底座上学会听指令、对齐人的偏好。两代配方：</p>
+        <p class="dim">经典配方（InstructGPT，三段式）：</p>
+        <p class="mini-map">SFT → 奖励模型 → PPO</p>
+        <p class="dim">Llama 3 配方：SFT + 拒绝采样 + DPO，六轮迭代。Meta 明确说放弃 PPO，因为 DPO 在大规模上更省算力、效果更好。</p>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      原文：现代基础模型的开发由两个主要阶段组成，(1) 预训练，用下一词预测这类简单任务做大规模训练；(2) 后训练，调优到遵循指令、对齐人类偏好。two main stages，出自 Llama 3 报告。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Llama 3（arXiv 2407.21783，逐字）· RUC 综述（三票验证 3-0）· InstructGPT</span>
+      <span class="slide-number" data-current="20" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>模型从哪来，三分钟版。Meta 在 Llama 3 报告里把基础模型的开发明确定义成两个阶段，这句是逐字核对过的原文。</p>
+      <p>第一阶段，预训练：在海量文本上做下一词预测，学会语言和世界知识。注意数据管线本身就是个完整工程：质量过滤、多级去重、隐私脱敏、分词，这是 RUC 综述里的标准管线，三票验证过。第一节看到的数据清洗，放大一万倍就是这条线。</p>
+      <p>第二阶段，后训练：在底座上学会听指令、对齐人的偏好。经典配方是 InstructGPT 的三段式：SFT、奖励模型、PPO。Llama 3 换了配方，SFT 加拒绝采样加 DPO，跑了六轮迭代。Meta 明确说放弃 PPO，是因为 DPO 在大规模上更省算力、效果还更好。</p>
+      <p>两个阶段谁更值钱？下一页用三个数字回答，其中一个相当反直觉。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S21 · 三个数字 ============ -->
+  <section class="slide" data-title="S21 三个数字">
+    <p class="kicker">// 第 2 节 · 模型底座</p>
+    <h2 class="h2" data-anim="fade-up">三个有记忆点的数字</h2>
+    <p class="lede">给底座一个体感，前两个讲规模，第三个讲什么更值钱。</p>
+
+    <div class="tri mt-l" data-anim="fade-up">
+      <div class="card">
+        <div class="v">15T</div>
+        <p class="k">Llama 3 预训练 token 量<br>Llama 2 是 1.8T，八倍多</p>
+      </div>
+      <div class="card">
+        <div class="v">50×</div>
+        <p class="k">405B 旗舰的算力倍数<br>16K 张 H100，3.8×10²⁵ FLOPs</p>
+      </div>
+      <div class="card hot">
+        <div class="v sm">1.3B &gt; 175B</div>
+        <p class="k">对齐后的 1.3B InstructGPT，人类偏好胜过 175B 原始 GPT-3<br>参数少一百倍</p>
+      </div>
+    </div>
+
+    <p class="era-note">运维现实：54 天快照期内训练中断 466 次，78% 是硬件故障，靠自动化保住 90% 以上的有效训练时间。预训练本身就是大型运维工程。（Llama 3 报告，逐字核对）</p>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>Chinchilla 定律</b>：算力最优要求参数与数据同比例增长，2022 年前的大模型普遍训练不足；之后为推理成本故意过训练，是这条律的细化，不是推翻。开场揭底的 80% 法则，在预训练尺度上同样成立。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Llama 3（逐字）· InstructGPT（arXiv 2203.02155）· Chinchilla（arXiv 2203.15556）</span>
+      <span class="slide-number" data-current="21" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>三个数字，给底座一个体感。</p>
+      <p>第一个，15T。Llama 3 预训练用了约 15 万亿 token，Llama 2 是 1.8 万亿，八倍多。第二个，50 倍。405B 旗舰模型的算力是 Llama 2 最大版的五十倍，跑在一万六千张 H100 上。这两个都来自 Llama 3 报告，逐字核对过。</p>
+      <p>顺带一个运维现实：54 天的快照期里，训练中断了 466 次，78% 是硬件问题，靠自动化把有效训练时间保持在 90% 以上。预训练本身就是个大型运维工程，这也是生命周期视角。</p>
+      <p>第三个数字最反直觉：1.3B 大于 175B。对齐过的 1.3B InstructGPT，人类偏好评分赢了 175B 的原始 GPT-3，参数少一百倍，这是论文摘要原文。结论：<strong>对齐的价值大于堆参数</strong>。</p>
+      <p>补一条 Chinchilla 定律：算力最优要求参数和数据同比例增长，2022 年前的大模型普遍训练不足；后来为推理成本故意过训练，是细化不是推翻。再呼应开场：那个 80% 在数据的法则，FineWeb 把 15T 过滤到 1.3T 反而更好，就是它在预训练尺度上的证明。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S22 · 小公司的位置 ============ -->
+  <section class="slide" data-title="S22 小公司的位置">
+    <p class="kicker">// 第 2 节 · 我们的位置</p>
+    <h2 class="h2" data-anim="fade-up">小公司的位置：<span class="accent">不造底座</span></h2>
+    <p class="lede">底座买，应用造。</p>
+
+    <div class="stack mt-l" data-anim="fade-up">
+      <div class="rule-row">
+        <span class="num">01</span>
+        <div>
+          <b>预训练不参与</b>
+          <p class="dim">16K 张 H100 的游戏。底座调 API，或者用开源的，把它当外购件。</p>
+        </div>
+      </div>
+      <div class="rule-row">
+        <span class="num">02</span>
+        <div>
+          <b>重心在应用层</b>
+          <p class="dim">RAG、Agent，以及它们完整的生产生命周期：数据、评测、上线、监控、飞轮。</p>
+        </div>
+      </div>
+      <div class="rule-row">
+        <span class="num">03</span>
+        <div>
+          <b>底座知识不白学</b>
+          <p class="dim">它决定三件事：选型（能力边界）、成本（token 怎么花钱）、升级（模型换代怎么应对）。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">下一站：RAG</span>
+      <span class="slide-number" data-current="22" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>看完底座的数字，说清楚我们的位置：不造底座。一万六千张 H100 的游戏，小公司不参与。底座调 API，或者用开源的。</p>
+      <p>我们的重心在应用层：RAG、Agent，和它们完整的生产生命周期。打个比方，底座是买发动机，我们造的是整车，做的是车队运营。</p>
+      <p>但刚才的底座知识不白学，它决定三件事：选型，知道能力边界在哪；成本，token 怎么花钱；升级，模型换代了怎么应对。接下来两站，先看 RAG。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S23 · RAG ============ -->
+  <section class="slide" data-title="S23 RAG">
+    <p class="kicker">// 第 2 节 · RAG</p>
+    <h2 class="h2" data-anim="fade-up">RAG：给模型<span class="accent">外挂知识</span></h2>
+    <p class="lede">模型不动，知识外挂，先检索再回答。</p>
+
+    <div class="rag-flow" data-anim="fade-up">
+      <div class="rag-chip"><span class="t">切片</span><span class="d">文档切块，一般不超过几百 token</span></div><span class="step-arrow">→</span>
+      <div class="rag-chip"><span class="t">Embedding</span><span class="d">块转向量，存向量库</span></div><span class="step-arrow">→</span>
+      <div class="rag-chip"><span class="t">检索</span><span class="d">按查询语义找相关块</span></div><span class="step-arrow">→</span>
+      <div class="rag-chip"><span class="t">重排</span><span class="d">精排出最好的几条</span></div><span class="step-arrow">→</span>
+      <div class="rag-chip"><span class="t">生成</span><span class="d">检索进 prompt，有据回答</span></div>
+    </div>
+
+    <div class="grid g3 mt-l" data-anim="fade-up">
+      <div class="card card-accent">
+        <h4>知识过时 &amp; 私有数据</h4>
+        <p class="dim">训练截止后的新知识、公司内部文档，改库即生效，不用动模型。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>幻觉缓解</h4>
+        <p class="dim">回答有出处，接地（grounding），不靠模型硬记。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>成本</h4>
+        <p class="dim">比微调便宜得多，知识更新立刻可见。</p>
+      </div>
+    </div>
+
+    <p class="era-note">在 Agent 里怎么看：RAG 是一项被调用的知识能力，工具箱里的一件工具。</p>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Anthropic Contextual Retrieval（流程，逐字）· RAG 原论文（Lewis et al. 2020）</span>
+      <span class="slide-number" data-current="23" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>RAG，检索增强生成。一句话：模型不动，知识外挂，先检索再回答。原始论文 2020 年就出来了，Meta 提出的。</p>
+      <p>流程五步。文档切块，Anthropic 的口径是一般不超过几百 token；块转向量，存进向量库；用户查询来了，按语义找相关块；重排，精排出最好的几条；最后把检索结果放进 prompt，让模型有据地回答。基本流程的官方描述出自 Anthropic 的 Contextual Retrieval 文章，逐字核对过。</p>
+      <p>它解决三件事：知识过时和私有数据，不用重训模型，改库就生效；幻觉缓解，回答有出处；成本，比微调便宜得多。</p>
+      <p>在 Agent 里怎么看它？就是一项被调用的知识能力，工具箱里的一件工具。每个环节怎么调参，下一页给工程参数。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S24 · RAG 参数 ============ -->
+  <section class="slide" data-title="S24 RAG 参数起点">
+    <p class="kicker">// 第 2 节 · RAG</p>
+    <h2 class="h2" data-anim="fade-up">生产级 RAG 的<span class="accent">参数起点</span></h2>
+    <p class="lede">不是玄学，是可以网格搜索的工程参数，跟调传统 ML 超参一个思路。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>从哪里开始试</h4>
+        <div class="feature-row"><span class="num blue">①</span><div><b>切片</b><p class="dim">256 / 512 / 1024 tokens 三档起试，重叠 10-20%</p></div></div>
+        <div class="feature-row"><span class="num green">②</span><div><b>两段式检索</b><p class="dim">先便宜地粗召回 50-200 条，再重排留 5-12 条进上下文。多了浪费 token，少了丢信息。</p></div></div>
+      </div>
+      <div class="code-block">
+<span class="comment"># StackAI 参考默认：起点，不是终点</span>
+chunk_size    = <span class="cmd">512 tokens</span>
+chunk_overlap = <span class="cmd">15%</span>
+vector_topN   = <span class="cmd">100</span>   <span class="comment">+ BM25 100 → RRF 融合</span>
+rerank_topM   = <span class="cmd">150</span>
+final_topK    = <span class="cmd">8</span>     <span class="comment"># 进上下文</span>
+      </div>
+    </div>
+
+    <p class="era-note">调参拿指标说话。检索侧：Recall@K · MRR · nDCG@K。生成侧：忠实度 · 引用覆盖率。</p>
+
+    <div class="deck-footer">
+      <span class="mono">出处：StackAI 企业实践（单源，引文直录）</span>
+      <span class="slide-number" data-current="24" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>上一页是流程，这一页是参数，都来自 StackAI 的企业实践总结。</p>
+      <p>切片大小，从 256、512、1024 三档开始试，重叠 10% 到 20%。检索用两段式：先便宜地粗召回 50 到 200 条，再重排出 5 到 12 条进上下文，多了浪费 token，少了丢信息。</p>
+      <p>右边这份参考默认可以直接抄：chunk 512、重叠 15%、向量 100 加 BM25 100 做 RRF 融合，重排 150，最终 8 条进上下文。注意它是起点，不是答案。</p>
+      <p>调参要拿指标说话：Recall@K、MRR、nDCG 看检索质量，忠实度、引用覆盖率看生成端。这套做法跟第一节调传统 ML 超参是同一个思路：<strong>网格搜索，指标说话</strong>。RAG 的迭代也走完整生命周期，这件事第三节回收。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S25 · RAG 两个跃迁点 ============ -->
+  <section class="slide" data-title="S25 RAG 跃迁点">
+    <p class="kicker">// 第 2 节 · RAG</p>
+    <h2 class="h2" data-anim="fade-up">两个最大的<span class="accent">效果跃迁点</span></h2>
+    <p class="lede">参数之外，两个结构性优化，回报最大。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card card-accent">
+        <h4>混合检索 · Hybrid</h4>
+        <p class="dim">BM25（精确匹配）和向量（语义）并行检索，结果用 RRF 融合。向量检索会丢精确匹配：型号、错误码、ID、SKU，BM25 正好补上。</p>
+        <p class="teaser">StackAI：常是企业 RAG 效果最大的一次跃迁</p>
+      </div>
+      <div class="card card-accent">
+        <h4>Cross-encoder 重排</h4>
+        <p class="dim">把 query 和文档拼在一起联合打分，比双编码器的相似度准得多。代价是慢，所以只对粗召回的前几十条做。</p>
+        <p class="teaser">StackAI 原话：很多 RAG 系统在这一步达到生产级</p>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>Anthropic 量化实验</b>（Contextual Retrieval，逐字核对）：给每个块补一段上下文说明，检索失败率降 <strong>49%</strong>；再叠加重排，降到 <strong>67%</strong>。结论：这些优化可以叠加，top-20 也优于 top-10。
+    </div>
+
+    <p class="era-note">RAG 的迭代也走完整生命周期：金标集（50-200 条真实查询）+ 检索指标 + 忠实度门禁，第三节细讲。</p>
+
+    <div class="deck-footer">
+      <span class="mono">出处：StackAI（单源）· Anthropic（逐字核对）</span>
+      <span class="slide-number" data-current="25" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>参数之外，两个结构性优化，回报最大。</p>
+      <p>第一，混合检索。BM25 和向量两条路并行跑，结果用 RRF 融合。StackAI 的说法，这经常是企业 RAG 效果最大的一次跃迁。原因很具体：向量检索会丢精确匹配，型号、错误码、ID、SKU 这种查询它抓不住，BM25 正好补上。</p>
+      <p>第二，Cross-encoder 重排。把 query 和文档拼在一起联合打分，比双编码器的相似度准得多，代价是慢，所以只对粗召回的前几十条做。StackAI 原话：重排是很多企业 RAG 系统达到生产级的那一步。</p>
+      <p>Anthropic 还给过一个量化实验，逐字核对过：给每个块补一段上下文说明，检索失败率降 49%；再叠加重排，降到 67%。这些优化可以叠加，top-20 也优于 top-10。</p>
+      <p>最后埋一条线：RAG 的迭代一样走完整生命周期，金标集、检索指标、忠实度门禁，怎么建，第三节细讲。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S26 · workflow vs agent ============ -->
+  <section class="slide" data-title="S26 workflow 与 agent">
+    <p class="kicker">// 第 2 节 · Agent</p>
+    <h2 class="h2" data-anim="fade-up">先分清两个词：<span class="accent">workflow 和 agent</span></h2>
+    <p class="lede">Anthropic 官方区分，逐字核对。两者统称 agentic system。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>Workflow</h4>
+        <p class="dim">LLM 与工具，按预定义的代码路径编排。流程图你画好，它照着走。</p>
+        <p class="def-quote">"orchestrated through predefined code paths"</p>
+      </div>
+      <div class="card hot">
+        <h4>Agent</h4>
+        <p class="dim">LLM 动态决定自己的流程与工具使用。流程图它自己画。</p>
+        <p class="def-quote">"dynamically direct their own processes and tool usage"</p>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>基本积木：增强型 LLM</b>
+      <div class="stat-chips">
+        <span>LLM 本体</span><span>+ 检索</span><span>+ 工具</span><span>+ 记忆</span>
+      </div>
+      后面的五种编排模式，都是拿这块积木搭出来的。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Anthropic《Building Effective Agents》（逐字核对）</span>
+      <span class="slide-number" data-current="26" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>进入 Agent，先把两个词分清。这是 Anthropic 的官方区分，逐字核对过。</p>
+      <p>Workflow：LLM 和工具，按预定义的代码路径编排，流程图你画好，它照着走。Agent：LLM 动态决定自己的流程和工具使用，流程图它自己画。一句话总结：<strong>workflow 是你画流程图，agent 是它自己画流程图</strong>，自主性换来的能力和风险都更大。</p>
+      <p>两者统称 agentic system。它的基本积木，Anthropic 叫增强型 LLM：模型本体，加上检索、工具、记忆三样外设。下一页的五种模式，都是这块积木搭出来的。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S27 · 五种编排模式 ============ -->
+  <section class="slide" data-title="S27 五种编排模式">
+    <p class="kicker">// 第 2 节 · Agent</p>
+    <h2 class="h2" data-anim="fade-up">五种<span class="accent">生产验证过</span>的编排模式</h2>
+    <p class="lede">Anthropic 从数十个团队的合作实践中总结，按复杂度从左到右排。</p>
+
+    <div class="pat-grid mt-l" data-anim="fade-up">
+      <div class="pat">
+        <span class="pn">1</span>
+        <b>Prompt chaining</b>
+        <code>A → B → C</code>
+        <p>串联分解：上一步的输出，是下一步的输入</p>
+      </div>
+      <div class="pat">
+        <span class="pn">2</span>
+        <b>Routing</b>
+        <code>A → 分类 → B/C/D</code>
+        <p>先分类，再走不同分支</p>
+      </div>
+      <div class="pat">
+        <span class="pn">3</span>
+        <b>Parallelization</b>
+        <code>A → B‖C‖D → Σ</code>
+        <p>多路同时跑再汇总；分段、投票是变体</p>
+      </div>
+      <div class="pat">
+        <span class="pn">4</span>
+        <b>Orchestrator-workers</b>
+        <code>主 → B,C,D → Σ</code>
+        <p>主 agent 拆任务、派子 agent、收结果</p>
+      </div>
+      <div class="pat">
+        <span class="pn">5</span>
+        <b>Evaluator-optimizer</b>
+        <code>A ⇄ B</code>
+        <p>一个生成、一个评审，循环到合格</p>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      再往上才是<b>自主 agent</b>：LLM 在环境反馈的循环里自己用工具，流程图它自己画。选型原则一条：按成本从左往右选，<strong>能用 1 就不用 2</strong>，越靠前越便宜、越好排查。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Anthropic《Building Effective Agents》（逐字核对）</span>
+      <span class="slide-number" data-current="27" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>五种生产里验证过的编排模式，Anthropic 从数十个团队的合作实践里总结的。</p>
+      <p>从简单到复杂。一，提示词串联，上一步输出当下一步输入，逐步收窄。二，路由，先分类再走分支。三，并行化，多路同时跑再汇总，分段和投票是它的两个变体。四，主控派发，主 agent 拆任务、派子 agent、收结果，后面讲多智能体会回到它。五，生成评审循环，一个生成一个挑刺，改到合格为止。</p>
+      <p>再往上才是自主 agent：LLM 在环境反馈的循环里自己用工具，流程图它自己画。</p>
+      <p>选型原则就一条：<strong>按成本从左往右选，能用一就不用二</strong>。越靠前越便宜，出了问题越好排查。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S28 · ReAct ============ -->
+  <section class="slide" data-title="S28 ReAct">
+    <p class="kicker">// 第 2 节 · Agent</p>
+    <h2 class="h2" data-anim="fade-up">ReAct：推理与行动<span class="accent">交织</span></h2>
+    <p class="lede">名字就是 Reasoning + Acting。2022 年之前，这两件事是分开研究的。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>机制</h4>
+        <p class="mini-map">Thought → Action → Observation ↺</p>
+        <div class="feature-row"><span class="num blue">①</span><div><b>推理轨迹 Thought</b><p class="dim">定计划、更新计划、处理异常</p></div></div>
+        <div class="feature-row"><span class="num green">②</span><div><b>行动 Action</b><p class="dim">调外部工具、知识源，把缺的信息补上</p></div></div>
+        <div class="feature-row"><span class="num orange">③</span><div><b>观察 Observation</b><p class="dim">结果回给模型，进入下一轮思考</p></div></div>
+      </div>
+      <div class="code-block trace">
+<span class="comment"># 一段轨迹（示意）</span>
+<span class="flag">Thought</span>      问题要 2024 营收，训练数据里没有
+<span class="cmd">Action</span>       search("X 公司 2024 营收")
+<span class="comment">Observation</span>  返回 3 条，第 2 条来自年报
+<span class="flag">Thought</span>      数据够了，可以回答
+<span class="cmd">Action</span>       finish(答案)
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>论文实证</b>：HotpotQA / FEVER 上，靠与外部知识源交互，缓解纯思维链的幻觉与错误传播；ALFWorld / WebShop 两个决策任务上，绝对成功率比模仿学习和强化学习高 <strong>34% / 10%</strong>（prompt 里只放了一两个示例）。轨迹可读，天然可归因，这一点第三节回收。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：ReAct 原论文（arXiv 2210.03629，逐字核对）</span>
+      <span class="slide-number" data-current="28" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>ReAct，2022 年提出的范式，名字就是 Reasoning 和 Acting 拼起来的。在这之前，推理和行动是两个分开研究的课题。</p>
+      <p>机制很简单：思考、行动、观察，转圈。推理轨迹负责定计划、更新计划、处理异常；行动负责调外部工具补信息。右边这段示意轨迹，就是模型发现信息不够、查工具、拿到结果、给出答案的全过程。</p>
+      <p>效果有实证，论文原文：在 HotpotQA 和 FEVER 上，靠跟外部知识源交互，缓解了纯思维链的幻觉和错误传播；在 ALFWorld 和 WebShop 两个决策任务上，绝对成功率比模仿学习和强化学习分别高 34% 和 10%，而且 prompt 里只放了一两个示例。</p>
+      <p>还有一点很重要：<strong>轨迹是可读的</strong>，失败发生在哪一步看得见，天然可归因。这一点第三节讲 Bad Case 的时候回收。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S29 · MCP ============ -->
+  <section class="slide" data-title="S29 MCP">
+    <p class="kicker">// 第 2 节 · Agent</p>
+    <h2 class="h2" data-anim="fade-up">MCP：AI 应用的 <span class="accent">USB-C</span></h2>
+    <p class="lede">Model Context Protocol，开放标准，连接 AI 应用与外部系统。官方类比原文：USB-C port for AI applications。</p>
+
+    <div class="mcp-arch" data-anim="fade-up">
+      <div class="mcp-side">
+        <div class="chip">应用 A</div>
+        <div class="chip">应用 B</div>
+        <div class="chip">应用 C</div>
+      </div>
+      <div class="mcp-hub">MCP<br><span>统一协议</span></div>
+      <div class="mcp-side">
+        <div class="chip">搜索工具</div>
+        <div class="chip">数据库</div>
+        <div class="chip">文件系统</div>
+      </div>
+    </div>
+    <p class="iter-quote">以前 N 个应用 × M 个工具 = N×M 份胶水代码；统一协议后，应用侧一次、工具侧一次 = N+M</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>架构</h4>
+        <p class="mini-map">host → client（每 server 一个）→ server</p>
+        <p class="dim">传输两种：本地 STDIO，远程 Streamable HTTP。协议层 JSON-RPC 2.0。</p>
+      </div>
+      <div class="card">
+        <h4>server 暴露的三样东西</h4>
+        <div class="feature-row"><span class="num blue">T</span><div><b>Tools</b><p class="dim">可执行函数：文件操作、API 调用、查库</p></div></div>
+        <div class="feature-row"><span class="num green">R</span><div><b>Resources</b><p class="dim">上下文数据：文件内容、数据库记录</p></div></div>
+        <div class="feature-row"><span class="num orange">P</span><div><b>Prompts</b><p class="dim">复用模板：系统提示、few-shot</p></div></div>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：modelcontextprotocol.io 官方文档（逐字核对）</span>
+      <span class="slide-number" data-current="29" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>工具多了，接线就是问题。以前每个 AI 应用接每个工具都要写一份胶水代码，N 个应用乘 M 个工具，就是 N 乘 M 份。MCP 把它变成开放标准：应用这头实现一次，工具那头实现一次，N 加 M 份搞定。官方的类比就是 USB-C，一个口通吃。</p>
+      <p>架构是 client-server：host 应用给每个 MCP server 建一个专属 client。server 可以跑在本地，STDIO 传输；也可以远程，Streamable HTTP。协议层是 JSON-RPC 2.0。</p>
+      <p>server 对外暴露三样东西：Tools，可执行的函数；Resources，上下文数据；Prompts，复用模板。后面给 agent 写工具的时候，就按这三样来想。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S30 · ACI ============ -->
+  <section class="slide" data-title="S30 ACI 工具设计">
+    <p class="kicker">// 第 2 节 · Agent</p>
+    <h2 class="h2" data-anim="fade-up">工具设计，是新的<span class="accent">接口设计</span></h2>
+    <p class="lede">ACI，agent-computer interface。给 HCI 多少严谨，就给 ACI 多少。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card hot">
+        <h4>一手事实</h4>
+        <p class="dim" style="font-size:16px; color:var(--text-1)">Anthropic 造 SWE-bench 编程 agent 时，花在<b>工具定义</b>上的精力，比优化整体 prompt 还多。</p>
+        <p class="dim">这是他们在工程文章里明说的，ACI 值得与 HCI（人机接口）同等的投入。</p>
+      </div>
+      <div class="card">
+        <h4>为什么这么重</h4>
+        <p class="dim">agent 全靠工具描述来决定怎么调用，描述模糊是它出错的最大来源之一。工具描述就是 agent 的 API 文档加使用手册，写得含糊，它就只能猜。</p>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>写法：像给新人写 onboarding 文档一样写工具</b>
+      <div class="stat-chips">
+        <span>名字说人话</span><span>参数含义明确</span><span>返回格式稳定</span><span>什么时候用</span><span>什么时候别用</span>
+      </div>
+      五条都写清楚，agent 就少猜很多。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Anthropic《Building Effective Agents》（逐字核对）</span>
+      <span class="slide-number" data-current="30" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>这一页讲个容易被忽略的事：工具定义本身就是接口设计。</p>
+      <p>Anthropic 造 SWE-bench 编程 agent 的时候，花在优化工具定义上的精力，比优化整体 prompt 还多，这是他们在工程文章里明说的。他们给的经验法则：人机接口 HCI 值得多少严谨，agent 与计算机的接口 ACI 就值得多少。</p>
+      <p>原因很直接：agent 全靠工具描述来决定怎么调用，描述模糊就是出错的最大来源之一。工具描述就是它的 API 文档加使用手册。</p>
+      <p>落地写法：<strong>像给新人写 onboarding 文档一样写工具</strong>。名字说人话，参数含义明确，返回格式稳定，什么时候该用、什么时候别用都写清楚。这五条都做了，agent 就少猜很多。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S31 · 多智能体 ============ -->
+  <section class="slide" data-title="S31 多智能体">
+    <p class="kicker">// 第 2 节 · Agent</p>
+    <h2 class="h2" data-anim="fade-up">多智能体：orchestrator-worker</h2>
+    <p class="lede">五种模式里第 4 种的实战版，Anthropic 自己的多智能体研究系统。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>结构</h4>
+        <div class="ma-diagram">
+          <div class="ma-node main">主 agent · 规划 + 持久化计划</div>
+          <div class="ma-fan"><span>▼</span><span>▼</span><span>▼</span></div>
+          <div class="ma-row">
+            <div class="ma-node">子 agent 1</div>
+            <div class="ma-node">子 agent 2</div>
+            <div class="ma-node">子 3 …（3-5 个并行）</div>
+          </div>
+          <div class="ma-fan"><span>▼</span><span>▼</span><span>▼</span></div>
+          <div class="ma-node out">汇总 + 引用（回传浓缩结果）</div>
+        </div>
+      </div>
+      <div>
+        <div class="card stat-card">
+          <div class="v">+90.2%</div>
+          <p class="k">内部研究评测超过单 agent<br>Opus 4 主控 + Sonnet 4 子 agent</p>
+        </div>
+        <div class="card stat-card">
+          <div class="v">-90%</div>
+          <p class="k">复杂查询的研究时间（最多）<br>广度优先的查询收益最大</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>收益来源</b>：并行 + 上下文隔离。子 agent 各自小上下文，跑完只回传浓缩结果，不会互相撑爆。对照基准是传统静态 RAG 分块检索，这个对比是 Anthropic 自己给的。成本的账，下一页算。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Anthropic《多智能体研究系统》（一手，逐字核对）</span>
+      <span class="slide-number" data-current="31" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>模式四的实战版：Anthropic 自己的多智能体研究系统。</p>
+      <p>结构：主 agent 负责规划，把计划持久化下来，然后派生三到五个并行的专业子 agent，各自带工具去跑，最后把浓缩的结果交给引用环节汇总。</p>
+      <p>数字：内部研究评测上，Opus 4 主控加 Sonnet 4 子 agent 的组合，超过单 agent Opus 4 百分之九十点二；复杂查询的研究时间最多降九成，广度优先的查询收益最大。</p>
+      <p>收益从哪来？两件事：并行，和上下文隔离。每个子 agent 一个小上下文，跑完只回传浓缩结果，不会被彼此的中间过程撑爆。还有一个细节：Anthropic 说的对照对象是传统静态 RAG 分块检索，这是他们自己给的对比。成本的账，下一页算。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S32 · 成本账 ============ -->
+  <section class="slide" data-title="S32 成本账">
+    <p class="kicker">// 第 2 节 · Agent</p>
+    <h2 class="h2" data-anim="fade-up">多智能体的<span class="accent">成本账</span>（必讲）</h2>
+    <p class="lede">Anthropic 生产数据，token 是硬通货。</p>
+
+    <div class="card cost-chart" data-anim="fade-up">
+      <div class="cost-row">
+        <span class="l">普通对话</span>
+        <div class="cost-track"><div class="cost-fill" style="width:7%"></div></div>
+        <span class="val">1×</span>
+      </div>
+      <div class="cost-row">
+        <span class="l">Agent</span>
+        <div class="cost-track"><div class="cost-fill" style="width:27%"></div></div>
+        <span class="val">4×</span>
+      </div>
+      <div class="cost-row hot">
+        <span class="l">多智能体</span>
+        <div class="cost-track"><div class="cost-fill full" style="width:100%"></div></div>
+        <span class="val">15×</span>
+      </div>
+      <p class="dim cap">同一产品内的生产 token 消耗对比：agent 约为对话的 4 倍，多智能体约 15 倍。</p>
+    </div>
+
+    <div class="grid g2 mt-m" data-anim="fade-up">
+      <div class="card">
+        <h4>为什么贵得有道理</h4>
+        <p class="dim">token 用量一项就解释了 <b>80%</b> 的性能方差；加上工具调用数和模型选择，三项合计 95%。性能差异的大头，是 token 堆出来的。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>结论</h4>
+        <p class="dim">多智能体只对高价值任务划算。Anthropic 的定位：它是广度优先搜索类问题的吞吐量优化，不是万能架构。先确认任务价值，再上架构。</p>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Anthropic《多智能体研究系统》（一手，逐字核对）</span>
+      <span class="slide-number" data-current="32" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>算完成绩马上算账，这页必讲。</p>
+      <p>Anthropic 分析了他们的 BrowseComp 评测，发现 token 用量自己一项就解释了 80% 的性能方差，再加上工具调用数和模型选择两项，合计 95%。换句话说，性能差异的大头，是 token 量堆出来的。</p>
+      <p>生产数据：agent 大约花普通对话四倍的 token，多智能体大约十五倍。条形图直观看：一次多智能体任务的成本，是普通聊天的十倍量级。</p>
+      <p>所以结论很清楚：<strong>多智能体只对高价值任务划算</strong>。Anthropic 自己的定位也诚实：它是广度优先搜索类问题的吞吐量优化，不是万能架构。先确认任务价值，再上架构。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S33 · 工程忠告（第 2 节收尾） ============ -->
+  <section class="slide" data-title="S33 工程忠告">
+    <p class="kicker">// 第 2 节 · Agent 收尾</p>
+    <h2 class="h2" data-anim="fade-up">Anthropic 的<span class="accent">工程忠告</span></h2>
+    <p class="lede">与数十个团队合作一年的观察：成功的实现都在做减法。</p>
+
+    <div class="stack mt-l" data-anim="fade-up">
+      <div class="rule-row">
+        <span class="num">01</span>
+        <div>
+          <b>简单可组合，胜过复杂框架</b>
+          <p class="dim">最成功的实现不用复杂框架和专用库，用简单、可组合的模式搭出来。</p>
+        </div>
+      </div>
+      <div class="rule-row">
+        <span class="num">02</span>
+        <div>
+          <b>从直接调 API 起步</b>
+          <p class="dim">先跑通，再抽象。别急着上框架。</p>
+        </div>
+      </div>
+      <div class="rule-row">
+        <span class="num">03</span>
+        <div>
+          <b>自主 agent 上线前：沙箱测试 + 护栏</b>
+          <p class="dim">成本和误差都会复利，一步错步步错。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>给小公司的定心丸</b>：业界头部也在做减法。回扣五种模式的选型原则：能用 workflow 解决的，就不上自主 agent。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Anthropic《Building Effective Agents》（逐字核对）</span>
+      <span class="slide-number" data-current="33" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>Agent 这一段的收尾。Anthropic 跟数十个团队合作一年的观察，三条忠告。</p>
+      <p>第一，最成功的实现，用的都是简单、可组合的模式，不是复杂框架和专用库。第二，从直接调 API 起步，先跑通再抽象，别急着上框架。第三，自主 agent 上线之前，沙箱测试加护栏，因为成本和误差都会复利，一步错步步错。</p>
+      <p>这一页其实是给小公司的定心丸：<strong>业界头部也在做减法</strong>。回想五种模式的选型原则，能用 workflow 解决的，不要上自主 agent。</p>
+      <p>第二节到此结束。第三节看这条流水线在 LLM 时代上线之后怎么运营：推理、监控、坏案例、数据飞轮。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S34 · 章节页：第 3 节 ============ -->
+  <section class="slide" data-title="S34 第 3 节 上线之后">
+    <p class="kicker">// 第 3 节</p>
+    <div class="section-head" data-anim="fade-up">
+      <div class="section-num">03</div>
+      <div class="t">
+        <h2 class="h2">上线不是终点</h2>
+        <p class="sub">监控、坏案例与数据飞轮 · 约 15 分钟</p>
+      </div>
+    </div>
+
+    <div class="stage-flow" data-anim="fade-up">
+      <div class="stage"><b>推理服务</b><p>秒级预算的新打法</p></div>
+      <span class="stage-arrow">→</span>
+      <div class="stage"><b>监控</b><p>四个维度</p></div>
+      <span class="stage-arrow">→</span>
+      <div class="stage"><b>Bad Case</b><p>收集与归因</p></div>
+      <span class="stage-arrow">→</span>
+      <div class="stage hot"><b>数据飞轮</b><p>全场核心对照</p></div>
+    </div>
+
+    <p class="era-note">第一节的部署、监控、反馈三站，换到 LLM 时代重新走一遍。</p>
+
+    <div class="deck-footer">
+      <span class="mono">第 3 节 · S34-S45</span>
+      <span class="slide-number" data-current="34" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>第三节，上线之后。第一节的部署、监控、反馈三站，换到 LLM 时代重新走一遍。</p>
+      <p>路线四站：先把模型服务跑起来，讲推理的新打法；然后是监控的四个维度；再是坏案例怎么收集、怎么归因；最后落到数据飞轮，那是全场最核心的一张对照表。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S35 · 瓶颈：显存 ============ -->
+  <section class="slide" data-title="S35 瓶颈显存">
+    <p class="kicker">// 第 3 节 · 推理服务</p>
+    <h2 class="h2" data-anim="fade-up">推理服务的瓶颈：<span class="accent">显存</span></h2>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up" style="margin-top:26px">
+      <b>兑现第一节的伏笔</b>：Uber 的线上服务 P95 &lt; 10ms，LLM 生成一个回答秒级起步。延迟预算变了两个数量级，瓶颈从特征查询变成了显存。
+    </div>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card stat-card">
+        <div class="v">1.7GB</div>
+        <p class="k">KV cache 的上限：LLaMA-13B 单条序列就能吃掉<br>而且随生成长度动态变化，难以预测</p>
+      </div>
+      <div class="card stat-card">
+        <div class="v">60-80%</div>
+        <p class="k">传统推理系统浪费的显存<br>碎片化 + 过度预留，vLLM 团队实测</p>
+      </div>
+    </div>
+
+    <p class="era-note">浪费六到八成显存，意味着同样的卡，并发直接砍到几分之一。下一页：vLLM 的解法。</p>
+
+    <div class="deck-footer">
+      <span class="mono">出处：vLLM 博客（2023，逐字核对）</span>
+      <span class="slide-number" data-current="35" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>先兑现一个伏笔。第一节 Uber 的数字，P95 十毫秒以内；LLM 这边，生成一个回答秒级起步。延迟预算变了两个数量级，服务打法全变：瓶颈不在特征查询，在显存。</p>
+      <p>两个数字，都来自 vLLM 团队，逐字核对过。第一，KV cache 很大：LLaMA-13B 一条序列最多吃 1.7GB，而且随生成长度动态变化，没法提前精确预判。第二，传统推理系统因为内存碎片化和过度预留，浪费了 60% 到 80% 的显存。</p>
+      <p>浪费六到八成是什么概念？同样的卡，能服务的并发直接砍到几分之一。打个比方，LLM 推理一直停在手动管理内存的 C 程序时代。下一页看 vLLM 怎么把操作系统那套搬进来。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S36 · vLLM ============ -->
+  <section class="slide" data-title="S36 vLLM">
+    <p class="kicker">// 第 3 节 · 推理服务</p>
+    <h2 class="h2" data-anim="fade-up">vLLM：把操作系统的<span class="accent">分页</span>搬进推理</h2>
+    <p class="lede">PagedAttention：KV cache 像虚拟内存一样，切成块、按需分配。</p>
+
+    <div class="grid g2" data-anim="fade-up" style="margin-top:26px">
+      <div class="card">
+        <h4>连续预留（传统）</h4>
+        <div class="mem-grid">
+          <div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c waste"></div><div class="c waste"></div><div class="c waste"></div><div class="c waste"></div><div class="c waste"></div>
+          <div class="c waste"></div><div class="c waste"></div><div class="c waste"></div><div class="c waste"></div><div class="c waste"></div><div class="c waste"></div><div class="c waste"></div><div class="c waste"></div><div class="c waste"></div><div class="c waste"></div><div class="c waste"></div><div class="c waste"></div>
+        </div>
+        <p class="dim">整段预留：碎片 + 尾部空闲，浪费 60-80%</p>
+      </div>
+      <div class="card">
+        <h4>分页（PagedAttention）</h4>
+        <div class="mem-grid">
+          <div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div>
+          <div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c used"></div><div class="c waste"></div>
+        </div>
+        <p class="dim">按块分配，只浪费最后一块：<strong>&lt;4%</strong></p>
+      </div>
+    </div>
+
+    <div class="tri" data-anim="fade-up" style="margin-top:20px">
+      <div class="card stat-card">
+        <div class="v">&lt;4%</div>
+        <p class="k">显存浪费，只剩最后一个块</p>
+      </div>
+      <div class="card stat-card">
+        <div class="v">24×</div>
+        <p class="k">吞吐 vs HF Transformers（vs TGI 3.5×），不改模型结构</p>
+      </div>
+      <div class="card stat-card">
+        <div class="v">GPU -50%</div>
+        <p class="k">LMSYS Chatbot Arena 实战：日均 3 万、峰值 6 万请求</p>
+      </div>
+    </div>
+
+    <p class="era-note">选型意义一句话：部署开源模型，vLLM 是默认起点。</p>
+
+    <div class="deck-footer">
+      <span class="mono">出处：vLLM 博客（2023，逐字核对）</span>
+      <span class="slide-number" data-current="36" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>解法来自 UC Berkeley 的 vLLM 团队：把操作系统里的虚拟内存和分页，原样搬进推理。</p>
+      <p>KV cache 不再整段预留，而是切成固定大小的块，逻辑块通过块表映射到不连续的物理块，按需分配。浪费只发生在每条序列的最后一个块，实测显存浪费低于 4%。看左右对比：左边连续预留，大片斜纹都是浪费；右边分页，几乎全满。</p>
+      <p>省下的显存直接换成吞吐：比 HuggingFace Transformers 最高快 24 倍，比当时的 TGI 快 3.5 倍，而且不用改模型结构。实战案例：LMSYS 的 Chatbot Arena 换 vLLM 之后，GPU 直接省一半，扛着日均三万、峰值六万的请求。</p>
+      <p>选型意义一句话：<strong>部署开源模型，vLLM 是默认起点</strong>。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S37 · 加速组合拳 ============ -->
+  <section class="slide" data-title="S37 加速组合拳">
+    <p class="kicker">// 第 3 节 · 推理服务</p>
+    <h2 class="h2" data-anim="fade-up">推理加速<span class="accent">组合拳</span></h2>
+    <p class="lede">一招省显存，一招提吞吐。招式要匹配负载。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>量化：精度换显存</h4>
+        <p class="dim">让大模型跑进更多设备。</p>
+        <p class="mini-map">FP8 · INT8 · INT4 · GPTQ · AWQ</p>
+        <p class="dim">格式与 GPU 代际强相关，FP8 要 Ada/Hopper 起。KV cache 还能单独再量化，跟权重量化是两个开关。</p>
+      </div>
+      <div class="card hot">
+        <h4>投机解码：先猜后验，无损</h4>
+        <p class="dim">草稿先写几个 token，大模型批量验证。验证机制保证输出分布与直接生成完全一致。</p>
+        <p class="teaser">LinkedIn 实测：吞吐近 4× · P90 -66% · 输出无损</p>
+        <p class="dim">前提：生成内容与输入高度重叠（JD 进、结构化分析出、大量引用原文）。n-gram 方案连草稿模型都不用。</p>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>方法论</b>：加速手段要匹配负载特征。LinkedIn 的负载输入长、输出大量引用输入，正好喂给 n-gram 投机；你的负载未必。先看自己的生成模式，再选招。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：vLLM 文档（量化）· LinkedIn Engineering（投机解码），均一手</span>
+      <span class="slide-number" data-current="37" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>推理加速两招，一招省显存，一招提吞吐。</p>
+      <p>第一招，量化：拿精度换显存，FP8、INT8、INT4，常见格式 GPTQ、AWQ。注意格式跟 GPU 代际强相关，FP8 要 Ada 或 Hopper 架构。另外 KV cache 本身也能单独量化，跟权重量化是两个开关。</p>
+      <p>第二招，投机解码：草稿先猜几个 token，大模型批量验证。验证机制数学上保证输出分布跟大模型自己写完全一样，所以叫无损。LinkedIn 在 vLLM 上开了 n-gram 投机，连草稿模型都不用，直接从输入里找重复片段当草稿。实测：同 QPS 同 SLA 下吞吐近四倍，P90 平均降 66%，内部评测确认输出无损。</p>
+      <p>但这招有前提：他们的负载是读几千 token 的 JD，生成一千多 token 的结构化分析，大量引用原文，输入输出高度重叠。方法论就一句：<strong>加速手段要匹配负载特征</strong>，先看自己的生成模式，再选招。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S38 · 监控四维度 ============ -->
+  <section class="slide" data-title="S38 监控四维度">
+    <p class="kicker">// 第 3 节 · 监控</p>
+    <h2 class="h2" data-anim="fade-up">LLM 应用的监控：<span class="accent">四个维度</span></h2>
+    <p class="lede">第一节说 ML 要在服务监控之上加数据健康和模型健康。LLM 应用落到四个维度。</p>
+
+    <div class="grid g4 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>质量</h4>
+        <p class="dim">幻觉率 · 用户反馈（点踩、人工接管）</p>
+      </div>
+      <div class="card">
+        <h4>成本</h4>
+        <p class="dim">token 用量 · 单次任务费用（多智能体的 15× 在这里盯）</p>
+      </div>
+      <div class="card">
+        <h4>延迟</h4>
+        <p class="dim">首 token 时间 · 生成速度</p>
+      </div>
+      <div class="card hot">
+        <h4>trace</h4>
+        <p class="dim">轨迹：每步调了什么模型、什么工具、检索了什么。<strong>归因的前提</strong>，LLM 应用独有。</p>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>工具现状</b>（以 MLflow 为例，官网自述，三票验证 3-0）：内建 OpenTelemetry tracing · 50+ 内置指标与 LLM judge · prompt 管理 · AI Gateway 成本管理。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Evidently（分层）· mlflow.org（三票验证 3-0）</span>
+      <span class="slide-number" data-current="38" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>监控。先回一句第一节：Evidently 说 ML 监控要在传统服务监控之上，加数据健康和模型健康两层。到了 LLM 应用，实践里盯四个维度。</p>
+      <p>质量，幻觉率和用户反馈；成本，token 用量，多智能体那个十五倍就是在这儿盯的；延迟，首 token 时间和生成速度；trace，轨迹，每次请求里模型做了什么、调了哪些工具、检索了什么。第四个是 LLM 应用独有的维度，没有 trace，后面的坏案例归因无从谈起。</p>
+      <p>工具现状以 MLflow 为例，官网自述：内建 OpenTelemetry 的 tracing，五十多个内置指标和 LLM judge，prompt 管理，AI Gateway 管成本。这些能力存在是三票验证过的。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S39 · 幻觉检测 ============ -->
+  <section class="slide" data-title="S39 幻觉检测">
+    <p class="kicker">// 第 3 节 · 监控</p>
+    <h2 class="h2" data-anim="fade-up">幻觉的现实与<span class="accent">实时检测</span></h2>
+    <p class="lede">先给现实预期，再看生产里怎么拦。</p>
+
+    <div class="grid g2" data-anim="fade-up" style="margin-top:26px">
+      <div class="card stat-card">
+        <div class="v">5-10%</div>
+        <p class="k">生产系统的典型事实错误率<br>上了 RAG、调好 prompt 之后仍然如此</p>
+      </div>
+      <div class="card stat-card">
+        <div class="v">&lt;2%</div>
+        <p class="k">降到 2% 以下极其困难<br>来自 Eugene Yan 从 LLM 供应商处了解的口径</p>
+      </div>
+    </div>
+
+    <div class="card mt-m" data-anim="fade-up">
+      <h4>Datadog 的实时检测（生产实践，一手）</h4>
+      <div class="feature-row"><span class="num blue">①</span><div><b>黑盒 LLM-as-judge，实时跑在生产流量上</b><p class="dim">客户大多用黑盒模型，概率和注意力拿不到；扰动式要重新生成答案，5-10 倍调用成本，弃用。</p></div></div>
+      <div class="feature-row"><span class="num green">②</span><div><b>判出来自动分两类</b><p class="dim">与上下文矛盾：上下文是对的，答案基本可判错。无依据论断：上下文里没有支撑。</p></div></div>
+      <div class="feature-row"><span class="num orange">③</span><div><b>分级拦截</b><p class="dim">敏感场景两类都拦，不敏感只拦矛盾。这套分级很实用，可以直接抄。</p></div></div>
+    </div>
+
+    <p class="era-note">预期管理：别承诺零幻觉，设计兜底（拦截 + 转人工）。</p>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Eugene Yan（逐字核对）· Datadog LLM Observability（一手）</span>
+      <span class="slide-number" data-current="39" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>幻觉，先给现实预期。Eugene Yan 的口径：上了 RAG、prompt 也调好的生产系统，典型的事实不一致率仍有 5% 到 10%；从供应商那边了解到的信息是，降到 2% 以下极其困难。所以对外别承诺零幻觉，对内设计兜底。</p>
+      <p>检测能不能实时做？Datadog 的生产实践：用黑盒 LLM-as-judge 跑在生产流量上。选黑盒是因为客户大多用黑盒模型，概率和注意力拿不到；不用扰动式，是因为它要重新生成答案，五到十倍的调用成本，太贵。</p>
+      <p>判出来自动分两类：与上下文矛盾，上下文是对的，答案基本就是错的；无依据论断，上下文里没有支撑。敏感场景两类都拦，不敏感只拦矛盾。这套分级很实用，直接抄。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S40 · Bad Case 归因 ============ -->
+  <section class="slide" data-title="S40 Bad Case 归因">
+    <p class="kicker">// 第 3 节 · Bad Case</p>
+    <h2 class="h2" data-anim="fade-up">Bad Case 从哪来，<span class="accent">怎么归因</span></h2>
+    <p class="lede">监控发现问题之后：先收集，再对着 trace 逐环排查。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>收集渠道</h4>
+        <div class="feature-row"><span class="num blue">显</span><div><b>显式反馈</b><p class="dim">点赞点踩、人工接管</p></div></div>
+        <div class="feature-row"><span class="num green">隐</span><div><b>隐式信号</b><p class="dim">重试、改写、放弃。没有点踩，不等于满意。</p></div></div>
+        <p class="dim" style="margin-top:12px">隐式信号量更大，也更容易被忽略。</p>
+      </div>
+      <div class="card">
+        <h4>归因链条：对着 trace 逐环问</h4>
+        <div class="feature-row"><span class="num blue">①</span><div><b>检索没召回？</b><p class="dim">查知识库与检索层：改库、改参数</p></div></div>
+        <div class="feature-row"><span class="num green">②</span><div><b>工具选错、参数错？</b><p class="dim">查工具定义，就是 ACI 那页说的写法</p></div></div>
+        <div class="feature-row"><span class="num orange">③</span><div><b>规划进循环？</b><p class="dim">查编排与 prompt</p></div></div>
+        <div class="feature-row"><span class="num red">④</span><div><b>模型能力不足？</b><p class="dim">最后才轮到它：换模型，或微调</p></div></div>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>归因到环节，才知道改哪一环</b>。传统模型只有一个输出可看，agent 的每一步都可审计，这是轨迹带来的独特优势。ReAct 那页埋的线，这页兑现。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">综合：Eugene Yan / Datadog（反馈信号）· 回扣 S28 轨迹、S30 工具定义</span>
+      <span class="slide-number" data-current="40" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>监控发现问题之后，进入坏案例环节。先说收集：显式的有点赞点踩、人工接管；隐式的更重要，用户重试、改写、放弃，都是信号，没有点踩不等于满意，而且隐式的量更大。</p>
+      <p>然后是归因，这一页兑现 ReAct 那页埋的线：轨迹可读，就能逐环排查。四个问题按顺序问：检索没召回吗？查知识库和检索层。工具选错或参数错吗？查工具定义，就是 ACI 那页说的。规划进循环了吗？查编排和 prompt。都不是，才轮到模型能力不足，考虑换模型或微调。</p>
+      <p>归因到环节，才知道改哪一环，否则全是玄学。这也是 agent 相对传统 ML 的独特优势：传统模型只有一个输出可看，agent 的每一步都可审计。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S41 · 评测集 ============ -->
+  <section class="slide" data-title="S41 评测集">
+    <p class="kicker">// 第 3 节 · 评测集</p>
+    <h2 class="h2" data-anim="fade-up">评测集：<span class="accent">不用大，但要真</span></h2>
+    <p class="lede">三个起步口径，指向同一句话：真实、小、现在就建。</p>
+
+    <div class="tri" data-anim="fade-up" style="margin-top:26px">
+      <div class="card stat-card">
+        <div class="v">~20 条</div>
+        <p class="k">Anthropic 多智能体系统的起步规模<br>真实使用模式的查询</p>
+      </div>
+      <div class="card stat-card">
+        <div class="v">20-50 个</div>
+        <p class="k">来自真实失败的简单任务就是好起点<br>已上线团队从 bug 单与客服队列收（evals 工程文）</p>
+      </div>
+      <div class="card stat-card">
+        <div class="v">50-200 条</div>
+        <p class="k">StackAI 建议的金标集规模<br>真实用户查询</p>
+      </div>
+    </div>
+
+    <div class="grid g2" data-anim="fade-up" style="margin-top:20px">
+      <div class="card">
+        <h4>方法与局限</h4>
+        <p class="dim">单次 LLM-as-judge：打 0.0-1.0 分 + rubric 通过/失败，与人工判断最一致。</p>
+        <p class="dim">但 judge 有局限：幻觉检测准确率仅 ~54-58%。<b>人工测试不可替代</b>——Anthropic 靠人工发现 agent 偏爱 SEO 内容农场，judge 抓不到。</p>
+      </div>
+      <div class="card hot">
+        <h4>兑现：坏案例 → 评测集</h4>
+        <p class="dim">开场地图里反馈的第二个回流点，这页兑现。Anthropic 原话：<b>failures become test cases, test cases prevent regressions</b>。</p>
+        <p class="dim">回归评测保持近 100% 通过率，专防倒退；能力评测通过率高了，毕业转回归套件。评测集是活物，不同步真实用法，就制造虚假信心。</p>
+      </div>
+    </div>
+
+    <p class="era-note">评测集是团队最重要的资产之一，20 条今天就建得起来。</p>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Anthropic evals 工程文 2026-01（逐字）· 多智能体/StackAI（一手/单源）· Eugene Yan 引 HaluEval</span>
+      <span class="slide-number" data-current="41" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>评测集，全场最重要的基础设施之一。三个起步口径：Anthropic 的多智能体系统从约二十条真实查询起步；他们今年一月的 evals 工程文说得更具体，二十到五十个来自真实失败的任务就是很好的起点，已上线的团队直接从 bug 单和客服队列里收；StackAI 建议五十到二百条真实用户查询做金标集。口径一致：真实、小、现在就建。</p>
+      <p>方法：单次 LLM-as-judge 调用，打 0 到 1 分加 rubric 通过失败，与人工判断最一致。但 judge 有局限，幻觉检测准确率只有五成四到五成八；人工测试不可替代，Anthropic 就是靠人工发现 agent 偏爱 SEO 内容农场的。</p>
+      <p>最后兑现开场地图那条线：反馈的第二个回流点，坏案例进评测集。Anthropic 原话，failures become test cases, test cases prevent regressions，失败变测试用例，测试用例防回归。回归评测保持近百分百通过率，专门防倒退；能力评测通过率高了就毕业成回归套件。评测集是活物，不同步真实用法，就会制造虚假信心。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S42 · 评测护栏 ============ -->
+  <section class="slide" data-title="S42 评测护栏">
+    <p class="kicker">// 第 3 节 · 评测集</p>
+    <h2 class="h2" data-anim="fade-up">评测护栏的<span class="accent">真实价值</span></h2>
+    <p class="lede">两个真实案例：没有评测，你不会知道升级伤了哪里。</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card stat-card">
+        <div class="v">-10%</div>
+        <p class="k">Voiceflow：一次常规升级被抓住的性能下滑</p>
+        <p class="dim" style="margin-top:10px">gpt-3.5-turbo-0301 → 1106，意图分类的评测护栏拦下了这 10% 的静默回归。没有护栏，用户先发现。</p>
+      </div>
+      <div class="card stat-card">
+        <div class="v">0.56 → 0.85</div>
+        <p class="k">专用检测器：几百条任务数据的跃迁</p>
+        <p class="dim" style="margin-top:10px">通用 judge 对事实一致性不够灵。用几百条任务数据微调一个 NLI 模型，ROC-AUC 从接近随机变成可靠检测器。</p>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up" style="margin-top:22px">
+      <b>点题</b>：LLM 应用升级模型、改 prompt，没有编译器帮你拦错误，<strong>评测就是你的编译器</strong>。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：Eugene Yan（单源，引文直录）</span>
+      <span class="slide-number" data-current="42" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>评测护栏值不值？两个真实案例，都来自 Eugene Yan 的实践复盘。</p>
+      <p>第一个，Voiceflow。OpenAI 把 gpt-3.5-turbo-0301 弃用，他们升到 1106，很常规的升级。意图分类的评测护栏抓住了 10% 的性能下滑。没有这个护栏，这 10% 就静默上线了，用户先发现。</p>
+      <p>第二个，专用检测器。通用 judge 对事实一致性不够灵，用几百条任务数据微调一个小 NLI 模型，ROC-AUC 从 0.56 提到 0.85，从接近随机变成可靠的检测器。几百条数据，就有这个跃迁。</p>
+      <p>点题：LLM 应用升级模型、改 prompt，没有编译器帮你拦错误，<strong>评测就是你的编译器</strong>。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S43 · 数据飞轮（核心对照） ============ -->
+  <section class="slide" data-title="S43 数据飞轮对照">
+    <p class="kicker">// 第 3 节 · 数据飞轮</p>
+    <h2 class="h2" data-anim="fade-up">数据飞轮：传统 ML <span class="accent">vs</span> Agent</h2>
+    <p class="lede">全场核心的一张对照。闭环没变，转速变了。</p>
+
+    <div class="card fw-wrap" data-anim="fade-up">
+      <table class="fw-table">
+        <thead>
+          <tr><th></th><th>传统 ML 飞轮</th><th class="agent">Agent 飞轮</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>数据来源</td>
+            <td>标注样本；线上预测 + 回流标签</td>
+            <td class="agent">trace 轨迹、显式/隐式反馈、任务成败信号</td>
+          </tr>
+          <tr>
+            <td>主要杠杆</td>
+            <td>重训模型（周 / 月级）</td>
+            <td class="agent">prompt · 工具定义 · 编排 · 换模型 · 微调（<b>天级</b>）</td>
+          </tr>
+          <tr>
+            <td>门禁</td>
+            <td>离线指标 + A/B</td>
+            <td class="agent">评测集回归门禁</td>
+          </tr>
+          <tr>
+            <td>发布</td>
+            <td>金丝雀 → A/B → 回滚</td>
+            <td class="agent">同样适用 + rainbow 平滑切流、checkpoint 断点恢复</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>核心洞察：闭环没变，转速变了。</b>传统 ML 转一圈要重训模型，周或月；Agent 转一圈可能只是改一段 prompt，天级。杠杆越多，飞轮转得越快。再收拢一条线：监控数据同时喂养两处——作为<b>燃料</b>进训练与杠杆，作为<b>门禁</b>进评测集（坏案例变回归用例，failures become test cases）。开场地图上的双回流，就是它。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：StackAI（发布流程）· Anthropic（rainbow / 评测闭环，一手）· 综合对照</span>
+      <span class="slide-number" data-current="43" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>全场最核心的一张表，左边传统 ML，右边 Agent，四行对齐。</p>
+      <p>数据来源：传统是标注样本加线上预测回流标签；Agent 是轨迹、显式隐式反馈、任务成败信号。杠杆：传统基本只有重训模型，周或月转一圈；Agent 有 prompt、工具定义、编排、换模型、微调，天级转一圈。门禁：离线指标加 A/B，对评测集回归门禁。发布：金丝雀、A/B、回滚两边通用，Agent 多了 rainbow 部署和 checkpoint 恢复，下一页讲。</p>
+      <p>核心洞察一句话：<strong>闭环没变，转速变了</strong>。杠杆越多，飞轮转得越快。</p>
+      <p>再补一条连接线，把今天几条线收拢：监控数据同时喂养两处。作为燃料，进训练和杠杆那一列；作为门禁，进评测集，坏案例变回归用例，就是 Anthropic 说的 failures become test cases。开场地图上那个双回流，就是它。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S44 · 发布流程 ============ -->
+  <section class="slide" data-title="S44 发布流程">
+    <p class="kicker">// 第 3 节 · 发布</p>
+    <h2 class="h2" data-anim="fade-up">Agent 的<span class="accent">发布流程</span></h2>
+    <p class="lede">通用四步，与第一节的灰度思维完全同构。</p>
+
+    <div class="pipe8-row" data-anim="fade-up" style="margin-top:32px">
+      <div class="step-chip"><span class="n">01</span><span class="t">离线评测门禁</span></div><span class="step-arrow">→</span>
+      <div class="step-chip"><span class="n">02</span><span class="t">金丝雀</span></div><span class="step-arrow">→</span>
+      <div class="step-chip"><span class="n">03</span><span class="t">A/B</span></div><span class="step-arrow">→</span>
+      <div class="step-chip last"><span class="n">04</span><span class="t">全量 + 监控</span></div>
+    </div>
+    <p class="iter-quote">评测集过不了门禁就不上线；小流量试错；真实对照；全量后盯监控</p>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card hot">
+        <h4>Rainbow deployment · 平滑切流</h4>
+        <p class="dim">新旧版本同时在线，流量逐步从旧切到新。跑到一半的长任务不被打断，这是对有状态任务的照顾。</p>
+      </div>
+      <div class="card hot">
+        <h4>Checkpoint · 断点恢复</h4>
+        <p class="dim">长任务出错，从断点重试，不是整个重来。配套：生产 tracing + 重试逻辑。</p>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>对照第一节</b>：影子、金丝雀、A/B、回退的灰度思维完全延续。变化在于 agent 有状态、任务长，切流方式更讲究。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">出处：StackAI（发布流程）· Anthropic（rainbow / checkpoint，一手）</span>
+      <span class="slide-number" data-current="44" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>发布。通用流程四步，来自 StackAI：先离线评测门禁，过不了不上线；再金丝雀小流量；然后 A/B；最后全量加监控。跟第一节的灰度三件套完全同构。</p>
+      <p>Agent 特有两件，都来自 Anthropic 的生产实践。第一，rainbow deployment：新旧版本同时在线，流量逐步从旧切到新，一直在跑的长任务不被打断。第二，checkpoint 恢复：长任务出错，从断点重试，不是整个重来，配套的是生产 tracing 和重试逻辑。</p>
+      <p>对照第一节：灰度思维完全延续，只是 agent 有状态、任务长，切流方式更讲究。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S45 · 第 3 节小结 ============ -->
+  <section class="slide" data-title="S45 第 3 节小结">
+    <p class="kicker">// 第 3 节 · 小结</p>
+    <h2 class="h2" data-anim="fade-up">三句话带走</h2>
+
+    <div class="stack mt-l" data-anim="fade-up" style="margin-top:44px">
+      <div class="rule-row sum">
+        <span class="num">01</span>
+        <div>
+          <b>上线不是终点，是飞轮的起点</b>
+          <p class="dim">监控四维度、坏案例归因、灰度发布，都是飞轮的零件。</p>
+        </div>
+      </div>
+      <div class="rule-row sum">
+        <span class="num">02</span>
+        <div>
+          <b>评测集是飞轮的轴承</b>
+          <p class="dim">20 条就能起步；坏案例不断变成新用例，它会一直长。</p>
+        </div>
+      </div>
+      <div class="rule-row sum">
+        <span class="num">03</span>
+        <div>
+          <b>trace 是归因的前提，归因是改进的前提</b>
+          <p class="dim">没有这条链，飞轮转不起来。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">第 3 节 · 完</span>
+      <span class="slide-number" data-current="45" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>第 3 节收三句话。</p>
+      <p>第一句，上线不是终点，是飞轮的起点，今天讲的监控、坏案例、发布，都是飞轮的零件。第二句，评测集是飞轮的轴承，二十条就能起步，坏案例不断变成新用例，它会一直长。第三句，trace 是归因的前提，归因是改进的前提，没有这条链，飞轮转不起来。</p>
+      <p>最后三页，收束全场。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S46 · 一条生命周期，两个时代 ============ -->
+  <section class="slide" data-title="S46 一条生命周期两个时代">
+    <p class="kicker">// 第 4 节 · 收束</p>
+    <h2 class="h2" data-anim="fade-up">一条生命周期，<span class="accent">两个时代</span></h2>
+    <p class="lede">两个时代放到同一张地图上，环节一一对应。</p>
+
+    <div class="duo-grid duo-head" data-anim="fade-up">
+      <span>数据</span><span>训练</span><span>评测</span><span>部署</span><span>监控</span><span>反馈</span>
+    </div>
+
+    <div data-anim="fade-up">
+      <p class="duo-label">① 传统 ML</p>
+      <div class="duo-grid">
+        <div class="duo-cell">标注样本</div><div class="duo-cell">训练单模型</div><div class="duo-cell">离线指标</div><div class="duo-cell">模型服务</div><div class="duo-cell">漂移监控</div><div class="duo-cell">重训模型</div>
+      </div>
+    </div>
+
+    <div data-anim="fade-up" style="margin-top:18px">
+      <p class="duo-label llm">② LLM · Agent</p>
+      <div class="duo-grid">
+        <div class="duo-cell hot">语料与轨迹</div><div class="duo-cell hot">底座 + 编排</div><div class="duo-cell hot">评测集门禁</div><div class="duo-cell hot">RAG / Agent 上线</div><div class="duo-cell hot">四维监控</div><div class="duo-cell hot">多杠杆迭代</div>
+      </div>
+    </div>
+
+    <p class="era-note">形状一模一样。开场画的那个圈，到这里闭合。再看一眼：什么变了，什么没变。</p>
+
+    <div class="deck-footer">
+      <span class="mono">收束 · S46-S48</span>
+      <span class="slide-number" data-current="46" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>倒数第三页，把两个时代放回同一张地图。</p>
+      <p>上面一条：标注样本、训练单模型、离线指标、模型服务、漂移监控、重训。下面一条：语料与轨迹、底座加编排、评测集门禁、RAG 和 Agent 系统上线、四维监控、多杠杆迭代。环节一一对应，形状一模一样。</p>
+      <p>开头画的那个圈，到这里闭合。接下来看：什么变了，什么没变。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S47 · 什么变了，什么没变 ============ -->
+  <section class="slide" data-title="S47 什么变了什么没变">
+    <p class="kicker">// 第 4 节 · 收束</p>
+    <h2 class="h2" data-anim="fade-up">什么变了，<span class="accent">什么没变</span></h2>
+
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="card">
+        <h4>没变（四件）</h4>
+        <ul class="fail-list">
+          <li><b class="mark-ok">✓ 数据质量决定上限</b>：从 CRISP-DM 的 80% 到 FineWeb 的过滤</li>
+          <li><b class="mark-ok">✓ 上线不是终点</b>：漂移监控到四维监控</li>
+          <li><b class="mark-ok">✓ 评测是门禁</b>：离线指标到评测集回归</li>
+          <li><b class="mark-ok">✓ 反馈闭环驱动迭代</b>：join 表到数据飞轮</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>变了（四件）</h4>
+        <ul class="fail-list">
+          <li><b>迭代周期</b>：月 → <span class="mark-chg">天</span></li>
+          <li><b>迭代杠杆</b>：重训模型 → <span class="mark-chg">prompt / 工具 / 编排 / 微调</span></li>
+          <li><b>数据形态</b>：标注样本 → <span class="mark-chg">轨迹与反馈</span></li>
+          <li><b>交付单元</b>：单模型 → <span class="mark-chg">模型 + 检索 + 工具 + 流程的系统</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>主旨</b>：生命周期框架是稳定的，环节形态在演化。所以生命周期视角比任何单项技术都保值——技术会过时，框架不会。
+    </div>
+
+    <div class="deck-footer">
+      <span class="mono">全场论断的收束</span>
+      <span class="slide-number" data-current="47" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>什么没变？四件：数据质量决定上限；上线不是终点；评测是门禁；反馈闭环驱动迭代。从 CRISP-DM 到 Agent，四件全部成立，每件今天都有出处。</p>
+      <p>什么变了？也是四件：迭代周期，月到天；迭代杠杆，从只有重训，到 prompt、工具、编排、微调好几把；数据形态，标注样本变成轨迹和反馈；交付单元，一个模型变成模型加检索加工具加流程的系统。</p>
+      <p>所以今天的落点：生命周期框架是稳定的，环节形态在演化。这也是为什么生命周期视角比任何单项技术都保值，技术会过时，框架不会。</p>
+    </aside>
+  </section>
+
+  <!-- ============ S48 · 务实路线 & Q&A ============ -->
+  <section class="slide" data-title="S48 务实路线与 QA">
+    <p class="kicker">// 收束 · 起步清单</p>
+    <h2 class="h2" data-anim="fade-up">小公司<span class="accent">务实路线</span></h2>
+    <p class="lede">开场答应过的起步清单，四条，全部有出处。</p>
+
+    <div class="stack" data-anim="fade-up" style="margin-top:24px">
+      <div class="rule-row">
+        <span class="num">1</span>
+        <div><b>先 workflow，后 agent</b><p class="dim">简单可组合起步，能用 1 就不用 2（Anthropic 工程忠告）</p></div>
+      </div>
+      <div class="rule-row">
+        <span class="num">2</span>
+        <div><b>评测集先行：20-50 条真实查询，今天就建</b><p class="dim">真实失败优先，从 bug 单和客服队列里收（Anthropic evals 工程文 / StackAI）</p></div>
+      </div>
+      <div class="rule-row">
+        <span class="num">3</span>
+        <div><b>直接调 API，别急着上框架</b><p class="dim">先跑通，再抽象（Anthropic 工程忠告）</p></div>
+      </div>
+      <div class="rule-row">
+        <span class="num">4</span>
+        <div><b>先有监控和 trace，再谈优化</b><p class="dim">没有归因就没有飞轮（Bad Case 与飞轮两页的推论）</p></div>
+      </div>
+    </div>
+
+    <div class="card card-accent fs-foot" data-anim="fade-up">
+      <b>回扣开场</b>：那个问题现在可以完整回答了。80% 在数据的法则没变，变的是数据本身，从标注样本变成了轨迹与反馈。
+    </div>
+
+    <div class="qa-final" data-anim="fade-up">Q &amp; A · 谢谢</div>
+
+    <div class="deck-footer">
+      <span class="mono">全部出处见 docs/research-verified-facts.md</span>
+      <span class="slide-number" data-current="48" data-total="48"></span>
+    </div>
+    <aside class="notes">
+      <p>收尾。开场答应的三样东西，最后一样现在兑现：起步清单，四条，全部有出处。</p>
+      <p>第一，先 workflow 后 agent，简单可组合起步，能用一就不用二。第二，评测集先行，二十到五十条真实查询，今天就建，已上线的从 bug 单和客服队列里收。第三，直接调 API，别急着上框架，先跑通再抽象。第四，先有监控和 trace，再谈优化，没有归因就没有飞轮。前两条和第三条都出自 Anthropic，第四条是今天 Bad Case 和飞轮两页的推论。</p>
+      <p>最后回扣开场。那个问题现在可以完整回答了：80% 在数据的法则没变，变的是数据本身，从标注样本变成了轨迹和反馈。</p>
+      <p>谢谢大家，提问开始。</p>
+    </aside>
+  </section>
+
+</div>
+
+<div style="position:fixed;bottom:12px;left:12px;font-size:11px;color:#484f5866;z-index:100;pointer-events:none">
+  S 演讲者视图 · T 切换主题 · ← → 翻页 · F 全屏 · O 总览 · R 重置计时
+</div>
+
+<script src="../.claude/skills/html-ppt/assets/runtime.js"></script>
+</body>
+</html>
