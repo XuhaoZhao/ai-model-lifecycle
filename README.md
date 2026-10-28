@@ -15,7 +15,7 @@
 ## 分享材料
 
 - [`docs/superpowers/specs/2026-09-27-ai-model-lifecycle-talk-design.md`](docs/superpowers/specs/2026-09-27-ai-model-lifecycle-talk-design.md) — 分享设计文档（结构、时间分配、讲稿要点、事实出处）
-- [`docs/talk/slides-content.md`](docs/talk/slides-content.md) — 页面级 PPT 内容（48 页：标题/要点/讲稿备注/配图建议）
+- [`docs/talk/slides-content.md`](docs/talk/slides-content.md) — 页面级 PPT 内容（50 页：标题/要点/讲稿备注/配图建议）
 - [`docs/research-verified-facts.md`](docs/research-verified-facts.md) — 人工核验事实底稿（A-F 六节，置信度分级：3 票验证 / 逐字核对 / 单源引文）
 - [`docs/research/deep-research-digest.md`](docs/research/deep-research-digest.md) — 调研事实库（25 来源 / 125 论断 / 13 条经对抗验证）
 
