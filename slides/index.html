@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body class="tpl-presenter-mode-reveal">
-<div class="deck">
+<div class="deck" data-w="1600" data-h="900">
 
   <!-- ============ S1 · 封面 ============ -->
   <section class="slide" data-title="S1 封面" style="padding:0">
@@ -123,7 +123,7 @@
       </div>
       <div class="reveal-facts">
         <div class="feature-row"><span class="num blue">①</span><div><b>数据准备占项目的 80%</b><p class="dim">行业经验法则，写在 CRISP-DM 官方介绍里。这套方法论 1999 年发布，KDnuggets 做过四次调查，每次使用率第一</p></div></div>
-        <div class="feature-row"><span class="num green">②</span><div><b>数据准备的五个任务：选择、清洗、构建、整合、格式化</b><p class="dim">官方原话：清洗往往是最耗时的任务</p></div></div>
+        <div class="feature-row"><span class="num green">②</span><div><b>数据准备的五个任务：选择、清洗、构建、整合、格式化</b><p class="dim"></p></div></div>
         <div class="feature-row"><span class="num orange">③</span><div><b>建模通常是整个项目里最短的阶段</b><p class="dim">时间都花在模型外面了</p></div></div>
       </div>
     </div>
@@ -252,7 +252,7 @@
     <p class="dim step-notes">第 3 步数据准备：清洗、划分、特征工程（80% 的去处）。第 5 步评估看效果指标（准确率、AUC、RMSE 这类）；第 6 步验证再判断够不够格上线：效果达标之外，还要满足预测服务的工程标准。</p>
 
     <div class="card card-accent maturity-callout" data-anim="fade-up">
-      <b>这些步骤的自动化程度，就是 MLOps 成熟度</b>。它量的不是模型效果，是交付流程：手动做、流水线自动跑，是两个档次
+      <b>这些步骤的自动化程度，就是 MLOps 成熟度</b>。它衡量的不是模型效果，是交付流程
     </div>
 
     <div class="deck-footer">
@@ -261,7 +261,7 @@
     </div>
     <aside class="notes">
       <p>先看业界怎么定义标准流程。Google Cloud 架构中心给过一个八步的交付流程：数据抽取、数据分析、数据准备，然后训练、评估、验证，最后服务化和监控。这一页经过三票对抗验证，原文如此。</p>
-      <p>有几步多说一句。第 3 步数据准备，包括清洗、划分训练验证测试集、特征工程，就是刚才那个 80% 的去处。第 5 步评估看效果，准确率、AUC、RMSE 这些指标。第 6 步验证回答的是够不够格上线：效果达标只是必要条件，还要过预测服务的工程标准，比如延迟、稳定性这些。</p>
+      <p>有几步多说一句。第 3 步数据准备，包括清洗、划分训练验证测试集、特征工程，就是刚才那个 80% 的去处。第 5 步评估看效果，准确率、AUC、RMSE 这些指标，两个缩写多说一句，在座的都是程序员，一句话就能懂：AUC 是分类的标尺，随机抽一个正样本和一个负样本，模型给正样本打分更高的概率就是 AUC，0.5 等于瞎猜，1 是完美。像欺诈检测正例只占 1%，无脑全判正常，准确率也有 99%，光看准确率会被骗，AUC 不会。RMSE 是回归的标尺，预测房价、配送时间这类数值任务用的，算的是预测值和真实值平均差多少，而且大错罚得格外狠，差一小时比差六次十分钟严重得多。记对应关系就够：分类看 AUC，回归看 RMSE。第 6 步验证回答的是够不够格上线：效果达标只是必要条件，还要过预测服务的工程标准，比如延迟、稳定性这些。</p>
       <p>重点在第 8 步。Google 原文说，监控发现性能问题，会 invoke a new iteration，触发新的一轮迭代。流程从终点绕回起点，就是地图上那个反馈环，这是它第一次在标准里出现。</p>
       <p>还有一句要记住：<strong>这八步的自动化程度，就是 MLOps 成熟度</strong>。注意它量的不是模型效果，是交付流程。效果决定这一次的模型能不能上线；自动化决定你能多快、多稳地产出下一个模型。Google 同一篇还提到，L0 的手动团队一年也就部署两三次新版本，效果再好，交付节奏也被流程锁死。这句话先记住，这一节收尾拿它给自己团队打个分。</p>
     </aside>
@@ -321,7 +321,7 @@
       <div class="task-row"><b>清洗</b><p class="dim">缺失、异常、重复、格式问题，官方说法里它是最耗时的任务</p><span class="tag">最耗时</span></div>
       <div class="task-row"><b>标注</b><p class="dim">人工打标签，传统 ML 里最大的人力投入</p><span></span></div>
       <div class="task-row"><b>划分</b><p class="dim">训练/验证/测试三份分开。最怕数据泄漏：未来信息混进训练，评测虚高，上线翻车</p><span class="tag tag-red">防泄漏</span></div>
-      <div class="task-row"><b>特征工程</b><p class="dim">把原始数据变成模型能用的信号。这件事怎么做成平台，下一页看 Uber 的做法</p><span></span></div>
+      <div class="task-row"><b>特征工程</b><p class="dim">把原始数据变成模型能用的信号。它是什么、为什么会出一致性问题，下一页用一个例子讲透，再看 Uber 的平台做法</p><span></span></div>
     </div>
 
     <div class="deck-footer">
@@ -331,31 +331,54 @@
     <aside class="notes">
       <p>进到数据环节，把 80% 拆开看。CRISP-DM 的说法是五个任务：选择、清洗、构建、整合、格式化。工程上一般按五件事组织：采集、清洗、标注、划分、特征工程。</p>
       <p>采集解决原料从哪来，日志、数据库、第三方接口、爬虫。清洗处理缺失、异常、重复、格式，这是最耗时的一件。标注是人工打标签，传统机器学习里最大的人力投入，后面讲数据飞轮的时候会回到这点。</p>
-      <p>划分要多说两句。把数据分成训练、验证、测试三份，这一步最容易犯的错是<strong>数据泄漏</strong>，就是让未来的信息混进训练数据，评测分数虚高，一上线就翻车。所以评测集的独立性，从第一天就要守住，这件事值多少钱都不过分。</p>
-      <p>特征工程把原始数据变成模型能用的信号。这件事单独做很亏，每个团队重复造轮子。下一页看 Uber 怎么把它做成平台。</p>
+      <p>划分要多说两句。把数据分成训练、验证、测试三份，验证集的目的是参与超参数选择，模型选择。这一步最容易犯的错是<strong>数据泄漏</strong>，就是让未来的信息混进训练数据，评测分数虚高，一上线就翻车。所以评测集的独立性，从第一天就要守住，这件事值多少钱都不过分。</p>
+      <p>特征工程把原始数据变成模型能用的信号。具体是什么、为什么会有训练和线上算不一致的问题，下一页用一个外卖的例子讲透，再看 Uber 怎么把它做成平台。</p>
     </aside>
   </section>
 
-  <!-- ============ S10 · Uber Feature Store ============ -->
-  <section class="slide" data-title="S10 Uber Feature Store">
-    <p class="kicker">// 第 1 节 · 案例</p>
-    <h2 class="h2" data-anim="fade-up">特征也能做成平台：Uber 的 Feature Store</h2>
-    <p class="lede">公司级 ML 平台 Michelangelo（2016 年起生产运行）里，最有生命力的一件设计。</p>
+  <!-- ============ S10 · 特征工程 与 Feature Store ============ -->
+  <section class="slide" data-title="S10 特征与训练服务一致性">
+    <p class="kicker">// 第 1 节 · 数据环节 · 案例</p>
+    <h2 class="h2" data-anim="fade-up">特征：模型上线后，它会被<span class="accent">算两遍</span></h2>
+    <p class="lede">用一个例子讲清三件事：特征是什么、为什么要定义、为什么训练和线上会算得不一致。</p>
 
-    <div class="grid g2 mt-l" data-anim="fade-up">
-      <div class="card card-accent fs-hero">
-        <div class="fs-num">10,000<span class="u">个特征</span></div>
-        <p class="dim">跨团队共享，自动计算、每日更新（2017 年博客时点）</p>
-        <p class="stack-line">HDFS · Spark · Samza · Cassandra · XGBoost · TensorFlow</p>
+    <div class="stage-flow" data-anim="fade-up" style="margin-top:24px">
+      <div class="stage"><b>原始数据</b><p>骑手 GPS 流水 · 商家出餐记录 · 地图路网 · 历史订单</p></div>
+      <span class="stage-arrow">→</span>
+      <div class="stage hot"><b>特征工程：人定义规则</b><p>距离 2.3 km ｜ 骑手在手 3 单 ｜ 商家出餐均时 12 min ｜ 晚高峰 = 1</p></div>
+      <span class="stage-arrow">→</span>
+      <div class="stage"><b>特征向量</b><p><span class="mono">[2.3, 3, 12, 1]</span><br>模型从头到尾只看得懂这行数字</p></div>
+    </div>
+
+    <div class="grid g3 mt-m" data-anim="fade-up">
+      <div class="card card-accent">
+        <b>为什么要定义特征</b>
+        <p class="dim">模型只吃数字向量；特征＝把业务理解编码成数字，定义好坏直接决定上限</p>
       </div>
-      <div>
-        <div class="feature-row"><span class="num blue">①</span><div><b>特征复用</b><p class="dim">做新模型先来库里找现成特征，不用每个团队从头算一遍</p></div></div>
-        <div class="feature-row"><span class="num green">②</span><div><b>训练/服务一致性</b><p class="dim">同一套特征逻辑：训练时 Spark 批量算，上线后 Cassandra 点查，P95 &lt; 10ms。两边算不一致，线上效果就跟离线评估对不上</p></div></div>
+      <div class="card card-accent">
+        <b>① 批 vs 流，代码被迫写两遍</b>
+        <p class="dim">训练扫全量算统计量，线上毫秒级只能查表；同一逻辑两套实现，缺失值填法稍有不同就偏</p>
+      </div>
+      <div class="card card-accent">
+        <b>② 两套系统供数</b>
+        <p class="dim">训练从数仓取 T+1 批算结果，线上从在线 KV 取实时值：口径、更新时机天然不同</p>
+      </div>
+      <div class="card card-accent">
+        <b>③ 预处理埋在训练脚本里</b>
+        <p class="dim">归一化/分箱只写在 notebook，模型只导出权重；上线重新实现，log1p 被写成 log</p>
+      </div>
+      <div class="card card-accent">
+        <b>④ 版本漂移</b>
+        <p class="dim">处理代码升到 v2，模型还是 v1 训的；两边各自正确，合起来不一致</p>
+      </div>
+      <div class="card card-accent hot">
+        <b>⑤ 隐式环境差异</b>
+        <p class="dim">Python 训练、Java 服务：浮点精度、缺失值默认值、类别排序都可能不同</p>
       </div>
     </div>
 
     <div class="card card-accent fs-foot" data-anim="fade-up">
-      <b>training-serving skew，训练服务偏差</b>：离线一套代码、在线再写一套，是经典事故源，Evidently 把它列为生产故障的一级类别。Uber 这个设计后来成了开源特征平台 Feast 的原型。
+      <b>本质：训练和服务是两套独立的工程系统，靠人工对齐两套代码，偏差几乎必然</b>。Uber 的解法：特征只定义一次、两边共用——Michelangelo（2016 年起生产运行），2017 年 10,000 个特征全公司共享，Spark 批算 / Cassandra 点查 P95 &lt; 10ms，成了开源 Feast 的原型。training-serving skew 被 Evidently 列为生产故障一级类别，第 15 页再见。
     </div>
 
     <div class="deck-footer">
@@ -363,10 +386,27 @@
       <span class="slide-number" data-current="10" data-total="48"></span>
     </div>
     <aside class="notes">
-      <p>第一个案例。Uber 从 2016 年开始跑一个公司级平台 Michelangelo，里面的 Feature Store 是后来所有特征平台的原型，开源的 Feast 就是从这来的。</p>
-      <p>先看数字：2017 年他们写博客的时候，里面已经有大约一万个特征，全公司共享，自动计算、每天更新。任何团队做新模型，先来库里找现成的，不用自己从头算。</p>
-      <p>它解决两个问题。第一是复用，刚才说了。第二个更重要，<strong>训练和服务的一致性</strong>。同一套特征逻辑，训练的时候用 Spark 批量算，上线之后从 Cassandra 点查，P95 十毫秒以内。如果离线一套代码、在线再手写一套，两边算出来的数对不上，线上效果就跟离线评估完全两回事。这个东西有个名字叫 training-serving skew，训练服务偏差，是经典事故源，Evidently 的故障分类学把它列为一级类别，第 15 页还会见到它。</p>
-      <p>技术栈也值得看一眼：HDFS、Spark、Samza、Cassandra、XGBoost，全是现成大数据组件拼的。平台化不等于买昂贵系统，把公共逻辑抽出来共享，就是平台的起点。</p>
+      <p>上一页说特征工程是把原始数据变成模型能用的信号，这一页用例子讲透它，再看 Uber 的平台做法。</p>
+      <p>例子是预测外卖多久送达。原始数据是骑手 GPS 流水、商家出餐记录、路网、历史订单，模型看不懂这些。人来定义转换规则：取餐距离二点三公里、骑手在手三单、这家商家出餐平均十二分钟、是不是晚高峰，于是得到向量 2.3、3、12、1。记住这一点：<strong>模型从头到尾只看到这行数字</strong>，原始世界长什么样，全靠特征的定义带进来。</p>
+      <p>所以为什么要定义特征？因为模型只吃数字向量，特征就是把业务理解编码成数字。同一批数据，特征定义得好，简单模型也有效；定义得差，再贵的模型也救不回来，上限在特征这里就定了。</p>
+      <p>再看为什么会被算两遍。训练的时候，特征是离线批量算的，昨晚跑完的一张表；模型上线以后，来一单要实时算一遍，此刻骑手在哪、在手几单。于是同一个特征有两份实现，窗口口径、数据延迟、代码版本稍有不同，两边数值就对不上，线上分布偏离训练分布，离线评估八十五分，上线翻车。这就是 training-serving skew，训练服务偏差，Evidently 的故障分类学把它列为一级类别，第 15 页还会见到它。</p>
+      <p>1. 训练用批处理，服务用流式，代码被迫重写
+训练时数据是静态的、全量的，你可以用 SQL、Pandas 或 Spark 一次性算全局统计量（比如某特征的历史均值、分位数），再做归一化。但线上服务是逐条请求、低延迟的，不可能为了一个请求去扫全量数据重算均值。于是工程上必须另写一套流式逻辑：把训练时算好的统计量存起来，线上直接查表用。这两套代码由不同的人、在不同时间、用不同的框架写出来，只要有一处细节不同（比如缺失值填 0 还是填均值、类别编码的映射表版本不同），偏差就出现了。
+
+2. 特征在训练和服务中由不同系统提供
+很多公司的特征是“训练时从数仓取，服务时从特征存储或在线 KV 取”。数仓里的特征可能是 T+1 离线计算的，在线特征可能是实时写入的，两者的计算口径、更新时机、缺失值处理都可能不同。即使两边都声称“用的是同一个特征定义”，实际落地的数据也可能不一致。这不是逻辑写错，而是同一个特征在两个系统里有两条独立的实现链路。
+
+3. 预处理被“内嵌”在训练脚本里，服务端没有对应实现
+常见的情况是：数据科学家在 notebook 里做特征工程，归一化、分箱、独热编码都写在训练脚本里，模型训练完只导出模型权重。上线时，工程师拿到模型文件，需要重新实现这些预处理步骤。工程师可能不知道某个步骤的细节（比如分箱的边界是训练时动态算的），或者实现时做了“合理但不同”的简化（比如把 log1p 写成 log）。模型权重是共享的，预处理逻辑却没有被共享。
+
+4. 版本漂移：训练和服务用了不同版本的处理代码
+特征处理代码本身会迭代。训练一个模型时用的是 v1 版处理逻辑，模型上线后，处理代码升级到了 v2（比如修了一个边界 bug），但线上服务用的是 v2，而模型是按 v1 训练的。或者反过来，服务端为了稳定锁定了旧版本，训练端已经用新版本训了新模型。两边各自“正确”，但组合在一起就不一致。
+
+5. 隐式的环境差异
+有些不一致很隐蔽：训练时用 Python 的 sklearn 做标准化，线上用 Java 重写，浮点数精度、默认的缺失值处理、类别排序规则都可能不同。甚至同一个库的不同版本，默认行为也会变。
+
+所以本质上，“数据处理逻辑不一致”不是某个人粗心，而是训练和服务是两套独立的工程系统，共享逻辑需要额外的架构设计（比如 TFX Transform、特征存储、统一的特征计算 DSL）才能保证。没有这层设计时，靠人工“对齐”两套代码，出现偏差几乎是必然的。</p>
+      <p>Uber 的解法就一句话：<strong>特征只定义一次，两边共用</strong>。训练侧 Spark 批量算，服务侧 Cassandra 点查，P95 十毫秒以内；2016 年起生产运行，2017 年博客时点已经一万个特征全公司共享，做新模型先来库里找。这个设计后来成了开源 Feast 的原型。平台化不等于买昂贵系统，把公共逻辑抽出来共享，就是平台的起点。</p>
     </aside>
   </section>
 
@@ -401,7 +441,7 @@
         <div class="stat-chips">
           <span>月下载 3000 万+</span><span>Apache 2.0</span><span>Linux 基金会托管</span>
         </div>
-        <p class="dim">四大能力的说法来自 mlflow.org 官网自述，这条论断经过三票对抗验证。</p>
+  
       </div>
       <div class="card card-accent">
         <h4>模型怎么选</h4>
@@ -454,7 +494,7 @@
         <div class="v">P95 &lt; 10ms</div>
         <div class="k">含 Cassandra 特征点查</div>
       </div>
-      <p class="src">Uber Michelangelo 流量最高的模型，2017 年工程博客数字。模型打包成容器，挂在负载均衡后面。</p>
+      <p class="src">Uber Michelangelo 公开数据，流量最高的模型，模型打包成容器，挂在负载均衡后面。</p>
     </div>
 
     <p class="era-note">记住这个毫秒级的延迟预算。第 3 节讲 LLM 推理时会回到这个对比：那边生成一个回答是秒级起步，服务架构完全另一个打法。</p>
@@ -492,7 +532,7 @@
     </div>
 
     <div class="card card-accent fs-foot" data-anim="fade-up">
-      <b>回退预案是标准配置，不是可选项</b>。新模型崩了怎么切回旧版本，答案要在上线前就准备好。出处：Evidently 把生产、影子、A/B 列为三类需要监控的场景；CRISP-ML(Q) 把 A/B、金丝雀、蓝绿部署和回退预案写进标准部署任务；Google 文档同样要求新模型先过金丝雀或 A/B 再接全量流量。
+      <b>回退预案是标准配置，不是可选项</b>。新模型崩了怎么切回旧版本，答案要在上线前就准备好。
     </div>
 
     <div class="deck-footer">
@@ -504,6 +544,7 @@
       <p>影子部署，新旧模型同时收线上请求，但新模型只记录预测、不生效，线上零风险，适合攒对照数据。金丝雀，放一小部分真实流量给新模型，出了问题影响面小，盯着指标再逐步放量。A/B，按流量切分做真实对照，比的是业务指标，不是离线分数。</p>
       <p>这个排列不是我编的。Evidently 的监控课程明确说，需要监控的就三类场景：生产、影子、A/B。CRISP-ML(Q) 把 A/B、金丝雀、蓝绿和回退预案直接写进标准部署任务。Google 的文档也要求新模型先过金丝雀或 A/B，再接全量流量。</p>
       <p>最后一条最容易被忽略：<strong>回退预案是标准配置，不是可选项</strong>。新模型崩了怎么切回旧版本，这个答案要在上线前就准备好，不是出事之后再想。</p>
+      <p>出处：Evidently 把生产、影子、A/B 列为三类需要监控的场景；CRISP-ML(Q) 把 A/B、金丝雀、蓝绿部署和回退预案写进标准部署任务；Google 文档同样要求新模型先过金丝雀或 A/B 再接全量流量。</p>
     </aside>
   </section>
 
@@ -551,7 +592,7 @@
         <h4>故障来源</h4>
         <ul class="fail-list">
           <li><b>数据质量与完整性</b>（多数故障的来源）：管道断裂、上游 schema 变更、源头丢数据</li>
-          <li><b>训练-服务偏差</b>：离线在线两套代码对不上，就是 Uber 那页讲过的 skew</li>
+          <li><b>训练-服务偏差</b>：离线在线两套代码对不上</li>
           <li><b>上游模型级联故障</b>：模型链里前一个坏了，带崩一串</li>
           <li><b>弱势子段表现差</b>：整体指标好看，某个段很差</li>
         </ul>
