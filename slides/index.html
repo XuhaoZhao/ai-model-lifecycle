@@ -62,7 +62,7 @@
 
     <div class="grid g2 mt-l" data-anim="fade-up">
       <div class="card card-accent">
-        <div class="pass-head"><span class="pass-num">①</span><div><b>传统机器学习</b><span class="pass-meta">第 1 节 · ~23 min</span></div></div>
+        <div class="pass-head"><span class="pass-num">①</span><div><b>传统机器学习</b><span class="pass-meta">第 1 节 · ~22 min</span></div></div>
         <p class="dim">1999 年的 CRISP-DM、Google 的 8 步流程、Uber 的 Michelangelo 平台，讲的都是这条线</p>
         <p class="teaser">25 万+ QPS · P95 &lt; 10ms 的生产服务</p>
       </div>
@@ -75,7 +75,7 @@
 
     <div class="deck-footer">
       <span class="mono">CRISP-DM 1999 · Google Cloud · Uber Eng 2017 · Meta · Anthropic</span>
-      <span class="slide-number" data-current="2" data-total="45"></span>
+      <span class="slide-number" data-current="2" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>先看今天的地图。中间这条线，数据、训练、评测、部署、监控，最后反馈绕回来，今天讲的所有内容都挂在这条线上。</p>
@@ -104,7 +104,7 @@
 
     <div class="deck-footer">
       <span class="mono">答案在下一页</span>
-      <span class="slide-number" data-current="3" data-total="45"></span>
+      <span class="slide-number" data-current="3" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>先来个互动。读一遍题：做一个 AI 功能，花在数据上的工作量，采集、清洗、标注、特征，占整个项目的百分之多少？</p>
@@ -137,7 +137,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：CRISP-DM · datascience-pm.com · KDnuggets ×4 · FineWeb arXiv:2406.17557</span>
-      <span class="slide-number" data-current="4" data-total="45"></span>
+      <span class="slide-number" data-current="4" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>答案是 D，80% 在数据上。行业经验法则：数据准备占整个项目的大约 80%，行话叫 data munging。这话写在 CRISP-DM 官方介绍里。</p>
@@ -182,7 +182,7 @@
 
     <div class="deck-footer">
       <span class="mono">每个数字都有出处 · 欢迎随时打断</span>
-      <span class="slide-number" data-current="5" data-total="45"></span>
+      <span class="slide-number" data-current="5" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>开场最后说说今天能带走什么，三样。</p>
@@ -221,8 +221,8 @@
     </div>
 
     <div class="deck-footer">
-      <span class="mono">第 1 节 · S6-S20</span>
-      <span class="slide-number" data-current="6" data-total="45"></span>
+      <span class="mono">第 1 节 · S6-S19</span>
+      <span class="slide-number" data-current="6" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>进入第 1 节，传统机器学习。这一节把这条线完整走一圈，看每个环节具体做什么、业界把它做成了什么样。</p>
@@ -263,7 +263,7 @@
 
     <div class="deck-footer">
       <span class="mono">Google Cloud Architecture Center · 三票验证 3-0</span>
-      <span class="slide-number" data-current="7" data-total="45"></span>
+      <span class="slide-number" data-current="7" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>先看业界怎么定义标准流程。Google Cloud 架构中心给过一个八步的交付流程：数据抽取、数据分析、数据准备，然后训练、评估、验证，最后服务化和监控。这一页经过三票对抗验证，原文如此。</p>
@@ -274,52 +274,8 @@
   </section>
 
 
-  <!-- ============ S8 · CRISP-DM ============ -->
-  <section class="slide" data-title="S8 CRISP-DM">
-    <p class="kicker">// 第 1 节 · 方法论</p>
-    <h2 class="h2" data-anim="fade-up">更老，但更流行：CRISP-DM</h2>
-    <p class="lede">1999 年发布的六阶段，到现在还是数据科学项目最常用的方法论。</p>
-
-    <div class="pipe8-row phase-row" data-anim="fade-up">
-      <div class="step-chip"><span class="n">01</span><span class="t">业务理解</span></div><span class="step-arrow">→</span>
-      <div class="step-chip"><span class="n">02</span><span class="t">数据理解</span></div><span class="step-arrow">→</span>
-      <div class="step-chip"><span class="n">03</span><span class="t">数据准备</span></div><span class="step-arrow">→</span>
-      <div class="step-chip"><span class="n">04</span><span class="t">建模</span></div><span class="step-arrow">→</span>
-      <div class="step-chip"><span class="n">05</span><span class="t">评估</span></div><span class="step-arrow">→</span>
-      <div class="step-chip"><span class="n">06</span><span class="t">部署</span></div>
-    </div>
-    <p class="iter-quote">⟲ 官方指南原话：阶段的顺序不是刚性的，来回移动总是必需的</p>
-
-    <div class="grid g3 mt-l" data-anim="fade-up">
-      <div class="card card-accent">
-        <h4>流行了二十多年</h4>
-        <p class="dim">KDnuggets 在 2002、2004、2007、2014 年做了四次调查，每次约 150-200 人，CRISP-DM 四次都是使用率第一。2020 年另一个 109 票的小调查，它拿了近一半。</p>
-      </div>
-      <div class="card card-accent">
-        <h4>局限：只管到项目结束</h4>
-        <p class="dim">部署阶段要求制定监控与维护计划，但项目结束之后的长期运营没有定义。这个空白后来由 MLOps 补上。</p>
-      </div>
-      <div class="card card-accent">
-        <h4>加强版：CRISP-ML(Q)</h4>
-        <p class="dim">给每个阶段加四样质量要求：需求与约束、任务、风险、对策。风险清单里有偏见、过拟合、不可复现。</p>
-      </div>
-    </div>
-
-    <div class="deck-footer">
-      <span class="mono">出处：datascience-pm.com · ml-ops.org</span>
-      <span class="slide-number" data-current="8" data-total="45"></span>
-    </div>
-    <aside class="notes">
-      <p>Google 的八步是现代版。再往前看，有个 1999 年发布的老方法论到现在还在用：CRISP-DM，六个阶段，业务理解、数据理解、数据准备、建模、评估、部署。</p>
-      <p>它有多流行？KDnuggets 在 2002 到 2014 年间做了四次调查，每次一百五到两百人，四次都是使用率第一。2020 年另一个站点搞了个 109 票的小调查，它拿了将近一半。一个 1999 年的框架能用到现在，说明抓到了本质。</p>
-      <p>官方指南里有句话：阶段的顺序不是刚性的，来回移动总是必需的。注意它跟流水线的区别，这是个迭代圈，不是单行道。</p>
-      <p>但它有个明确的局限。部署阶段虽然要求制定监控和维护计划，可那是以项目为单位的，项目结束之后的长期运营它没定义。这个空白后来就是 MLOps 补上的。顺带一提，后来还有个加强版叫 CRISP-ML(Q)，给每个阶段加了质量要求，风险清单里包括偏见、过拟合、不可复现，感兴趣可以看 ml-ops.org。</p>
-    </aside>
-  </section>
-
-
-  <!-- ============ S9 · 数据环节 ============ -->
-  <section class="slide" data-title="S9 数据环节">
+  <!-- ============ S8 · 数据环节 ============ -->
+  <section class="slide" data-title="S8 数据环节">
     <p class="kicker">// 第 1 节 · 数据环节</p>
     <h2 class="h2" data-anim="fade-up">80% 的精力花在哪</h2>
     <p class="lede">CRISP-DM 把数据准备拆成五个任务：选择、清洗、构建、整合、格式化。工程上一般按五件事组织。</p>
@@ -334,7 +290,7 @@
 
     <div class="deck-footer">
       <span class="mono">CRISP-DM 数据准备五任务 · datascience-pm.com</span>
-      <span class="slide-number" data-current="9" data-total="45"></span>
+      <span class="slide-number" data-current="8" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>进到数据环节，把 80% 拆开看。CRISP-DM 的说法是五个任务：选择、清洗、构建、整合、格式化。工程上一般按五件事组织：采集、清洗、标注、划分、特征工程。</p>
@@ -345,8 +301,8 @@
   </section>
 
 
-  <!-- ============ S10 · 特征工程 与 Feature Store ============ -->
-  <section class="slide" data-title="S10 特征与训练服务一致性">
+  <!-- ============ S9 · 特征工程 与 Feature Store ============ -->
+  <section class="slide" data-title="S9 特征与训练服务一致性">
     <p class="kicker">// 第 1 节 · 数据环节 · 案例</p>
     <h2 class="h2" data-anim="fade-up">特征：模型上线后，它会被<span class="accent">算两遍</span></h2>
     <p class="lede">用一个例子讲清三件事：特征是什么、为什么要定义、为什么训练和线上会算得不一致。</p>
@@ -387,18 +343,18 @@
     </div>
 
     <div class="card card-accent fs-foot" data-anim="fade-up">
-      <b>本质：训练和服务是两套独立的工程系统，靠人工对齐两套代码，偏差几乎必然</b>。Uber 的解法：特征只定义一次、两边共用——Michelangelo（2016 年起生产运行），2017 年 10,000 个特征全公司共享，Spark 批算 / Cassandra 点查 P95 &lt; 10ms，成了开源 Feast 的原型。training-serving skew 被 Evidently 列为生产故障一级类别，第 15 页再见。
+      <b>本质：训练和服务是两套独立的工程系统，靠人工对齐两套代码，偏差几乎必然</b>。Uber 的解法：特征只定义一次、两边共用——Michelangelo（2016 年起生产运行），2017 年 10,000 个特征全公司共享，Spark 批算 / Cassandra 点查 P95 &lt; 10ms，成了开源 Feast 的原型。training-serving skew 被 Evidently 列为生产故障一级类别，监控那节再见。
     </div>
 
     <div class="deck-footer">
       <span class="mono">出处：Uber Engineering 2017（一手）· Evidently</span>
-      <span class="slide-number" data-current="10" data-total="45"></span>
+      <span class="slide-number" data-current="9" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>上一页说特征工程是把原始数据变成模型能用的信号，这一页用例子讲透它，再看 Uber 的平台做法。</p>
       <p>例子是预测外卖多久送达。原始数据是骑手 GPS 流水、商家出餐记录、路网、历史订单，模型看不懂这些。人来定义转换规则：取餐距离二点三公里、骑手在手三单、这家商家出餐平均十二分钟、是不是晚高峰，于是得到向量 2.3、3、12、1。记住这一点：<strong>模型从头到尾只看到这行数字</strong>，原始世界长什么样，全靠特征的定义带进来。</p>
       <p>所以为什么要定义特征？因为模型只吃数字向量，特征就是把业务理解编码成数字。同一批数据，特征定义得好，简单模型也有效；定义得差，再贵的模型也救不回来，上限在特征这里就定了。</p>
-      <p>再看为什么会被算两遍。训练的时候，特征是离线批量算的，昨晚跑完的一张表；模型上线以后，来一单要实时算一遍，此刻骑手在哪、在手几单。于是同一个特征有两份实现，窗口口径、数据延迟、代码版本稍有不同，两边数值就对不上，线上分布偏离训练分布，离线评估八十五分，上线翻车。这就是 training-serving skew，训练服务偏差，Evidently 的故障分类学把它列为一级类别，第 15 页还会见到它。</p>
+      <p>再看为什么会被算两遍。训练的时候，特征是离线批量算的，昨晚跑完的一张表；模型上线以后，来一单要实时算一遍，此刻骑手在哪、在手几单。于是同一个特征有两份实现，窗口口径、数据延迟、代码版本稍有不同，两边数值就对不上，线上分布偏离训练分布，离线评估八十五分，上线翻车。这就是 training-serving skew，训练服务偏差，Evidently 的故障分类学把它列为一级类别，监控那节还会见到它。</p>
       <p>1. 训练用批处理，服务用流式，代码被迫重写
 训练时数据是静态的、全量的，你可以用 SQL、Pandas 或 Spark 一次性算全局统计量（比如某特征的历史均值、分位数），再做归一化。但线上服务是逐条请求、低延迟的，不可能为了一个请求去扫全量数据重算均值。于是工程上必须另写一套流式逻辑：把训练时算好的统计量存起来，线上直接查表用。这两套代码由不同的人、在不同时间、用不同的框架写出来，只要有一处细节不同（比如缺失值填 0 还是填均值、类别编码的映射表版本不同），偏差就出现了。
 
@@ -420,8 +376,8 @@
   </section>
 
 
-  <!-- ============ S11 · 训练与实验管理 ============ -->
-  <section class="slide" data-title="S11 训练与实验管理">
+  <!-- ============ S10 · 训练与实验管理 ============ -->
+  <section class="slide" data-title="S10 训练与实验管理">
     <p class="kicker">// 第 1 节 · 训练环节</p>
     <h2 class="h2" data-anim="fade-up">训练不难，难的是管住几百次实验</h2>
     <p class="lede">业界把这个环节的平台能力归纳成四件，正好是 MLflow 官网给自己的定位。</p>
@@ -463,7 +419,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：mlflow.org（三票验证 3-0）· Uber Eng 2017 · Evidently</span>
-      <span class="slide-number" data-current="11" data-total="45"></span>
+      <span class="slide-number" data-current="10" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>训练环节。训练代码本身不难写，难的是管住它长出来的东西：一次调参就是一次新实验，几百次下来，哪个模型好、怎么训出来的，说不清就等于白做。</p>
@@ -475,8 +431,8 @@
   </section>
 
 
-  <!-- ============ S12 · 部署上线 ============ -->
-  <section class="slide" data-title="S12 部署上线">
+  <!-- ============ S11 · 部署上线 ============ -->
+  <section class="slide" data-title="S11 部署上线">
     <p class="kicker">// 第 1 节 · 部署环节</p>
     <h2 class="h2" data-anim="fade-up">模型怎么变成线上服务</h2>
     <p class="lede">三种形态，按延迟预算和场景选。</p>
@@ -512,7 +468,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Uber Engineering 2017（一手）</span>
-      <span class="slide-number" data-current="12" data-total="45"></span>
+      <span class="slide-number" data-current="11" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>模型训好了，怎么变成服务？业界三种形态。实时推理 API，请求来了当场算，线上产品的主流。批量预测，离线把一批跑完写回去，评分、清单类场景够用。第三种嵌到端上，手机、IoT，数据不出设备。</p>
@@ -522,8 +478,8 @@
   </section>
 
 
-  <!-- ============ S13 · 三种验证策略 ============ -->
-  <section class="slide" data-title="S13 上线验证策略">
+  <!-- ============ S12 · 三种验证策略 ============ -->
+  <section class="slide" data-title="S12 上线验证策略">
     <p class="kicker">// 第 1 节 · 上线策略</p>
     <h2 class="h2" data-anim="fade-up">上线不等于全量</h2>
     <p class="lede">三个验证策略，风险从低到高，模型和代码一样要有灰度思维。</p>
@@ -549,7 +505,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Evidently · ml-ops.org · Google Cloud</span>
-      <span class="slide-number" data-current="13" data-total="45"></span>
+      <span class="slide-number" data-current="12" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>上线不等于全量。三个验证策略，风险从低到高。</p>
@@ -561,8 +517,8 @@
   </section>
 
 
-  <!-- ============ S14 · 模型会腐烂 ============ -->
-  <section class="slide" data-title="S14 模型漂移">
+  <!-- ============ S13 · 模型会腐烂 ============ -->
+  <section class="slide" data-title="S13 模型漂移">
     <p class="kicker">// 第 1 节 · 监控</p>
     <h2 class="h2" data-anim="fade-up">上线之后，模型会自己坏掉</h2>
     <p class="lede">代码一行没动，线上效果也可能持续变差。</p>
@@ -584,7 +540,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Google Cloud（三票验证 3-0）· Evidently</span>
-      <span class="slide-number" data-current="14" data-total="45"></span>
+      <span class="slide-number" data-current="13" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>上线之后最反直觉的一件事：代码一行没动，模型也会自己坏掉。</p>
@@ -595,8 +551,8 @@
   </section>
 
 
-  <!-- ============ S15 · 故障分类学与代理指标 ============ -->
-  <section class="slide" data-title="S15 故障分类与代理指标">
+  <!-- ============ S14 · 故障分类学与代理指标 ============ -->
+  <section class="slide" data-title="S14 故障分类与代理指标">
     <p class="kicker">// 第 1 节 · 监控</p>
     <h2 class="h2" data-anim="fade-up">故障从哪来，盯什么指标</h2>
     <p class="lede">Evidently 的生产故障分类学，按出现频率排。</p>
@@ -624,7 +580,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Evidently（单源，引文直录）</span>
-      <span class="slide-number" data-current="15" data-total="45"></span>
+      <span class="slide-number" data-current="14" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>知道了会坏，还得知道从哪坏起。Evidently 的故障分类学，按出现频率排。</p>
@@ -635,8 +591,8 @@
   </section>
 
 
-  <!-- ============ S16 · Michelangelo 闭环实现 ============ -->
-  <section class="slide" data-title="S16 Michelangelo 闭环实现">
+  <!-- ============ S15 · Michelangelo 闭环实现 ============ -->
+  <section class="slide" data-title="S15 Michelangelo 闭环实现">
     <p class="kicker">// 第 1 节 · 案例</p>
     <h2 class="h2" data-anim="fade-up">闭环落地：把预测和结果 join 起来</h2>
     <p class="lede">Uber Michelangelo 对监控和反馈两步的工程实现。</p>
@@ -659,7 +615,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Uber Engineering 2017（一手，引文直录）</span>
-      <span class="slide-number" data-current="16" data-total="45"></span>
+      <span class="slide-number" data-current="15" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>讲了半天闭环，落地到底长什么样？Uber 的实现，三步。</p>
@@ -669,8 +625,8 @@
   </section>
 
 
-  <!-- ============ S17 · CI / CD / CT ============ -->
-  <section class="slide" data-title="S17 CI CD CT">
+  <!-- ============ S16 · CI / CD / CT ============ -->
+  <section class="slide" data-title="S16 CI CD CT">
     <p class="kicker">// 第 1 节 · 闭环的本质</p>
     <h2 class="h2" data-anim="fade-up">CI、CD 之外，还有个 <span class="accent">CT</span></h2>
     <p class="lede">MLOps 和 DevOps 的三个区别，Google 的定义，全部三票验证。</p>
@@ -705,7 +661,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Google Cloud（三票验证 3-0）</span>
-      <span class="slide-number" data-current="17" data-total="45"></span>
+      <span class="slide-number" data-current="16" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>把前面的东西串起来：MLOps 和 DevOps 的区别，Google 给了三条，全部三票验证。</p>
@@ -715,8 +671,8 @@
   </section>
 
 
-  <!-- ============ S18 · 成熟度模型（第 1 节收束） ============ -->
-  <section class="slide" data-title="S18 成熟度模型">
+  <!-- ============ S17 · 成熟度模型（第 1 节收束） ============ -->
+  <section class="slide" data-title="S17 成熟度模型">
     <p class="kicker">// 第 1 节 · 小结</p>
     <h2 class="h2" data-anim="fade-up">你在哪一级：成熟度模型</h2>
     <p class="lede">自动化程度就是成熟度。两把尺子：Google 三级，微软五级，都经过三票验证。</p>
@@ -743,7 +699,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Google Cloud · Microsoft Learn（两家均三票验证 3-0）</span>
-      <span class="slide-number" data-current="18" data-total="45"></span>
+      <span class="slide-number" data-current="17" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>第 1 节收尾。前面留过一句话：八步的自动化程度，就是你的 MLOps 成熟度。现在兑现，给两把尺子。</p>
@@ -754,8 +710,8 @@
   </section>
 
 
-  <!-- ============ S19 · 真实案例（上）：数据与标注 ============ -->
-  <section class="slide" data-title="S19 真实案例·数据与标注">
+  <!-- ============ S18 · 真实案例（上）：数据与标注 ============ -->
+  <section class="slide" data-title="S18 真实案例·数据与标注">
     <p class="kicker">// 第 1 节 · 真实案例</p>
     <h2 class="h2" data-anim="fade-up">真实案例：中文短信 NER 服务<span class="accent">（上）</span></h2>
     <p class="lede">我自己把这条流水线走了一遍：4227 条真实短信，抽姓名、机构、地点三类实体，一路走到上线。先看数据这头。</p>
@@ -776,7 +732,7 @@
 
     <div class="deck-footer">
       <span class="mono">真实案例 · chinese-sms-ner · 数据与标注</span>
-      <span class="slide-number" data-current="19" data-total="45"></span>
+      <span class="slide-number" data-current="18" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>讲完方法论，看一个真实案例，我自己做的：中文短信命名实体识别服务。4227 条真实短信，抽三类实体：姓名、机构、地点。</p>
@@ -786,8 +742,8 @@
   </section>
 
 
-  <!-- ============ S20 · 真实案例（下）：工程、压测、上线 ============ -->
-  <section class="slide" data-title="S20 真实案例·工程与上线">
+  <!-- ============ S19 · 真实案例（下）：工程、压测、上线 ============ -->
+  <section class="slide" data-title="S19 真实案例·工程与上线">
     <p class="kicker">// 第 1 节 · 真实案例</p>
     <h2 class="h2" data-anim="fade-up">真实案例<span class="accent">（下）</span>：工程、压测、上线</h2>
     <p class="lede">推理侧的工程账，三个数字都是项目里的真实记录。</p>
@@ -830,7 +786,7 @@
 
     <div class="deck-footer">
       <span class="mono">真实案例 · chinese-sms-ner · 工程与上线</span>
-      <span class="slide-number" data-current="20" data-total="45"></span>
+      <span class="slide-number" data-current="19" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>工程这头三个数字。</p>
@@ -841,8 +797,8 @@
   </section>
 
 
-  <!-- ============ S21 · 章节页：第 2 节 ============ -->
-  <section class="slide" data-title="S21 第 2 节 LLM 时代">
+  <!-- ============ S20 · 章节页：第 2 节 ============ -->
+  <section class="slide" data-title="S20 第 2 节 LLM 时代">
     <p class="kicker">// 第 2 节</p>
     <div class="section-head" data-anim="fade-up">
       <div class="section-num">02</div>
@@ -863,8 +819,8 @@
     <p class="era-note">这三样都长在地图的训练与构建这一侧。上线之后的监控和飞轮，第三节讲。</p>
 
     <div class="deck-footer">
-      <span class="mono">第 2 节 · S21-S32</span>
-      <span class="slide-number" data-current="21" data-total="45"></span>
+      <span class="mono">第 2 节 · S20-S31</span>
+      <span class="slide-number" data-current="20" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>第二节，LLM 时代。先把边界说清楚：不讲 Transformer 的历史，也不推任何公式。只花三分钟把一件事讲明白：模型是从哪来的。然后就尽快到应用层。</p>
@@ -873,8 +829,8 @@
   </section>
 
 
-  <!-- ============ S22 · 模型从哪来 ============ -->
-  <section class="slide" data-title="S22 模型从哪来">
+  <!-- ============ S21 · 模型从哪来 ============ -->
+  <section class="slide" data-title="S21 模型从哪来">
     <p class="kicker">// 第 2 节 · 模型底座</p>
     <h2 class="h2" data-anim="fade-up">模型从哪来：两个阶段</h2>
     <p class="lede">Meta 在 Llama 3 报告里对基础模型开发生命周期的官方定义，原文逐字核对。</p>
@@ -902,7 +858,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Llama 3（arXiv 2407.21783，逐字）· RUC 综述（三票验证 3-0）· InstructGPT</span>
-      <span class="slide-number" data-current="22" data-total="45"></span>
+      <span class="slide-number" data-current="21" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>模型从哪来，三分钟版。Meta 在 Llama 3 报告里把基础模型的开发明确定义成两个阶段，这句是逐字核对过的原文。</p>
@@ -913,8 +869,8 @@
   </section>
 
 
-  <!-- ============ S23 · 三个数字 ============ -->
-  <section class="slide" data-title="S23 三个数字">
+  <!-- ============ S22 · 三个数字 ============ -->
+  <section class="slide" data-title="S22 三个数字">
     <p class="kicker">// 第 2 节 · 模型底座</p>
     <h2 class="h2" data-anim="fade-up">三个有记忆点的数字</h2>
     <p class="lede">给底座一个体感，前两个讲规模，第三个讲什么更值钱。</p>
@@ -942,7 +898,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Llama 3（逐字）· InstructGPT（arXiv 2203.02155）· Chinchilla（arXiv 2203.15556）</span>
-      <span class="slide-number" data-current="23" data-total="45"></span>
+      <span class="slide-number" data-current="22" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>三个数字，给底座一个体感。</p>
@@ -954,8 +910,8 @@
   </section>
 
 
-  <!-- ============ S24 · 小公司的位置 ============ -->
-  <section class="slide" data-title="S24 小公司的位置">
+  <!-- ============ S23 · 小公司的位置 ============ -->
+  <section class="slide" data-title="S23 小公司的位置">
     <p class="kicker">// 第 2 节 · 我们的位置</p>
     <h2 class="h2" data-anim="fade-up">小公司的位置：<span class="accent">不造底座</span></h2>
     <p class="lede">底座买，应用造。</p>
@@ -986,7 +942,7 @@
 
     <div class="deck-footer">
       <span class="mono">下一站：工具与 harness</span>
-      <span class="slide-number" data-current="24" data-total="45"></span>
+      <span class="slide-number" data-current="23" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>看完底座的数字，说清楚我们的位置：不造底座。一万六千张 H100 的游戏，小公司不参与。底座调 API，或者用开源的。</p>
@@ -997,8 +953,8 @@
 
 
 
-  <!-- ============ S25 · MCP ============ -->
-  <section class="slide" data-title="S25 MCP">
+  <!-- ============ S24 · MCP ============ -->
+  <section class="slide" data-title="S24 MCP">
     <p class="kicker">// 第 2 节 · Agent</p>
     <h2 class="h2" data-anim="fade-up">MCP：AI 应用的 <span class="accent">USB-C</span></h2>
     <p class="lede">Model Context Protocol，开放标准，连接 AI 应用与外部系统。官方类比原文：USB-C port for AI applications。</p>
@@ -1034,7 +990,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：modelcontextprotocol.io 官方文档（逐字核对）</span>
-      <span class="slide-number" data-current="25" data-total="45"></span>
+      <span class="slide-number" data-current="24" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>工具多了，接线就是问题。以前每个 AI 应用接每个工具都要写一份胶水代码，N 个应用乘 M 个工具，就是 N 乘 M 份。MCP 把它变成开放标准：应用这头实现一次，工具那头实现一次，N 加 M 份搞定。官方的类比就是 USB-C，一个口通吃。</p>
@@ -1044,8 +1000,8 @@
   </section>
 
 
-  <!-- ============ S26 · ACI ============ -->
-  <section class="slide" data-title="S26 ACI 工具设计">
+  <!-- ============ S25 · ACI ============ -->
+  <section class="slide" data-title="S25 ACI 工具设计">
     <p class="kicker">// 第 2 节 · Agent</p>
     <h2 class="h2" data-anim="fade-up">工具设计，是新的<span class="accent">接口设计</span></h2>
     <p class="lede">ACI，agent-computer interface。给 HCI 多少严谨，就给 ACI 多少。</p>
@@ -1072,7 +1028,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Anthropic《Building Effective Agents》（逐字核对）</span>
-      <span class="slide-number" data-current="26" data-total="45"></span>
+      <span class="slide-number" data-current="25" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>这一页讲个容易被忽略的事：工具定义本身就是接口设计。</p>
@@ -1083,8 +1039,8 @@
   </section>
 
 
-  <!-- ============ S27 · Agent Harness ============ -->
-  <section class="slide" data-title="S27 Agent Harness">
+  <!-- ============ S26 · Agent Harness ============ -->
+  <section class="slide" data-title="S26 Agent Harness">
     <p class="kicker">// 第 2 节 · Agent 系统</p>
     <h2 class="h2" data-anim="fade-up">agent = 模型 + <span class="accent">harness</span></h2>
     <p class="lede">模型只是 agent 的一半，另一半是让它能行动起来的那套系统。</p>
@@ -1113,7 +1069,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Anthropic《Demystifying evals》（harness 定义，逐字核对）</span>
-      <span class="slide-number" data-current="27" data-total="45"></span>
+      <span class="slide-number" data-current="26" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>进入 agent 之前，先分清一个概念：agent 不是模型本身。Anthropic 的定义，agent harness，有时也叫 scaffold，是让模型能作为 agent 行动的那套系统：处理输入、编排工具调用、返回响应。还有句关键的话，逐字核对过：评测一个 agent 时，评的是 harness 和模型协同工作的整体。Claude Code 就是一个 harness。</p>
@@ -1124,8 +1080,8 @@
   </section>
 
 
-  <!-- ============ S28 · 上下文工程 ============ -->
-  <section class="slide" data-title="S28 上下文工程">
+  <!-- ============ S27 · 上下文工程 ============ -->
+  <section class="slide" data-title="S27 上下文工程">
     <p class="kicker">// 第 2 节 · Agent 系统</p>
     <h2 class="h2" data-anim="fade-up">harness 工程（一）：<span class="accent">上下文工程</span></h2>
     <p class="lede">Anthropic：猜谜式的 prompt 工程过去了，上下文工程是系统化的注意力管理。</p>
@@ -1158,7 +1114,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Anthropic《Effective Context Engineering for AI Agents》（2025-09）</span>
-      <span class="slide-number" data-current="28" data-total="45"></span>
+      <span class="slide-number" data-current="27" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>harness 工程第一块：上下文工程。Anthropic 今年九月的工程文：prompt 工程那种猜谜调参的时代过去了，上下文工程是系统化的注意力管理。文章给了一个比值：注意力是分子，干扰是分母，等于信号比噪声。窗口里多放一段无关内容，都是分母变大。</p>
@@ -1168,8 +1124,8 @@
   </section>
 
 
-  <!-- ============ S29 · 执行环境与安全边界 ============ -->
-  <section class="slide" data-title="S29 执行环境与安全">
+  <!-- ============ S28 · 执行环境与安全边界 ============ -->
+  <section class="slide" data-title="S28 执行环境与安全">
     <p class="kicker">// 第 2 节 · Agent 系统</p>
     <h2 class="h2" data-anim="fade-up">harness 工程（二）：<span class="accent">执行环境与安全边界</span></h2>
     <p class="lede">agent 会写文件、跑命令、调 API，风险比聊天模型大一个量级，边界要在 harness 层挡。</p>
@@ -1195,7 +1151,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：安全边界为业界通行实践；架构趋势参考存档《别再给每个 Agent 塞一个 Sandbox》</span>
-      <span class="slide-number" data-current="29" data-total="45"></span>
+      <span class="slide-number" data-current="28" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>harness 工程第二块：执行环境与安全边界。agent 会写文件、跑命令、调 API，风险比聊天模型大一个量级，边界要在 harness 层挡，不能指望模型自觉。</p>
@@ -1204,8 +1160,8 @@
     </aside>
   </section>
 
-  <!-- ============ S30 · 五种编排模式 ============ -->
-  <section class="slide" data-title="S30 五种编排模式">
+  <!-- ============ S29 · 五种编排模式 ============ -->
+  <section class="slide" data-title="S29 五种编排模式">
     <p class="kicker">// 第 2 节 · Agent</p>
     <h2 class="h2" data-anim="fade-up">编排：五种<span class="accent">生产验证过</span>的模式</h2>
     <p class="lede">Anthropic 从数十个团队的合作实践中总结，按复杂度从左到右排。</p>
@@ -1253,7 +1209,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Anthropic《Building Effective Agents》（逐字核对）</span>
-      <span class="slide-number" data-current="30" data-total="45"></span>
+      <span class="slide-number" data-current="29" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>先分清两个词，Anthropic 的官方区分：workflow 按预定义代码路径编排，agent 动态决定自己的流程和工具。一句话：workflow 是你画流程图，agent 是它自己画流程图，自主性换来的能力和风险都更大。下面五种模式，是从数十个团队合作实践里总结的。</p>
@@ -1264,8 +1220,8 @@
   </section>
 
 
-  <!-- ============ S31 · 多智能体：收益与成本 ============ -->
-  <section class="slide" data-title="S31 多智能体收益与成本">
+  <!-- ============ S30 · 多智能体：收益与成本 ============ -->
+  <section class="slide" data-title="S30 多智能体收益与成本">
     <p class="kicker">// 第 2 节 · Agent</p>
     <h2 class="h2" data-anim="fade-up">多智能体：<span class="accent">收益与成本</span></h2>
     <p class="lede">orchestrator-worker 的实战版，成绩和账单一页讲完。</p>
@@ -1304,7 +1260,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Anthropic《多智能体研究系统》（一手，逐字核对）</span>
-      <span class="slide-number" data-current="31" data-total="45"></span>
+      <span class="slide-number" data-current="30" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>模式四的实战版：Anthropic 自己的多智能体研究系统。主 agent 规划并持久化计划，派生三到五个并行子 agent，各自小上下文，回传浓缩结果，这是收益的来源：并行加上下文隔离。</p>
@@ -1312,8 +1268,8 @@
       <p>所以结论一句话：<strong>多智能体只对高价值任务划算</strong>。Anthropic 自己的定位也诚实：它是广度优先搜索类问题的吞吐量优化，不是万能架构。先确认任务价值，再上架构。</p>
     </aside>
   </section>
-  <!-- ============ S32 · 工程忠告（第 2 节收尾） ============ -->
-  <section class="slide" data-title="S32 工程忠告">
+  <!-- ============ S31 · 工程忠告（第 2 节收尾） ============ -->
+  <section class="slide" data-title="S31 工程忠告">
     <p class="kicker">// 第 2 节 · Agent 收尾</p>
     <h2 class="h2" data-anim="fade-up">Anthropic 的<span class="accent">工程忠告</span></h2>
     <p class="lede">与数十个团队合作一年的观察：成功的实现都在做减法。</p>
@@ -1348,7 +1304,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Anthropic《Building Effective Agents》（逐字核对）</span>
-      <span class="slide-number" data-current="32" data-total="45"></span>
+      <span class="slide-number" data-current="31" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>Agent 这一段的收尾。Anthropic 跟数十个团队合作一年的观察，三条忠告。</p>
@@ -1359,8 +1315,8 @@
   </section>
 
 
-  <!-- ============ S33 · 章节页：第 3 节 ============ -->
-  <section class="slide" data-title="S33 第 3 节 上线之后">
+  <!-- ============ S32 · 章节页：第 3 节 ============ -->
+  <section class="slide" data-title="S32 第 3 节 上线之后">
     <p class="kicker">// 第 3 节</p>
     <div class="section-head" data-anim="fade-up">
       <div class="section-num">03</div>
@@ -1383,8 +1339,8 @@
     <p class="era-note">第一节的部署、监控、反馈三站，换到 LLM 时代重新走一遍。</p>
 
     <div class="deck-footer">
-      <span class="mono">第 3 节 · S33-S42</span>
-      <span class="slide-number" data-current="33" data-total="45"></span>
+      <span class="mono">第 3 节 · S32-S41</span>
+      <span class="slide-number" data-current="32" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>第三节，上线之后。第一节的部署、监控、反馈三站，换到 LLM 时代重新走一遍。我自己的案例也停在上线这一站，正好跟着这一节往前走。</p>
@@ -1393,8 +1349,8 @@
   </section>
 
 
-  <!-- ============ S34 · 推理服务一页速览 ============ -->
-  <section class="slide" data-title="S34 推理速览">
+  <!-- ============ S33 · 推理服务一页速览 ============ -->
+  <section class="slide" data-title="S33 推理速览">
     <p class="kicker">// 第 3 节 · 推理服务</p>
     <h2 class="h2" data-anim="fade-up">推理服务：<span class="accent">一页速览</span></h2>
     <p class="lede">兑现第一节的伏笔：Uber P95 &lt; 10ms，LLM 生成秒级起步。预算变了两个数量级，瓶颈从特征查询变成显存。</p>
@@ -1418,7 +1374,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：vLLM 博客（逐字核对）· LinkedIn Engineering（一手）</span>
-      <span class="slide-number" data-current="34" data-total="45"></span>
+      <span class="slide-number" data-current="33" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>推理这块一页讲完，细节感兴趣会后聊。先兑现伏笔：第一节 Uber 的 P95 十毫秒以内，LLM 生成一个回答秒级起步，预算变了两个数量级，瓶颈变成显存。</p>
@@ -1427,8 +1383,8 @@
     </aside>
   </section>
 
-  <!-- ============ S35 · 监控四维度 ============ -->
-  <section class="slide" data-title="S35 监控四维度">
+  <!-- ============ S34 · 监控四维度 ============ -->
+  <section class="slide" data-title="S34 监控四维度">
     <p class="kicker">// 第 3 节 · 监控</p>
     <h2 class="h2" data-anim="fade-up">LLM 应用的监控：<span class="accent">四个维度</span></h2>
     <p class="lede">第一节说 ML 要在服务监控之上加数据健康和模型健康。LLM 应用落到四个维度。</p>
@@ -1458,7 +1414,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Evidently（分层）· mlflow.org（三票验证 3-0）</span>
-      <span class="slide-number" data-current="35" data-total="45"></span>
+      <span class="slide-number" data-current="34" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>监控。先回一句第一节：Evidently 说 ML 监控要在传统服务监控之上，加数据健康和模型健康两层。到了 LLM 应用，实践里盯四个维度。</p>
@@ -1468,8 +1424,8 @@
   </section>
 
 
-  <!-- ============ S36 · 幻觉检测 ============ -->
-  <section class="slide" data-title="S36 幻觉检测">
+  <!-- ============ S35 · 幻觉检测 ============ -->
+  <section class="slide" data-title="S35 幻觉检测">
     <p class="kicker">// 第 3 节 · 监控</p>
     <h2 class="h2" data-anim="fade-up">幻觉的现实与<span class="accent">实时检测</span></h2>
     <p class="lede">先给现实预期，再看生产里怎么拦。</p>
@@ -1496,7 +1452,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Eugene Yan（逐字核对）· Datadog LLM Observability（一手）</span>
-      <span class="slide-number" data-current="36" data-total="45"></span>
+      <span class="slide-number" data-current="35" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>幻觉，先给现实预期。Eugene Yan 的口径：做了知识接地、prompt 也调好的生产系统，典型的事实不一致率仍有 5% 到 10%；从供应商那边了解到的信息是，降到 2% 以下极其困难。所以对外别承诺零幻觉，对内设计兜底。</p>
@@ -1506,8 +1462,8 @@
   </section>
 
 
-  <!-- ============ S37 · Bad Case 归因 ============ -->
-  <section class="slide" data-title="S37 Bad Case 归因">
+  <!-- ============ S36 · Bad Case 归因 ============ -->
+  <section class="slide" data-title="S36 Bad Case 归因">
     <p class="kicker">// 第 3 节 · Bad Case</p>
     <h2 class="h2" data-anim="fade-up">Bad Case 从哪来，<span class="accent">怎么归因</span></h2>
     <p class="lede">监控发现问题之后：先收集，再对着 trace 逐环排查。</p>
@@ -1533,8 +1489,8 @@
     </div>
 
     <div class="deck-footer">
-      <span class="mono">综合：Eugene Yan / Datadog（反馈信号）· 回扣 S28 轨迹、S30 工具定义</span>
-      <span class="slide-number" data-current="37" data-total="45"></span>
+      <span class="mono">综合：Eugene Yan / Datadog（反馈信号）· 回扣 S26 循环轨迹、S25 工具定义</span>
+      <span class="slide-number" data-current="36" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>监控发现问题之后，进入坏案例环节。先说收集：显式的有点赞点踩、人工接管；隐式的更重要，用户重试、改写、放弃，都是信号，没有点踩不等于满意，而且隐式的量更大。</p>
@@ -1544,8 +1500,8 @@
   </section>
 
 
-  <!-- ============ S38 · 评测集 ============ -->
-  <section class="slide" data-title="S38 评测集">
+  <!-- ============ S37 · 评测集 ============ -->
+  <section class="slide" data-title="S37 评测集">
     <p class="kicker">// 第 3 节 · 评测集</p>
     <h2 class="h2" data-anim="fade-up">评测集：<span class="accent">不用大，但要真</span></h2>
     <p class="lede">三个起步口径，指向同一句话：真实、小、现在就建。</p>
@@ -1582,7 +1538,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Anthropic evals 工程文 2026-01（逐字）· 多智能体/StackAI（一手/单源）· Eugene Yan 引 HaluEval</span>
-      <span class="slide-number" data-current="38" data-total="45"></span>
+      <span class="slide-number" data-current="37" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>评测集，全场最重要的基础设施之一。三个起步口径：Anthropic 的多智能体系统从约二十条真实查询起步；他们今年一月的 evals 工程文说得更具体，二十到五十个来自真实失败的任务就是很好的起点，已上线的团队直接从 bug 单和客服队列里收；StackAI 建议五十到二百条真实用户查询做金标集。口径一致：真实、小、现在就建。</p>
@@ -1592,8 +1548,8 @@
   </section>
 
 
-  <!-- ============ S39 · 评测护栏 ============ -->
-  <section class="slide" data-title="S39 评测护栏">
+  <!-- ============ S38 · 评测护栏 ============ -->
+  <section class="slide" data-title="S38 评测护栏">
     <p class="kicker">// 第 3 节 · 评测集</p>
     <h2 class="h2" data-anim="fade-up">评测护栏的<span class="accent">真实价值</span></h2>
     <p class="lede">两个真实案例：没有评测，你不会知道升级伤了哪里。</p>
@@ -1617,7 +1573,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：Eugene Yan（单源，引文直录）</span>
-      <span class="slide-number" data-current="39" data-total="45"></span>
+      <span class="slide-number" data-current="38" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>评测护栏值不值？两个真实案例，都来自 Eugene Yan 的实践复盘。</p>
@@ -1628,8 +1584,8 @@
   </section>
 
 
-  <!-- ============ S40 · 数据飞轮（核心对照） ============ -->
-  <section class="slide" data-title="S40 数据飞轮对照">
+  <!-- ============ S39 · 数据飞轮（核心对照） ============ -->
+  <section class="slide" data-title="S39 数据飞轮对照">
     <p class="kicker">// 第 3 节 · 数据飞轮</p>
     <h2 class="h2" data-anim="fade-up">数据飞轮：传统 ML <span class="accent">vs</span> Agent</h2>
     <p class="lede">全场核心的一张对照。闭环没变，转速变了。</p>
@@ -1670,7 +1626,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：StackAI（发布流程）· Anthropic（rainbow / 评测闭环，一手）· 综合对照</span>
-      <span class="slide-number" data-current="40" data-total="45"></span>
+      <span class="slide-number" data-current="39" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>全场最核心的一张表，左边传统 ML，右边 Agent，四行对齐。</p>
@@ -1681,8 +1637,8 @@
   </section>
 
 
-  <!-- ============ S41 · 发布流程 ============ -->
-  <section class="slide" data-title="S41 发布流程">
+  <!-- ============ S40 · 发布流程 ============ -->
+  <section class="slide" data-title="S40 发布流程">
     <p class="kicker">// 第 3 节 · 发布</p>
     <h2 class="h2" data-anim="fade-up">Agent 的<span class="accent">发布流程</span></h2>
     <p class="lede">通用四步，与第一节的灰度思维完全同构。</p>
@@ -1712,7 +1668,7 @@
 
     <div class="deck-footer">
       <span class="mono">出处：StackAI（发布流程）· Anthropic（rainbow / checkpoint，一手）</span>
-      <span class="slide-number" data-current="41" data-total="45"></span>
+      <span class="slide-number" data-current="40" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>发布。通用流程四步，来自 StackAI：先离线评测门禁，过不了不上线；再金丝雀小流量；然后 A/B；最后全量加监控。跟第一节的灰度三件套完全同构。</p>
@@ -1722,8 +1678,8 @@
   </section>
 
 
-  <!-- ============ S42 · 第 3 节小结 ============ -->
-  <section class="slide" data-title="S42 第 3 节小结">
+  <!-- ============ S41 · 第 3 节小结 ============ -->
+  <section class="slide" data-title="S41 第 3 节小结">
     <p class="kicker">// 第 3 节 · 小结</p>
     <h2 class="h2" data-anim="fade-up">三句话带走</h2>
 
@@ -1753,7 +1709,7 @@
 
     <div class="deck-footer">
       <span class="mono">第 3 节 · 完</span>
-      <span class="slide-number" data-current="42" data-total="45"></span>
+      <span class="slide-number" data-current="41" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>第 3 节收三句话。</p>
@@ -1763,8 +1719,8 @@
   </section>
 
 
-  <!-- ============ S43 · 一条生命周期，两个时代 ============ -->
-  <section class="slide" data-title="S43 一条生命周期两个时代">
+  <!-- ============ S42 · 一条生命周期，两个时代 ============ -->
+  <section class="slide" data-title="S42 一条生命周期两个时代">
     <p class="kicker">// 第 4 节 · 收束</p>
     <h2 class="h2" data-anim="fade-up">一条生命周期，<span class="accent">两个时代</span></h2>
     <p class="lede">两个时代放到同一张地图上，环节一一对应。</p>
@@ -1790,8 +1746,8 @@
     <p class="era-note">形状一模一样。开场画的那个圈，到这里闭合。再看一眼：什么变了，什么没变。</p>
 
     <div class="deck-footer">
-      <span class="mono">收束 · S43-S45</span>
-      <span class="slide-number" data-current="43" data-total="45"></span>
+      <span class="mono">收束 · S42-S44</span>
+      <span class="slide-number" data-current="42" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>倒数第三页，把两个时代放回同一张地图。</p>
@@ -1801,8 +1757,8 @@
   </section>
 
 
-  <!-- ============ S44 · 什么变了，什么没变 ============ -->
-  <section class="slide" data-title="S44 什么变了什么没变">
+  <!-- ============ S43 · 什么变了，什么没变 ============ -->
+  <section class="slide" data-title="S43 什么变了什么没变">
     <p class="kicker">// 第 4 节 · 收束</p>
     <h2 class="h2" data-anim="fade-up">什么变了，<span class="accent">什么没变</span></h2>
 
@@ -1833,7 +1789,7 @@
 
     <div class="deck-footer">
       <span class="mono">全场论断的收束</span>
-      <span class="slide-number" data-current="44" data-total="45"></span>
+      <span class="slide-number" data-current="43" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>什么没变？四件：数据质量决定上限；上线不是终点；评测是门禁；反馈闭环驱动迭代。从 CRISP-DM 到 Agent，四件全部成立，每件今天都有出处。</p>
@@ -1843,8 +1799,8 @@
   </section>
 
 
-  <!-- ============ S45 · 务实路线 & Q&A ============ -->
-  <section class="slide" data-title="S45 务实路线与 QA">
+  <!-- ============ S44 · 务实路线 & Q&A ============ -->
+  <section class="slide" data-title="S44 务实路线与 QA">
     <p class="kicker">// 收束 · 起步清单</p>
     <h2 class="h2" data-anim="fade-up">小公司<span class="accent">务实路线</span></h2>
     <p class="lede">开场答应过的起步清单，四条，全部有出处。</p>
@@ -1876,7 +1832,7 @@
 
     <div class="deck-footer">
       <span class="mono">全部出处见 docs/research-verified-facts.md</span>
-      <span class="slide-number" data-current="45" data-total="45"></span>
+      <span class="slide-number" data-current="44" data-total="44"></span>
     </div>
     <aside class="notes">
       <p>收尾。开场答应的三样东西，最后一样现在兑现：起步清单，四条，全部有出处。</p>
