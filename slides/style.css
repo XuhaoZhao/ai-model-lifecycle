@@ -782,3 +782,19 @@
   margin: 12px 0 0; font-size: 15px; font-weight: 600; color: var(--accent-3);
   font-family: var(--font-mono, monospace); letter-spacing: .01em;
 }
+
+/* ===== S9 特征页：适配 1600x900 画布，收紧纵向留白防裁切 ===== */
+.tpl-presenter-mode-reveal section[data-title="S9 特征与训练服务一致性"] { padding: 46px 88px; }
+.tpl-presenter-mode-reveal section[data-title="S9 特征与训练服务一致性"] .stage { padding: 18px 12px; }
+.tpl-presenter-mode-reveal section[data-title="S9 特征与训练服务一致性"] .grid.g3 { gap: 14px; margin-top: 14px; }
+.tpl-presenter-mode-reveal section[data-title="S9 特征与训练服务一致性"] .grid.g3 .card { padding: 14px 18px; }
+.tpl-presenter-mode-reveal section[data-title="S9 特征与训练服务一致性"] .fs-foot { margin-top: 12px; }
+
+/* ===== 案例大图页（S19-S22）===== */
+.tpl-presenter-mode-reveal .case-shot { padding: 44px 72px 60px; }
+.tpl-presenter-mode-reveal .case-shot .big-shot { flex: 1 1 auto; min-height: 0; aspect-ratio: auto; }
+.tpl-presenter-mode-reveal .shot-cap {
+  display: flex; justify-content: space-between; gap: 16px;
+  margin-top: 14px; font-size: 14px; color: var(--text-3); line-height: 1.5;
+}
+.tpl-presenter-mode-reveal .shot-cap b { color: var(--text-2); }
