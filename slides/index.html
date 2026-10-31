@@ -1572,7 +1572,7 @@
       <p class="dim" style="margin:-2px 0 6px; font-size:12.5px; color:var(--text-3)">Datadog：纳斯达克上市的云监控与可观测性公司（APM、日志起家），LLM Observability 是它的 AI 产品线</p>
       <div class="feature-row"><span class="num blue">①</span><div><b>黑盒 LLM-as-judge，实时跑在生产流量上</b><p class="dim">客户大多用黑盒模型，概率和注意力拿不到；扰动式要重新生成答案，5-10 倍调用成本，弃用。judge 把任务拆成"找分歧+引用原文"的评分表，普通代码做最终裁决。</p></div></div>
       <div class="feature-row"><span class="num green">②</span><div><b>判出来自动分两类</b><p class="dim">与上下文矛盾：上下文是对的，答案基本可判错。无依据论断：上下文里没有支撑。</p></div></div>
-      <div class="feature-row"><span class="num orange">③</span><div><b>分级拦截，两条产品线别混</b><p class="dim">质量评测（Custom Judge）异步不阻塞；同步拦截是 AI Guard 那条线，危险动作前拦，敏感场景才上。失败 Trace 可导入评测集。</p></div></div>
+      <div class="feature-row"><span class="num orange">③</span><div><b>分级拦截，两条产品线别混</b><p class="dim">质量评测（Custom Judge）异步不阻塞；敏感场景的危险动作，使用AI guard拦截。失败 Trace 可导入评测集。</p></div></div>
     </div>
 
     <p class="era-note">2026 年的行业共识：这不再是模型问题，是缺一层评测（missing eval layer）。别承诺零幻觉，设计兜底（拦截 + 转人工）。</p>
@@ -1658,7 +1658,7 @@
       <div class="card hot">
         <h4>兑现：坏案例 → 评测集</h4>
         <p class="dim">开场地图里反馈的第二个回流点，这页兑现。Anthropic 原话：<b>failures become test cases, test cases prevent regressions</b>。</p>
-        <p class="dim">回归评测保持近 100% 通过率，专防倒退；能力评测通过率高了，毕业转回归套件。评测集是活物，不同步真实用法，就制造虚假信心。</p>
+        <p class="dim">考题分两种。<b>防倒退的</b>：全是曾经做对的题，每次改动后重跑一遍，应该几乎全对，哪题掉队就是这次改动改坏了东西。<b>测进步的</b>：专挑还不会做的题，哪道稳定做对了，就转成防倒退的题。题库要跟着线上真实用法一直长，不更新，分数再高也是自己骗自己。</p>
       </div>
     </div>
 
@@ -1672,7 +1672,7 @@
       <p>评测集，全场最重要的基础设施之一。三个起步口径：Anthropic 的多智能体系统从约二十条真实查询起步；他们今年一月的 evals 工程文说得更具体，二十到五十个来自真实失败的任务就是很好的起点，已上线的团队直接从 bug 单和客服队列里收；StackAI 建议五十到二百条真实用户查询做金标集。口径一致：真实、小、现在就建。</p>
       <p>评测方法。总不能每改一版 prompt 就雇人把评测集重新打一遍分，所以业界用「模型阅卷」：让另一个大模型当阅卷老师，给它一张评分标准清单，行话叫 rubric，上面写清楚什么算合格什么不算。它看一遍回答，打一个 0 到 1 的分，再给过或者不过的结论，一次调用就出结果。Anthropic 试过各种自动打分法，这个跟真人阅卷的结果最接近。</p>
       <p>但它有硬伤：这位老师自己也是模型。让它判断回答里有没有编造，准确率只有五成四到五成八，比抛硬币强不了太多。所以人工测试替代不了。Anthropic 有个真事：自动打分全部通过，人工一测才发现 agent 检索的时候偏爱 SEO 内容农场，就是标题党、堆关键词那种网站，不爱看权威来源。答案本身看着挺好，来源一塌糊涂，这种问题机器阅卷看不出来。</p>
-      <p>最后兑现开场地图那条线：反馈的第二个回流点，坏案例进评测集。Anthropic 原话，failures become test cases, test cases prevent regressions，失败变测试用例，测试用例防回归。回归评测保持近百分百通过率，专门防倒退；能力评测通过率高了就毕业成回归套件。评测集是活物，不同步真实用法，就会制造虚假信心。</p>
+      <p>最后兑现开场地图那条线：反馈的第二个回流点，坏案例进评测集。Anthropic 原话，failures become test cases, test cases prevent regressions，失败变测试用例，测试用例防回归。再说一组概念，讲成人话。回归评测就是防倒退的考试：里面的题都是模型曾经做对的，所以每次改完 prompt、换完模型重跑一遍，应该几乎全对；一旦哪道题从对变错，不用查别的，就是这次改动改坏了东西。能力评测正相反，专挑模型还不会做的难题，测进步；哪道难题被稳定攻克，它就毕业，搬进防倒退的题库从此站岗。最后提醒：题库要跟着线上真实用法一直长，一直不更新，考的全是老题，分数再高也只是自己骗自己。</p>
     </aside>
   </section>
 
