@@ -798,3 +798,13 @@
   margin-top: 14px; font-size: 14px; color: var(--text-3); line-height: 1.5;
 }
 .tpl-presenter-mode-reveal .shot-cap b { color: var(--text-2); }
+
+/* ===== S40 幻觉页：内容较满，压缩行距适配画布 ===== */
+.tpl-presenter-mode-reveal .slide[data-title="S40 幻觉检测"] .card { padding: 14px 20px; }
+.tpl-presenter-mode-reveal .slide[data-title="S40 幻觉检测"] .card h4 { margin-bottom: 4px; }
+.tpl-presenter-mode-reveal .slide[data-title="S40 幻觉检测"] .stat-card { padding: 16px 14px 14px; }
+.tpl-presenter-mode-reveal .slide[data-title="S40 幻觉检测"] .stat-card .v { font-size: 38px; }
+.tpl-presenter-mode-reveal .slide[data-title="S40 幻觉检测"] .stat-card .k { margin-top: 8px; font-size: 12.5px; }
+.tpl-presenter-mode-reveal .slide[data-title="S40 幻觉检测"] .feature-row { padding: 7px 0; }
+.tpl-presenter-mode-reveal .slide[data-title="S40 幻觉检测"] .feature-row .dim { font-size: 13px; line-height: 1.5; }
+.tpl-presenter-mode-reveal .slide[data-title="S40 幻觉检测"] .era-note { margin-top: 12px; }

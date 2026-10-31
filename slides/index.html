@@ -1531,7 +1531,7 @@
     </div>
 
     <div class="deck-footer">
-      <span class="mono">出处：Evidently（分层）· mlflow.org（三票验证 3-0）</span>
+      <span class="mono">出处：Evidently（分层）· mlflow.org</span>
       <span class="slide-number" data-current="39" data-total="49"></span>
     </div>
     <aside class="notes">
@@ -1549,7 +1549,7 @@
     <p class="lede">能解千禧年问题的模型，简单事实仍会错——差的那件东西叫验证器。</p>
 
     <div class="card card-accent fs-foot" data-anim="fade-up" style="margin-top:20px">
-      <b>同一个秋天</b>：2026-09，OpenAI 宣布 AI 解决 Navier–Stokes 千禧问题，配 Lean 形式化证明（Clay 所验证中）——证明有机器逐行检查，编造无法存活。<b>你的业务答案没有这个兜底</b>：同一批模型体系，开放域简单事实（SimpleQA）最好的成绩也只有 77.5%。
+      <b>同一个秋天</b>：2026-09，OpenAI 宣布 AI 解决 Navier–Stokes 千禧问题，配 Lean 形式化证明（Clay 所验证中）——证明有机器逐行检查，编造无法存活。<b>我们的业务答案没有这个兜底</b>：同一批模型体系，开放域简单事实（SimpleQA）最好的成绩也只有 77.5%。
     </div>
 
     <div class="tri" data-anim="fade-up" style="margin-top:18px">
@@ -1558,8 +1558,8 @@
         <p class="k">接地任务头部模型<br>RAG 摘要幻觉率（Vectara HHEM 下一代榜）——"2% 以下极难"已被打破</p>
       </div>
       <div class="card stat-card">
-        <div class="v">77.5%</div>
-        <p class="k">开放域最好成绩<br>SimpleQA 无工具短问答——两成多不对或不知道，推理强 ≠ 事实检索可靠</p>
+        <div class="v">22-94%</div>
+        <p class="k">开放域事实问答：26 模型区间（AA-Omniscience）<br>最好的 SimpleQA 也只 77.5% 准确——推理强 ≠ 事实可靠</p>
       </div>
       <div class="card stat-card">
         <div class="v">10.2%</div>
@@ -1567,24 +1567,24 @@
       </div>
     </div>
 
-    <div class="card mt-m" data-anim="fade-up">
-      <h4>Datadog 的实时检测（生产实践，一手）</h4>
+    <div class="card" data-anim="fade-up" style="margin-top:12px">
+      <h4>Datadog 的实时检测</h4>
       <div class="feature-row"><span class="num blue">①</span><div><b>黑盒 LLM-as-judge，实时跑在生产流量上</b><p class="dim">客户大多用黑盒模型，概率和注意力拿不到；扰动式要重新生成答案，5-10 倍调用成本，弃用。judge 把任务拆成"找分歧+引用原文"的评分表，普通代码做最终裁决。</p></div></div>
       <div class="feature-row"><span class="num green">②</span><div><b>判出来自动分两类</b><p class="dim">与上下文矛盾：上下文是对的，答案基本可判错。无依据论断：上下文里没有支撑。</p></div></div>
-      <div class="feature-row"><span class="num orange">③</span><div><b>分级拦截</b><p class="dim">敏感场景两类都拦，不敏感只拦矛盾。这套分级很实用，可以直接抄。</p></div></div>
+      <div class="feature-row"><span class="num orange">③</span><div><b>分级拦截，两条产品线别混</b><p class="dim">质量评测（Custom Judge）异步不阻塞；同步拦截是 AI Guard 那条线，危险动作前拦，敏感场景才上。失败 Trace 可导入评测集。</p></div></div>
     </div>
 
     <p class="era-note">2026 年的行业共识：这不再是模型问题，是缺一层评测（missing eval layer）。别承诺零幻觉，设计兜底（拦截 + 转人工）。</p>
 
     <div class="deck-footer">
-      <span class="mono">出处：OpenAI Navier–Stokes 2026-09 · Vectara HHEM 2025-11 · SimpleQA 2026 · Datadog</span>
+      <span class="mono">出处：OpenAI Navier–Stokes 2026-09 · Vectara HHEM 2025-11 · SimpleQA 2026 · 斯坦福 AI Index 2026（AA-Omniscience）· Datadog</span>
       <span class="slide-number" data-current="40" data-total="49"></span>
     </div>
     <aside class="notes">
       <p>先讲上个月的大新闻：OpenAI 宣布 AI 解决了纳维-斯托克斯千禧问题，一百万美元那种，还配了 Lean 形式化证明。两句话跟上：第一，Clay 数学所到现在还没验证完，奖金没发；第二，也是更重要的——这跟"模型不编了"是两回事。数学证明是封闭任务，每一行都被 Lean 机器检查，编造无法存活；你的业务答案没有这个验证器兜底。</p>
-      <p>所以幻觉严不严重，取决于问哪一层。接地任务，就是 RAG 给了上下文让它摘要，头部模型幻觉率已经压到 2% 以下——两年前"2% 以下极其困难"的口径已经被打破。开放域就完全另一回事：SimpleQA 这种无工具的简单事实问答，最好的模型也只有 77.5%，两成多不对或者不知道——推理能力和事实检索可靠性是两回事。而整个生态的平均幻觉率反而在恶化，从 2024 年的 6.25% 涨到 2026 年的 10.24%，模型数量暴涨，小模型拖垮了平均。给听众的一句话：别拿头部模型的接地成绩，去承诺你的开放域业务。</p>
+      <p>所以幻觉严不严重，取决于问哪一层。接地任务，就是 RAG 给了上下文让它摘要，头部模型幻觉率已经压到 2% 以下——两年前"2% 以下极其困难"的口径已经被打破。开放域就完全另一回事：AA-Omniscience 测了 26 个模型，幻觉率从 22% 到 94%，GPT-4o 的准确率从 98.2% 掉到 64.4%；SimpleQA 这种无工具的简单事实问答，最好的模型也只有 77.5%——推理能力和事实检索可靠性是两回事。而且要提醒：幻觉分三类，常识错误大幅改善，复杂推理仍有，最核心的是无依据编造，这类反而更难识别，因为编出来的答案看起来更专业，接口、配置、文件路径都能给你编齐。而整个生态的平均幻觉率反而在恶化，从 2024 年的 6.25% 涨到 2026 年的 10.24%，模型数量暴涨，小模型拖垮了平均。给听众的一句话：别拿头部模型的接地成绩，去承诺你的开放域业务。</p>
       <p>那生产里怎么办？Datadog 的实时检测。黑盒 LLM-as-judge 跑在生产流量上——选黑盒是因为客户大多用黑盒 API，概率和注意力拿不到；不用扰动式，重新生成答案要五到十倍调用成本。judge 的关键设计是把"判幻觉"拆成"找出所有分歧并引用原文"的评分表，每条分歧从上下文和答案各抄一段原文，最后由普通代码做布尔裁决。判出来分两类：与上下文矛盾，上下文是对的，答案基本就是错的；无依据论断，上下文里没有支撑。敏感场景两类都拦，不敏感只拦矛盾，直接抄。</p>
-      <p>收尾用行业共识：2026 年的说法是，幻觉不再是模型问题，是缺一层评测。数学有 Lean，你的业务没有——检测层就是你的 Lean。别承诺零幻觉，设计兜底，拦截加转人工。</p>
+      <p>收尾用行业共识：2026 年的说法是，幻觉不再是模型问题，是缺一层评测。数学有 Lean，你的业务没有——检测层就是你的 Lean。顺带回答一个常见疑问：为什么感觉行业不怎么提幻觉了？因为 RAG 和工具调用把"回忆题"变成了"阅读题"，问题从模型层挪进了系统层——这正是第二节那句"从一个模型到一组系统"。别承诺零幻觉，设计兜底，拦截加转人工。</p>
     </aside>
   </section>
 
