@@ -1631,8 +1631,8 @@
   <!-- ============ S42 · 评测集 ============ -->
   <section class="slide" data-title="S42 评测集">
     <p class="kicker">// 第 3 节 · 评测集</p>
-    <h2 class="h2" data-anim="fade-up">评测集：<span class="accent">不用大，但要真</span></h2>
-    <p class="lede">三个起步口径，指向同一句话：真实、小、现在就建。</p>
+    <h2 class="h2" data-anim="fade-up">评测集：<span class="accent">非常重要，重点在于真实</span></h2>
+    <p class="lede">数量可以不用非常多，agent系统上线时就要有</p>
 
     <div class="tri" data-anim="fade-up" style="margin-top:26px">
       <div class="card stat-card">
@@ -1641,7 +1641,7 @@
       </div>
       <div class="card stat-card">
         <div class="v">20-50 个</div>
-        <p class="k">来自真实失败的简单任务就是好起点<br>已上线团队从 bug 单与客服队列收（evals 工程文）</p>
+        <p class="k">Anthropic今年一月的 evals 工程文说得更具体，二十到五十个来自真实失败的任务就是很好的起点<br>
       </div>
       <div class="card stat-card">
         <div class="v">50-200 条</div>
@@ -1652,8 +1652,8 @@
     <div class="grid g2" data-anim="fade-up" style="margin-top:20px">
       <div class="card">
         <h4>方法与局限</h4>
-        <p class="dim">单次 LLM-as-judge：打 0.0-1.0 分 + rubric 通过/失败，与人工判断最一致。</p>
-        <p class="dim">但 judge 有局限：幻觉检测准确率仅 ~54-58%。<b>人工测试不可替代</b>——Anthropic 靠人工发现 agent 偏爱 SEO 内容农场，judge 抓不到。</p>
+        <p class="dim">自动打分：让另一个大模型当阅卷老师。给它一张评分标准清单，看一遍回答，打 0 到 1 的分，再给过 / 不过。一次出结果，是跟真人阅卷最接近的自动打分法。</p>
+        <p class="dim">但这位老师自己也会看走眼：让它判断回答是不是编的，准确率只有 54-58%，比抛硬币强不了太多。<b>人工测试替代不了</b>，Anthropic 靠人工才发现 agent 爱引用 SEO 内容农场（标题党网站），答案看着没问题，来源很糟。</p>
       </div>
       <div class="card hot">
         <h4>兑现：坏案例 → 评测集</h4>
@@ -1670,7 +1670,8 @@
     </div>
     <aside class="notes">
       <p>评测集，全场最重要的基础设施之一。三个起步口径：Anthropic 的多智能体系统从约二十条真实查询起步；他们今年一月的 evals 工程文说得更具体，二十到五十个来自真实失败的任务就是很好的起点，已上线的团队直接从 bug 单和客服队列里收；StackAI 建议五十到二百条真实用户查询做金标集。口径一致：真实、小、现在就建。</p>
-      <p>方法：单次 LLM-as-judge 调用，打 0 到 1 分加 rubric 通过失败，与人工判断最一致。但 judge 有局限，幻觉检测准确率只有五成四到五成八；人工测试不可替代，Anthropic 就是靠人工发现 agent 偏爱 SEO 内容农场的。</p>
+      <p>评测方法。总不能每改一版 prompt 就雇人把评测集重新打一遍分，所以业界用「模型阅卷」：让另一个大模型当阅卷老师，给它一张评分标准清单，行话叫 rubric，上面写清楚什么算合格什么不算。它看一遍回答，打一个 0 到 1 的分，再给过或者不过的结论，一次调用就出结果。Anthropic 试过各种自动打分法，这个跟真人阅卷的结果最接近。</p>
+      <p>但它有硬伤：这位老师自己也是模型。让它判断回答里有没有编造，准确率只有五成四到五成八，比抛硬币强不了太多。所以人工测试替代不了。Anthropic 有个真事：自动打分全部通过，人工一测才发现 agent 检索的时候偏爱 SEO 内容农场，就是标题党、堆关键词那种网站，不爱看权威来源。答案本身看着挺好，来源一塌糊涂，这种问题机器阅卷看不出来。</p>
       <p>最后兑现开场地图那条线：反馈的第二个回流点，坏案例进评测集。Anthropic 原话，failures become test cases, test cases prevent regressions，失败变测试用例，测试用例防回归。回归评测保持近百分百通过率，专门防倒退；能力评测通过率高了就毕业成回归套件。评测集是活物，不同步真实用法，就会制造虚假信心。</p>
     </aside>
   </section>
