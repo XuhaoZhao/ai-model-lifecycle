@@ -1016,7 +1016,7 @@
     </div>
 
     <div class="card card-accent fs-foot" data-anim="fade-up">
-      原文：现代基础模型的开发由两个主要阶段组成，(1) 预训练，用下一词预测这类简单任务做大规模训练；(2) 后训练，调优到遵循指令、对齐人类偏好。two main stages，出自 Llama 3 报告。
+      原文：现代基础模型的开发由两个主要阶段组成，(1) 预训练，用下一词预测这类简单任务做大规模训练；(2) 后训练，调优到遵循指令、对齐人类偏好。
     </div>
 
     <div class="deck-footer">
@@ -1505,24 +1505,24 @@
   <section class="slide" data-title="S39 监控四维度">
     <p class="kicker">// 第 3 节 · 监控</p>
     <h2 class="h2" data-anim="fade-up">LLM 应用的监控：<span class="accent">四个维度</span></h2>
-    <p class="lede">第一节说 ML 要在服务监控之上加数据健康和模型健康。LLM 应用落到四个维度。</p>
+    <p class="lede">第一节说 ML 要在服务监控之上加数据健康和模型健康。LLM 应用落到四个维度，这一节的重点是<b>质量</b>和 <b>trace</b>两条线。</p>
 
     <div class="grid g4 mt-l" data-anim="fade-up">
-      <div class="card">
-        <h4>质量</h4>
-        <p class="dim">幻觉率 · 用户反馈（点踩、人工接管）</p>
+      <div class="card hot">
+        <h4>质量 ★</h4>
+        <p class="dim">幻觉率 · 用户反馈（点踩、人工接管）。<b>本节主线</b>：接下来几页全是它。</p>
       </div>
       <div class="card">
         <h4>成本</h4>
-        <p class="dim">token 用量 · 单次任务费用（多智能体的 15× 在这里盯）</p>
+        <p class="dim">token 用量 · 单次任务费用。账单第 2 节多智能体算过了，这里只负责持续盯。</p>
       </div>
       <div class="card">
         <h4>延迟</h4>
-        <p class="dim">首 token 时间 · 生成速度</p>
+        <p class="dim">首 token 时间 · 生成速度。怎么优化推理页讲过了，这里是盯线上指标。</p>
       </div>
       <div class="card hot">
-        <h4>trace</h4>
-        <p class="dim">轨迹：每步调了什么模型、什么工具、检索了什么。<strong>归因的前提</strong>，LLM 应用独有。</p>
+        <h4>trace ★</h4>
+        <p class="dim">轨迹：每步调了什么模型、什么工具、检索了什么。<b>本节另一条主线</b>：归因的前提，LLM 应用独有。</p>
       </div>
     </div>
 
@@ -1536,7 +1536,7 @@
     </div>
     <aside class="notes">
       <p>监控。先回一句第一节：Evidently 说 ML 监控要在传统服务监控之上，加数据健康和模型健康两层。到了 LLM 应用，实践里盯四个维度。</p>
-      <p>质量，幻觉率和用户反馈；成本，token 用量，多智能体那个十五倍就是在这儿盯的；延迟，首 token 时间和生成速度；trace，轨迹，每次请求里模型做了什么、调了哪些工具、检索了什么。第四个是 LLM 应用独有的维度，没有 trace，后面的坏案例归因无从谈起。</p>
+      <p>四个维度过一遍，但说清楚重点：这一节后面几页全在质量和 trace 这两条线上展开，幻觉检测、坏案例归因、评测集都从这两条线来。成本和延迟不是不重要，是它们的位置在前面：成本账单第 2 节多智能体算过了，延迟优化推理页讲过了，监控这边只负责持续盯指标。质量看幻觉率和用户反馈；trace 是轨迹，每次请求里模型做了什么、调了哪些工具、检索了什么，LLM 应用独有的维度，没有它，坏案例归因无从谈起。</p>
       <p>工具现状以 MLflow 为例，官网自述：内建 OpenTelemetry 的 tracing，五十多个内置指标和 LLM judge，prompt 管理，AI Gateway 管成本。这些能力存在是三票验证过的。</p>
     </aside>
   </section>
