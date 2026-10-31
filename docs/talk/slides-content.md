@@ -419,7 +419,7 @@
 - StackAI 建议：**50-200 条真实用户查询**做金标集
 - 评测方法（人话版）：让另一个大模型当阅卷老师，给一张评分标准清单（rubric），看一遍回答打 0 到 1 的分再给过/不过，一次出结果；与真人阅卷最接近的自动打分法
 - 但阅卷模型自己会看走眼：判「回答是不是编的」准确率仅 54-58%，比抛硬币强不了太多；**人工测试替代不了**（Anthropic 靠人工才发现 agent 爱引用 SEO 内容农场，答案没问题、来源很糟，机器阅卷发现不了）
-**讲稿备注**：Anthropic【单源·一手】、StackAI【单源】、judge 局限来自 Eugene Yan 引 HaluEval 数据【单源】。金句：**评测集是团队最重要的资产之一，20 条今天就建得起来**。补充闭环：监控回流的坏案例是评测集最高价值的新增——"failures become test cases, test cases prevent regressions"；回归评测保持近 100% 通过率、专防倒退，能力评测高通过率后「毕业」为回归套件；评测集是"活物"，要与真实用法同步否则制造虚假信心【单源·一手：anthropic.com/engineering/demystifying-evals-for-ai-agents 2026-01】。
+**讲稿备注**：Anthropic【单源·一手】、StackAI【单源】、judge 局限来自 Eugene Yan 引 HaluEval 数据【单源】。金句：**评测集是团队最重要的资产之一，20 条今天就建得起来**。补充闭环：监控回流的坏案例是评测集最高价值的新增——"failures become test cases, test cases prevent regressions"；页面上已译为人话：考题分两种——防倒退的（全是做对过的题，改动后重跑应几乎全对，掉队即改坏）和测进步的（专挑不会的题，稳定攻克后转入防倒退题库）；题库要跟着真实用法长，不更新就是自己骗自己【单源·一手：anthropic.com/engineering/demystifying-evals-for-ai-agents 2026-01】。
 
 ---
 
