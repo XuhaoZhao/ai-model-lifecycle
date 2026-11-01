@@ -48,7 +48,7 @@
         <span class="num">01</span>
         <div>
           <b>一张<span class="accent">流程图</span></b>
-          <p class="dim">AI 功能从数据到生产要经过哪些环节，自己在这条线的哪一段，上下游是谁</p>
+          <p class="dim">AI 功能从数据到生产要经过哪些环节</p>
           <p class="mini-map">数据 → 训练 → 评测 → 部署 → 监控 ↺ 反馈</p>
         </div>
       </div>
@@ -56,7 +56,7 @@
         <span class="num">02</span>
         <div>
           <b>agent 时代如何<span class="accent">工程化落地</span></b>
-          <p class="dim">第 2-3 节的主线：模型底座、agent 工程、上线之后的监控与迭代——重点是怎么落地，不是概念</p>
+          <p class="dim">第 2-3 节的主线：模型底座、agent 工程、上线之后的监控与迭代——重点是怎么落地</p>
         </div>
       </div>
     </div>
@@ -136,7 +136,7 @@
       </div>
     </div>
 
-    <p class="dim step-notes">第 3 步数据准备：清洗、划分、特征工程（80% 的去处）。第 5 步评估看效果指标（准确率、AUC、RMSE 这类）；第 6 步验证再判断够不够格上线：效果达标之外，还要满足预测服务的工程标准。</p>
+    <p class="dim step-notes">第 3 步数据准备：清洗、划分、特征工程。第 5 步评估看效果指标（准确率、AUC、RMSE 这类）；第 6 步验证再判断够不够格上线：效果达标之外，还要满足预测服务的工程标准。</p>
 
     <div class="card card-accent maturity-callout" data-anim="fade-up">
       <b>这些步骤的自动化程度，就是 MLOps 成熟度</b>。它衡量的不是模型效果，是交付流程
@@ -231,7 +231,7 @@
       <div class="task-row"><b>清洗</b><p class="dim">缺失、异常、重复、格式问题，官方说法里它是最耗时的任务</p><span class="tag">最耗时</span></div>
       <div class="task-row"><b>标注</b><p class="dim">人工打标签，传统 ML 里最大的人力投入</p><span></span></div>
       <div class="task-row"><b>划分</b><p class="dim">训练/验证/测试三份分开。最怕数据泄漏：未来信息混进训练，评测虚高，上线翻车</p><span class="tag tag-red">防泄漏</span></div>
-      <div class="task-row"><b>特征工程</b><p class="dim">把原始数据变成模型能用的信号。它是什么、为什么会出一致性问题，下一页用一个例子讲透，再看 Uber 的平台做法</p><span></span></div>
+      <div class="task-row"><b>特征工程</b><p class="dim">把原始数据变成模型能用的信号。</p><span></span></div>
     </div>
 
     <div class="deck-footer">
@@ -265,7 +265,7 @@
     <div class="grid g3 mt-m" data-anim="fade-up">
       <div class="card card-accent">
         <b>为什么要定义特征</b>
-        <p class="dim">模型只吃数字向量；特征＝把业务理解编码成数字，定义好坏直接决定上限</p>
+        <p class="dim">模型只吃数字向量；特征＝把业务理解编码成数字，转化好坏直接决定上限</p>
       </div>
       <div class="card card-accent">
         <b>① 批 vs 流，代码被迫写两遍</b>
@@ -290,7 +290,7 @@
     </div>
 
     <div class="card card-accent fs-foot" data-anim="fade-up">
-      <b>本质：训练和服务是两套独立的工程系统，靠人工对齐两套代码，偏差几乎必然</b>。Uber 的解法：特征只定义一次、两边共用——Michelangelo（2016 年起生产运行），2017 年 10,000 个特征全公司共享，Spark 批算 / Cassandra 点查 P95 &lt; 10ms，成了开源 Feast 的原型。training-serving skew 被 Evidently 列为生产故障一级类别，监控那节再见。
+      <b>本质：训练和服务是两套独立的工程系统，靠人工对齐两套代码，偏差几乎必然</b>。Uber 的解法：特征定义只写一份，放进 Michelangelo 的平台库（2016 年起生产运行）；平台拿这<b>同一份定义</b>跑两种模式——离线用 Spark 把历史数据批量算成训练表，在线把最新值提前算好存进 Cassandra；线上来一单，直接取现成值，不用现场重算，P95 &lt; 10ms。数值同源，没有第二份代码可漂移。2017 年 10,000 个特征全公司共享，成了开源 Feast 的原型。training-serving skew 被 Evidently 列为生产故障一级类别，监控那节再见。
     </div>
 
     <div class="deck-footer">
@@ -318,7 +318,7 @@
 有些不一致很隐蔽：训练时用 Python 的 sklearn 做标准化，线上用 Java 重写，浮点数精度、默认的缺失值处理、类别排序规则都可能不同。甚至同一个库的不同版本，默认行为也会变。
 
 所以本质上，“数据处理逻辑不一致”不是某个人粗心，而是训练和服务是两套独立的工程系统，共享逻辑需要额外的架构设计（比如 TFX Transform、特征存储、统一的特征计算 DSL）才能保证。没有这层设计时，靠人工“对齐”两套代码，出现偏差几乎是必然的。</p>
-      <p>Uber 的解法就一句话：<strong>特征只定义一次，两边共用</strong>。训练侧 Spark 批量算，服务侧 Cassandra 点查，P95 十毫秒以内；2016 年起生产运行，2017 年博客时点已经一万个特征全公司共享，做新模型先来库里找。这个设计后来成了开源 Feast 的原型。平台化不等于买昂贵系统，把公共逻辑抽出来共享，就是平台的起点。</p>
+      <p>Uber 的解法，关键是<strong>特征定义只写一份</strong>。这一份定义放进 Michelangelo 的平台库，平台拿它跑两种模式：离线这边，Spark 按这份定义把历史数据批量算成训练表；在线这边，按同一个定义把最新值提前算好，存进 Cassandra。线上每来一单，直接把这个特征的现成值取出来用——值是提前算好的，取一下就行，不用现场重算，所以十毫秒以内就能拿到。回想一下前面的问题出在哪：两拨人各写一套实现，怎么对都对不齐。现在两边数值出自同一份定义，没有第二份代码可以漂移，问题从根上没了。2016 年起生产运行，2017 年博客时点已经一万个特征全公司共享，做新模型先来库里找，这个设计后来成了开源 Feast 的原型。平台化不等于买昂贵系统，把公共逻辑抽出来共享，就是平台的起点。</p>
     </aside>
   </section>
 
@@ -475,13 +475,13 @@
     <p class="lede">代码一行没动，线上效果也可能持续变差。</p>
 
     <div class="card card-accent fs-foot" data-anim="fade-up">
-      <b>Google Cloud 原话</b>：模型衰减的方式，比传统软件系统更多（decay in more ways than conventional software systems）。不止因为代码缺陷，更因为数据分布在持续演变。
+      <b>Google Cloud </b>：模型衰减的方式，比传统软件系统更多（decay in more ways than conventional software systems）。不止因为代码缺陷，更因为数据分布在持续演变。
     </div>
 
     <div class="grid g2 mt-m" data-anim="fade-up">
       <div class="card">
         <h4>数据漂移 · Data drift</h4>
-        <p class="dim">输入的分布变了。用户群体迁移、渠道占比变化，喂进模型的数据跟训练时不是一个样子了。X 变了。</p>
+        <p class="dim">输入的分布变了。用户群体迁移、渠道占比变化，喂进模型的数据跟训练时不是一个样子了。</p>
       </div>
       <div class="card">
         <h4>概念漂移 · Concept drift</h4>
@@ -522,12 +522,12 @@
       <div class="card">
         <h4>标签延迟与代理指标</h4>
         <div class="feature-row"><span class="num red">!</span><div><b>难题：线上没有现成标签</b><p class="dim">离线评估有测试集、答案现成；线上的真实标签要等——转化几天后、违约一年后。标签没回来，线上准确率算不出来</p></div></div>
-        <div class="feature-row"><span class="num green">→</span><div><b>对策：代理指标当烟雾报警器</b><p class="dim">输入漂移、预测漂移、新类别占比。世界变了输入先变，输出跟着变——响了再去查根因，不等标签</p></div></div>
+        <div class="feature-row"><span class="num green">→</span><div><b>对策：代理指标当烟雾报警器</b><p class="dim">输入漂移、预测漂移、新类别占比。世界变了输入先变，输出跟着变——有了异常就去查根因，不用等标签</p></div></div>
       </div>
     </div>
 
     <div class="card card-accent fs-foot" data-anim="fade-up">
-      <b>监控 vs 可观测性</b>：监控盯预先定义的指标，反应式，找已知的未知；可观测性做根因分析，主动式，找未知的未知。监控是可观测性的子集，小团队先把监控做起来就够了。
+      <b>监控 vs 可观测性</b>：监控盯预先定义的指标，反应式，找已知的未知；可观测性做根因分析，主动式，找未知的未知。监控是可观测性的子集。
     </div>
 
     <div class="deck-footer">
@@ -547,33 +547,48 @@
   <!-- ============ S14 · Michelangelo 闭环实现 ============ -->
   <section class="slide" data-title="S14 Michelangelo 闭环实现">
     <p class="kicker">// 第 1 节 · 案例</p>
-    <h2 class="h2" data-anim="fade-up">闭环落地：把预测和结果 join 起来</h2>
-    <p class="lede">Uber Michelangelo 对监控和反馈两步的工程实现。</p>
+    <h2 class="h2" data-anim="fade-up">闭环落地：掉点之后，数据往哪回流</h2>
+    <p class="lede">前半段一句话：Uber Michelangelo 把预测日志和回流结果按订单号 join，得到持续更新的线上准确率，越线告警。真正的重点是后半段：曲线掉了，这批生产数据往哪去。</p>
 
-    <div class="join-grid mt-l" data-anim="fade-up">
-      <div class="card">
-        <h4>① 线上预测，自动抽样</h4>
-        <p class="dim">服务端记预测日志，可选扣留一小部分流量专门用于评估。</p>
+    <div class="stage-flow mt-m" data-anim="fade-up">
+      <div class="stage"><b>① 预测日志 · 自动记</b><p>订单 A102 · 18:42 · v3 · 预测 32 min</p></div>
+      <span class="stage-arrow">⋈</span>
+      <div class="stage"><b>② 结果回流 · 有延迟</b><p>订单 A102 · 19:23 · 实际 41 min</p></div>
+      <span class="stage-arrow">→</span>
+      <div class="stage hot"><b>③ 线上准确率时序</b><p>笔笔可对账，汇成 RMSE 曲线 · 越线告警</p></div>
+    </div>
+
+    <div class="grid g2 mt-m" data-anim="fade-up">
+      <div class="card card-accent">
+        <h4>去处一 · 进训练数据</h4>
+        <div class="feature-row"><span class="num">1</span><div><b>模型是拿旧数据训的</b><p class="dim">线上每一笔带标签的订单，就是新世界的样本</p></div></div>
+        <div class="feature-row"><span class="num">2</span><div><b>掉点就是重训信号</b><p class="dim">Google 的触发条件写得很直白：性能退化、概念漂移，就该再训练</p></div></div>
+        <div class="feature-row"><span class="num">3</span><div><b>混进训练集重训</b><p class="dim">模型追上现在的世界；这一步自动化，就是持续训练，下一页讲</p></div></div>
       </div>
-      <div class="join-mid"><span class="op">⋈</span><span class="w">join</span></div>
-      <div class="card">
-        <h4>② 真实结果回流</h4>
-        <p class="dim">数据管道把 outcome 送回来，有延迟：送餐实际用了多久、转化最终有没有发生。</p>
+      <div class="card card-accent">
+        <h4>去处二 · 进评测集</h4>
+        <div class="feature-row"><span class="num">1</span><div><b>旧评测集会过期</b><p class="dim">它是训练那一刻的快照，漂移之后不再代表现在的流量，考题先过期</p></div></div>
+        <div class="feature-row"><span class="num">2</span><div><b>拿生产数据刷新</b><p class="dim">近期流量进来，线上坏案例沉淀成回归用例，专防倒退</p></div></div>
+        <div class="feature-row"><span class="num">3</span><div><b>新模型先考试再上岗</b><p class="dim">新版本比旧版本还差，就不能放出去</p></div></div>
       </div>
     </div>
 
     <div class="card card-accent fs-foot" data-anim="fade-up">
-      ③ join 之后：<strong>持续更新的线上准确率时序</strong>（RMSE · RMSLE · R²），喂进时序监控，配阈值告警，越线报警。地图上监控到反馈这两步，工程上就这么朴素：难的不是 join，是<strong>结果回流的数据管道要先建好</strong>。
+      <b>一个实操坑：同一条样本不能两边都进</b>。既进训练集又进评测集，等于考它做过的原题，分数虚高，这叫数据泄漏；分配前先去重，两边各拿各的。
     </div>
 
     <div class="deck-footer">
-      <span class="mono">出处：Uber Engineering 2017（一手，引文直录）</span>
+      <span class="mono">出处：Uber Engineering 2017（一手）· Google Cloud ✅ · 防泄漏为综合推论</span>
       <span class="slide-number" data-current="14" data-total="47"></span>
     </div>
     <aside class="notes">
-      <p>讲了半天闭环，落地到底长什么样？Uber 的实现，三步。</p>
-      <p>第一步，自动抽样记录线上预测，还可以扣留一小部分流量专门用于评估。第二步，等真实结果回流，比如送餐订单最后实际用了多久，这由数据管道送回来，有延迟。第三步，把预测日志和结果表 join 起来，算出持续更新的线上准确率，RMSE、R 平方这些，做成时序指标，配阈值告警。</p>
-      <p>你会发现所谓反馈闭环，工程上朴素得很，就是两张表 join 一下。真正难的是前面那步：<strong>结果回流的数据管道要先建好</strong>。标签从哪来、多久回来、格式对不对，这些不通，闭环就停在最朴素的那一步。</p>
+      <p>这一节叫闭环，第 4 页流程图的第 8 步也说了：监控发现问题，就启动新一轮迭代。上一页还留了个尾巴：标签没回来，线上准确率算不出来。这一页先把这个机器三句话讲完，重点讲后半段：曲线掉了之后，数据往哪回流。</p>
+      <p>前半段很快，还是 Uber Michelangelo。服务端自动记预测日志，订单 A102、六点四十二、模型 v3、预测三十二分钟；数据管道把真实结果送回来，十九点二十三送达、实际四十一分钟。两张表按订单号 join，笔笔对账，这单偏了九分钟；所有订单的偏差汇起来，就是一条持续更新的线上准确率曲线，越线告警。这部分机器不难，难的是结果回流的数据管道要先建好——标签从哪来、多久回来、格式对不对。</p>
+      <p>真正要讲的是：曲线掉了，然后呢？这批带着新标签的生产数据，有两个去处。</p>
+      <p>第一个去处，进训练数据。模型是拿旧世界的数据训的，线上每一笔带标签的订单都是新世界的样本，白拿的。Google 的 MLOps 文章把触发条件写得很直白：性能退化、概念漂移，就该再训练。把这批数据混进训练集重训，模型追上现在的世界；把这一步自动化，就是持续训练，下一页专门讲。</p>
+      <p>第二个去处，进评测集。旧评测集是训练那一刻的快照，漂移之后不再代表现在的流量——考题先过期了，考出来的分数不算数。所以要拿近期生产数据刷新评测集，线上发现的坏案例沉淀成回归用例。新模型上岗之前先在它身上考试，防的是倒退：新版本比旧版本还差，就不能放出去。</p>
+      <p>一个实操坑：同一条监控样本不能既进训练集又进评测集。那等于考它做过的原题，分数虚高，这叫数据泄漏。分配前先去重，两边各拿各的。</p>
+      <p>两条回流都通了，闭环才真的转起来。</p>
     </aside>
   </section>
 
@@ -666,11 +681,11 @@
 
 
 
-  <!-- ============ S17 · 真实案例（上）：数据与标注 ============ -->
+  <!-- ============ S17 · 真实案例：数据与标注 ============ -->
   <section class="slide" data-title="S17 真实案例·数据与标注">
     <p class="kicker">// 第 1 节 · 真实案例</p>
-    <h2 class="h2" data-anim="fade-up">真实案例：中文短信 NER 服务<span class="accent">（上）</span></h2>
-    <p class="lede">我自己把这条流水线走了两遍：第一轮自标 4227 条摸流程，正式选型批 2001 条换成 9 人团队打标，为 BERT 和大模型的对决定金标准。</p>
+    <h2 class="h2" data-anim="fade-up">真实案例：中文短信 NER 服务</h2>
+    <p class="lede">我自己把这条流水线走了两遍：第一轮自标 4227 条摸流程，正式选型批 2001 条换成 9 人团队打标，为 BERT 和大模型的效果决定金标准。</p>
 
     <div class="grid g2 mt-l" data-anim="fade-up">
       <div class="card">
@@ -722,7 +737,7 @@
     <aside class="notes">
       <p>上一页说的平台，这一页是它真实的样子。数据样本页，一共两千零一条真实短信，全部从生产库采集，手机号先脱敏。</p>
       <p>看列的设计：BERT 和大模型两个模型的预测并排放在同一条短信旁边，谁标了什么一眼可见；标注状态整页绿色已完成；原文实体数、BERT 正确、大模型正确三列放在同一张表里，评估要的分子分母在标注的同时就长出来了。最右边是标注人，认领制，按 IP 记账，谁干了多少一目了然。</p>
-      <p>这张表可以一键导出 CSV，直接喂评估脚本——后面那页的 F1，就是从这张表长出来的。</p>
+      <p>这张表可以一键导出 CSV，直接喂评估脚本——对决那页的 F1，就是从这张表长出来的。</p>
     </aside>
   </section>
 
@@ -774,13 +789,59 @@
     <aside class="notes">
       <p>第二步才把两个模型的预测亮出来，标注高亮在原文上。标注人这时只做一件事：数它对了几个，BERT 一格，大模型一格。</p>
       <p>第一步的实体总数做分母，这一步的正确数做分子，精确率和召回率全从这两个数字来，工作台看板实时汇总成 P、R、F1，不需要任何人手算。两步强制分步，防的就是先看答案再凑数。</p>
-      <p>顺带一说，这个方法让标注变得很快：一条短信平均二三十秒，九个人两天就把两千条全标完了。</p>
+      <p>顺带一说，这个方法让标注变得很快：一条短信平均二三十秒，九个人两天就把两千条全标完了。两个模型的正确数都数完了，高下见分晓——下一页对决。</p>
     </aside>
   </section>
 
 
-  <!-- ============ S21 · 案例大图：服务演示 /ner ============ -->
-  <section class="slide case-shot" data-title="S21 案例·服务演示">
+  <!-- ============ S21 · 真实案例：双模型对决与上线 ============ -->
+  <section class="slide" data-title="S21 案例·对决与上线">
+    <p class="kicker">// 第 1 节 · 真实案例 · 对决</p>
+    <h2 class="h2" data-anim="fade-up">小模型 vs 大模型，<span class="accent">谁上线</span></h2>
+    <p class="lede">全量人工金标定胜负，三个数字都出自选型报告（2026-08）。</p>
+
+    <div class="tri" data-anim="fade-up" style="margin-top:24px">
+      <div class="card stat-card hot">
+        <div class="v">0.917</div>
+        <p class="k">BERT 的 F1；大模型 DeepSeek-V4 只有 0.721<br>全量 1998 条计数式评估，差 0.20</p>
+      </div>
+      <div class="card stat-card">
+        <div class="v">9×</div>
+        <p class="k">误报差距：44 vs 407。大模型多报 65% 的量<br>只换来召回 +3.6pp——每 10 个预测约 4 个是错的</p>
+      </div>
+      <div class="card stat-card">
+        <div class="v">15<span style="font-size:26px"> QPS</span></div>
+        <p class="k">BERT 4C8G 容量稳定，过载排队零拒绝<br>大模型两轮压测不可复现，p99 高达 14s</p>
+      </div>
+    </div>
+
+    <div class="card card-accent" data-anim="fade-up" style="margin-top:18px">
+        <h4>五票同向：BERT 上线，大模型不进生产链路</h4>
+        <ul class="fail-list">
+          <li><b>效果</b>：F1 领先 0.20，全量人工金标而非抽样</li>
+          <li><b>误报</b>：44 vs 407，人工复核量差 9 倍</li>
+          <li><b>容量</b>：≈15 QPS 可规划 vs 压测不可复现</li>
+          <li><b>数据不出内网</b>：短信含姓名、地址、手机号</li>
+          <li><b>提示词注入</b>：BERT 结构性免疫；大模型 6 条被攻破 3 条</li>
+        </ul>
+    </div>
+
+
+    <div class="deck-footer">
+      <span class="mono">真实案例 · 选型报告 §4-§6 · 压测 2026-08-27</span>
+      <span class="slide-number" data-current="21" data-total="47"></span>
+    </div>
+    <aside class="notes">
+      <p>金标准全量标完，两个模型谁上线，三个数字见分晓。第一，F1：BERT 零点九一七，大模型零点七二一，差零点二，而且这是全量一千九百九十八条人工金标算出来的，不是抽样外推。第二，误报：大模型多报百分之六十五的量，误识四百零七个，是 BERT 的九倍，换来的召回只多了三点六个百分点——每十个预测约四个是错的，短信审核这种场景，误报直接放大人工复核量。第三，容量：BERT 四核八 G 压测稳定十五 QPS，过载排队不丢请求；大模型经网关，两轮压测结果都复现不了，尾延迟能到十四秒，容量规划无从谈起。</p>
+      <p>还有两票：短信原文含个人信息，BERT 自托管不出内网，大模型每条都要送出去；提示词注入，BERT 是纯序列标注没有指令通道，结构性免疫，大模型六条注入用例被攻破三条——一句「忽略指令」就能让它整条放弃抽取。五票同向，BERT 上线。</p>
+      <p>胜出的就是那个 /ner 服务——前面被打标、被数对的它。下一页看它长什么样，再三步优化进生产。</p>
+    </aside>
+  </section>
+
+
+
+  <!-- ============ S22 · 案例大图：服务演示 /ner ============ -->
+  <section class="slide case-shot" data-title="S22 案例·服务演示">
     <p class="kicker">// 第 1 节 · 真实案例 · 服务形态</p>
     <h2 class="h2" data-anim="fade-up">服务长什么样：/ner 接口，<span class="accent">偏移可验证</span></h2>
 
@@ -795,18 +856,18 @@
 
     <div class="deck-footer">
       <span class="mono">真实案例 · 服务接口 · 字符级偏移</span>
-      <span class="slide-number" data-current="21" data-total="47"></span>
+      <span class="slide-number" data-current="22" data-total="47"></span>
     </div>
     <aside class="notes">
-      <p>被评估和被部署的就是这个服务。演示页输入一句例句：张三您好，请联系顺丰速运李四，地址北京市朝阳区。三类实体全部命中，前端按类型着色——姓名红色、机构蓝色、地点绿色。</p>
+      <p>对决胜出、要上线的就是这个服务。演示页输入一句例句：张三您好，请联系顺丰速运李四，地址北京市朝阳区。三类实体全部命中，前端按类型着色——姓名红色、机构蓝色、地点绿色。</p>
       <p>右下 DevTools 里是接口响应：每个实体带类型、原文，还有 start、end 两个字符偏移，耗时八十二毫秒。偏移这个细节值得强调：实体的位置可程序化验证，评估脚本对得上，前端高亮也画得准，这就是它能直接嵌进标注平台和生产链路的原因。</p>
-      <p>下一页看它进了生产环境是什么样子。</p>
+      <p>服务定了，先做三步部署优化把它变快，再进生产环境。</p>
     </aside>
   </section>
 
 
-  <!-- ============ S22 · 真实案例：部署优化的三板斧 ============ -->
-  <section class="slide" data-title="S22 案例·部署优化三板斧">
+  <!-- ============ S23 · 真实案例：部署优化的三板斧 ============ -->
+  <section class="slide" data-title="S23 案例·部署优化三板斧">
     <p class="kicker">// 第 1 节 · 真实案例 · 部署优化</p>
     <h2 class="h2" data-anim="fade-up">部署优化的<span class="accent">三板斧</span>：先对齐，再提速</h2>
     <p class="lede">换引擎设门禁、修浪费、上批处理——三个数字都是项目里的真实记录，顺序不能颠倒。</p>
@@ -834,7 +895,7 @@
 
     <div class="deck-footer">
       <span class="mono">真实案例 · ONNX Runtime · 4C8G CPU 推理</span>
-      <span class="slide-number" data-current="22" data-total="47"></span>
+      <span class="slide-number" data-current="23" data-total="47"></span>
     </div>
     <aside class="notes">
       <p>工程这头三个数字，顺序不能颠倒。</p>
@@ -845,9 +906,9 @@
   </section>
 
 
-  <!-- ============ S23 · 案例大图：生产环境 ============ -->
-  <section class="slide case-shot" data-title="S23 案例·生产环境">
-    <p class="kicker">// 第 1 节 · 真实案例 · 上线</p>
+  <!-- ============ S24 · 案例大图：生产环境与收束 ============ -->
+  <section class="slide case-shot" data-title="S24 案例·生产环境">
+    <p class="kicker">// 第 1 节 · 真实案例 · 上线收束</p>
     <h2 class="h2" data-anim="fade-up">生产环境：NER 内嵌短信平台，<span class="accent">实时脱敏</span></h2>
 
     <figure class="img-frame contain big-shot" data-anim="fade-up">
@@ -859,78 +920,27 @@
       <span class="mono">内网生产截图 · 外发需打码</span>
     </div>
 
+    <div class="duo-grid" data-anim="fade-up" style="margin-top:14px">
+      <div class="duo-cell done">数据·标注 ✓</div>
+      <div class="duo-cell done">评测 ✓</div>
+      <div class="duo-cell done">对比选型 ✓</div>
+      <div class="duo-cell done">部署·压测 ✓</div>
+      <div class="duo-cell miss">监控 ✗</div>
+      <div class="duo-cell miss">反馈闭环 ✗</div>
+    </div>
+    <p class="era-note">走到了哪一站：前四站打了勾，监控和反馈闭环还没有——正好是第 3 节的内容，自评 L1 → L2 之间。上线形态：openEuler/arm64 信创环境，镜像 491MB，healthcheck healthy。</p>
+
     <div class="deck-footer">
-      <span class="mono">真实案例 · 部署形态 · 实时识别</span>
-      <span class="slide-number" data-current="23" data-total="47"></span>
+      <span class="mono">真实案例 · 生产部署 · 选型报告 §6</span>
+      <span class="slide-number" data-current="24" data-total="47"></span>
     </div>
     <aside class="notes">
       <p>这一页是「部署」那一格真正打勾的样子。模型不是躺在 demo 里，是内嵌在银行短信平台的下发链路上：记录页里每条短信的机构名都被实时掩码——常熟星号银行、江苏广域星号公司，这些全是模型当场识别的，不是人工配的词表。</p>
       <p>细节值得看：旁边有「不脱敏审批」开关，说明脱敏策略是可配置、可人工放行的，工程上留了运营的口子。</p>
       <p>提醒一句，这是内网生产截图，里面有真实姓名和内网地址，对内分享没问题，外发的场合记得打码。</p>
+      <p>案例到这里，前四站一条龙走完：数据、标注、评测、对决、优化、上线。诚实说，监控和反馈闭环还没有，那就是第 3 节要讲的，我的下一步就在那一站，自评在 L1 到 L2 之间。</p>
     </aside>
   </section>
-
-
-  <!-- ============ S24 · 真实案例（下）：双模型对决与上线 ============ -->
-  <section class="slide" data-title="S24 真实案例·对决与上线">
-    <p class="kicker">// 第 1 节 · 真实案例</p>
-    <h2 class="h2" data-anim="fade-up">真实案例<span class="accent">（下）</span>：小模型 vs 大模型，谁上线</h2>
-    <p class="lede">全量人工金标定胜负，三个数字都出自选型报告（2026-08）。</p>
-
-    <div class="tri" data-anim="fade-up" style="margin-top:24px">
-      <div class="card stat-card hot">
-        <div class="v">0.917</div>
-        <p class="k">BERT 的 F1；大模型 DeepSeek-V4 只有 0.721<br>全量 1998 条计数式评估，差 0.20</p>
-      </div>
-      <div class="card stat-card">
-        <div class="v">9×</div>
-        <p class="k">误报差距：44 vs 407。大模型多报 65% 的量<br>只换来召回 +3.6pp——每 10 个预测约 4 个是错的</p>
-      </div>
-      <div class="card stat-card">
-        <div class="v">15<span style="font-size:26px"> QPS</span></div>
-        <p class="k">BERT 4C8G 容量稳定，过载排队零拒绝<br>大模型两轮压测不可复现，p99 高达 14s</p>
-      </div>
-    </div>
-
-    <div class="grid g2" data-anim="fade-up" style="margin-top:18px">
-      <div class="card card-accent">
-        <h4>五票同向：BERT 上线，大模型不进生产链路</h4>
-        <ul class="fail-list">
-          <li><b>效果</b>：F1 领先 0.20，全量人工金标而非抽样</li>
-          <li><b>误报</b>：44 vs 407，人工复核量差 9 倍</li>
-          <li><b>容量</b>：≈15 QPS 可规划 vs 压测不可复现</li>
-          <li><b>数据不出内网</b>：短信含姓名、地址、手机号</li>
-          <li><b>提示词注入</b>：BERT 结构性免疫；大模型 6 条被攻破 3 条</li>
-        </ul>
-      </div>
-      <div>
-        <div class="card">
-          <h4>走到了哪一站</h4>
-          <div class="duo-grid" style="margin-top:10px">
-            <div class="duo-cell done">数据·标注 ✓</div>
-            <div class="duo-cell done">评测 ✓</div>
-            <div class="duo-cell done">部署·压测 ✓</div>
-            <div class="duo-cell miss">监控 ✗</div>
-            <div class="duo-cell miss">反馈闭环 ✗</div>
-          </div>
-          <p class="dim" style="margin-top:12px">评测已全量完成（上一页那 2001 条）；监控与闭环是下一步——正好是第 3 节的内容，自评 L1 → L2 之间。</p>
-        </div>
-      </div>
-    </div>
-
-    <p class="era-note">上线形态：NER 内嵌短信平台做实时脱敏（S24 截图）；openEuler/arm64 信创环境，镜像 491MB，healthcheck healthy。</p>
-
-    <div class="deck-footer">
-      <span class="mono">真实案例 · 选型报告 §4-§6 · 压测 2026-08-27</span>
-      <span class="slide-number" data-current="24" data-total="47"></span>
-    </div>
-    <aside class="notes">
-      <p>对决的结果，三个数字。第一，F1：BERT 零点九一七，大模型零点七二一，差零点二，而且这是全量一千九百九十八条人工金标算出来的，不是抽样外推。第二，误报：大模型多报百分之六十五的量，误识四百零七个，是 BERT 的九倍，换来的召回只多了三点六个百分点——每十个预测约四个是错的，短信审核这种场景，误报直接放大人工复核量。第三，容量：BERT 四核八 G 压测稳定十五 QPS，过载排队不丢请求；大模型经网关，两轮压测结果都复现不了，尾延迟能到十四秒，容量规划无从谈起。</p>
-      <p>还有两票：短信原文含个人信息，BERT 自托管不出内网，大模型每条都要送出去；提示词注入，BERT 是纯序列标注没有指令通道，结构性免疫，大模型六条注入用例被攻破三条——一句「忽略指令」就能让它整条放弃抽取。五票同向，BERT 上线。</p>
-      <p>工程三板斧上一页刚讲过：门禁、提速、批处理，不重复。诚实说，监控和反馈闭环还没有，那就是第三节要讲的东西，我的下一步就在那一站。</p>
-    </aside>
-  </section>
-
 
 
   <!-- ============ S25 · 章节页：第 2 节 ============ -->
@@ -1112,7 +1122,7 @@
         <p class="dim">这是他们在工程文章里明说的，ACI 值得与 HCI（人机接口）同等的投入。</p>
       </div>
       <div class="card">
-        <h4>为什么这么重</h4>
+        <h4>为什么这么重要</h4>
         <p class="dim">agent 全靠工具描述来决定怎么调用，描述模糊是它出错的最大来源之一。工具描述就是 agent 的 API 文档加使用手册，写得含糊，它就只能猜。</p>
       </div>
     </div>
@@ -1533,10 +1543,10 @@
   <section class="slide" data-title="S39 幻觉检测">
     <p class="kicker">// 第 3 节 · 监控</p>
     <h2 class="h2" data-anim="fade-up">幻觉 2026：能力暴涨，<span class="accent">编造未归零</span></h2>
-    <p class="lede">能解千禧年问题的模型，简单事实仍会错——差的那件东西叫验证器。</p>
+    <p class="lede">能解决千禧年数学问题的模型，简单事实仍会错——这其中差的那件东西叫验证器。</p>
 
     <div class="card card-accent fs-foot" data-anim="fade-up" style="margin-top:20px">
-      <b>同一个秋天</b>：2026-09，OpenAI 宣布 AI 解决 Navier–Stokes 千禧问题，配 Lean 形式化证明（Clay 所验证中）——证明有机器逐行检查，编造无法存活。<b>我们的业务答案没有这个兜底</b>：同一批模型体系，开放域简单事实（SimpleQA）最好的成绩也只有 77.5%。
+      <b>同一个秋天</b>：2026-09，OpenAI 宣布 AI 解决 Navier–Stokes 千禧年数学问题，配 Lean 形式化证明（Clay 数学研究所验证中）——证明有机器逐行检查，基本无法编造事实。我们的编程问题也一样。<b>但是业务答案没有这个兜底</b>：同一批模型体系，开放域简单事实（SimpleQA）最好的成绩也只有 77.5%。
     </div>
 
     <div class="tri" data-anim="fade-up" style="margin-top:18px">
@@ -1546,7 +1556,7 @@
       </div>
       <div class="card stat-card">
         <div class="v">22-94%</div>
-        <p class="k">开放域事实问答：26 模型区间（AA-Omniscience）<br>最好的 SimpleQA 也只 77.5% 准确——推理强 ≠ 事实可靠</p>
+        <p class="k">开放域事实问答幻觉率：26 模型区间（AA-Omniscience）<br>最好的 SimpleQA 也只 77.5% 准确——推理强 ≠ 事实可靠</p>
       </div>
       <div class="card stat-card">
         <div class="v">10.2%</div>
