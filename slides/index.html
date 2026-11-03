@@ -1021,7 +1021,6 @@
   <section class="slide" data-title="S27 三个数字">
     <p class="kicker">// 第 2 节 · 模型底座</p>
     <h2 class="h2" data-anim="fade-up">三个有记忆点的数字</h2>
-    <p class="lede">给底座一个体感，前两个讲规模，第三个讲什么更值钱。</p>
 
     <div class="tri mt-l" data-anim="fade-up">
       <div class="card">
@@ -1038,7 +1037,7 @@
       </div>
     </div>
 
-    <p class="era-note">运维现实：54 天快照期内训练中断 466 次，78% 是硬件故障，靠自动化保住 90% 以上的有效训练时间。预训练本身就是大型运维工程。（Llama 3 报告，逐字核对）</p>
+    <p class="era-note">运维现实：54 天快照期内训练中断 466 次，78% 是硬件故障，靠自动化保住 90% 以上的有效训练时间。预训练本身就是大型运维工程。</p>
 
     <div class="card card-accent fs-foot" data-anim="fade-up">
       <b>Chinchilla 定律</b>：算力最优要求参数与数据同比例增长，2022 年前的大模型普遍训练不足；之后为推理成本故意过训练，是这条律的细化，不是推翻。开场揭底的 80% 法则，在预训练尺度上同样成立。
@@ -1893,46 +1892,22 @@
 
 
 
-  <!-- ============ S47 · 务实路线 & Q&A ============ -->
-  <section class="slide" data-title="S47 务实路线与 QA">
-    <p class="kicker">// 收束 · 起步清单</p>
-    <h2 class="h2" data-anim="fade-up">小公司<span class="accent">务实路线</span></h2>
-    <p class="lede">开场答应过的起步清单，四条，全部有出处。</p>
-
-    <div class="stack" data-anim="fade-up" style="margin-top:24px">
-      <div class="rule-row">
-        <span class="num">1</span>
-        <div><b>先 workflow，后 agent</b><p class="dim">简单可组合起步，能用 1 就不用 2（Anthropic 工程忠告）</p></div>
-      </div>
-      <div class="rule-row">
-        <span class="num">2</span>
-        <div><b>评测集先行：20-50 条真实查询，今天就建</b><p class="dim">真实失败优先，从 bug 单和客服队列里收（Anthropic evals 工程文 / StackAI）</p></div>
-      </div>
-      <div class="rule-row">
-        <span class="num">3</span>
-        <div><b>直接调 API，别急着上框架</b><p class="dim">先跑通，再抽象（Anthropic 工程忠告）</p></div>
-      </div>
-      <div class="rule-row">
-        <span class="num">4</span>
-        <div><b>先有监控和 trace，再谈优化</b><p class="dim">没有归因就没有飞轮（Bad Case 与飞轮两页的推论）</p></div>
-      </div>
+  <!-- ============ S47 · 致谢 & 二维码 ============ -->
+  <section class="slide" data-title="S47 致谢">
+    <div class="qa-center">
+      <div class="qa-final" data-anim="fade-up">Q &amp; A · 谢谢</div>
+      <figure class="img-frame contain qa-qr" data-anim="fade-up">
+        <img src="qrcode.png" alt="二维码">
+      </figure>
     </div>
-
-    <div class="card card-accent fs-foot" data-anim="fade-up">
-      <b>回扣开场</b>：那个问题现在可以完整回答了。80% 在数据的法则没变，变的是数据本身，从标注样本变成了轨迹与反馈。
-    </div>
-
-    <div class="qa-final" data-anim="fade-up">Q &amp; A · 谢谢</div>
 
     <div class="deck-footer">
       <span class="mono">全部出处见 docs/research-verified-facts.md</span>
       <span class="slide-number" data-current="47" data-total="47"></span>
     </div>
     <aside class="notes">
-      <p>收尾。开场答应的三样东西，最后一样现在兑现：起步清单，四条，全部有出处。</p>
-      <p>第一，先 workflow 后 agent，简单可组合起步，能用一就不用二。第二，评测集先行，二十到五十条真实查询，今天就建，已上线的从 bug 单和客服队列里收。第三，直接调 API，别急着上框架，先跑通再抽象。第四，先有监控和 trace，再谈优化，没有归因就没有飞轮。前两条和第三条都出自 Anthropic，第四条是今天 Bad Case 和飞轮两页的推论。</p>
-      <p>最后回扣开场。那个问题现在可以完整回答了：80% 在数据的法则没变，变的是数据本身，从标注样本变成了轨迹和反馈。</p>
-      <p>谢谢大家，提问开始。</p>
+      <p>收尾。回扣开场：那个问题现在可以完整回答了——80% 在数据的法则没变，变的是数据本身，从标注样本变成了轨迹与反馈。</p>
+      <p>谢谢大家，提问开始。也欢迎扫码交流。</p>
     </aside>
   </section>
 

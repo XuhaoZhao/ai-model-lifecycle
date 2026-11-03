@@ -735,6 +735,21 @@
   color: transparent;
 }
 
+/* ===== S47 致谢 + 二维码 ===== */
+.tpl-presenter-mode-reveal .qa-center {
+  height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 36px;
+}
+.tpl-presenter-mode-reveal .qa-center .qa-final { margin-top: 0; font-size: 56px; }
+.tpl-presenter-mode-reveal .qa-qr {
+  width: 400px; --img-ratio: 1/1;
+  background: #fff; border: none;
+  padding: 20px; /* quiet zone：暗色背景下保证可扫 */
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .45);
+}
+
 /* ===== S19/S20 真实案例 ===== */
 .tpl-presenter-mode-reveal .shot { align-self: stretch; margin: 0; }
 .tpl-presenter-mode-reveal .shot-empty {
