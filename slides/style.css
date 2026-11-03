@@ -3,17 +3,26 @@
  * Minimal overrides — focus is on content + notes structure.
  */
 
+/* ===== 大屏投影可读性：提亮灰阶文字 =====
+ * tokyo-night 原值 --text-2:#a9b1d6(~7:1) / --text-3:#565f89(~2.8:1)，
+ * 投影仪上 text-3 基本不可见。此处覆盖为 ~10:1 / ~6:1。
+ * 注意：T 键切到浅色主题时不适用。 */
+.tpl-presenter-mode-reveal {
+  --text-2: #c8d0f0;
+  --text-3: #8f9ac4;
+}
+
 .tpl-presenter-mode-reveal .slide {
-  padding: 72px 96px;
+  padding: 52px 72px;
 }
 
 .tpl-presenter-mode-reveal .kicker {
   font-family: var(--font-mono, monospace);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-3);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  margin: 0 0 18px 0;
+  margin: 0 0 14px 0;
 }
 
 .tpl-presenter-mode-reveal .h1 {
@@ -27,11 +36,11 @@
   font-size: clamp(32px, 3.6vw, 48px);
   line-height: 1.22;
   letter-spacing: -0.01em;
-  margin: 0 0 28px 0;
+  margin: 0 0 22px 0;
 }
 
 .tpl-presenter-mode-reveal .lede {
-  font-size: 20px;
+  font-size: 21px;
   line-height: 1.55;
   color: var(--text-2);
 }
@@ -64,10 +73,10 @@
 }
 .tpl-presenter-mode-reveal .speaker b {
   display: block;
-  font-size: 16px;
+  font-size: 17px;
 }
 .tpl-presenter-mode-reveal .speaker span {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-3);
 }
 
@@ -85,18 +94,18 @@
 }
 .tpl-presenter-mode-reveal .agenda-row .num {
   font-family: var(--font-mono, monospace);
-  font-size: 14px;
+  font-size: 15px;
   color: var(--accent, #58a6ff);
   font-weight: 700;
 }
 .tpl-presenter-mode-reveal .agenda-row .t {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 500;
   color: var(--text-1);
 }
 .tpl-presenter-mode-reveal .agenda-row .d {
   font-family: var(--font-mono, monospace);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-3);
 }
 
@@ -112,12 +121,12 @@
 }
 .tpl-presenter-mode-reveal .card h4 {
   margin: 0 0 10px 0;
-  font-size: 18px;
+  font-size: 19px;
   color: var(--text-1);
 }
 .tpl-presenter-mode-reveal .card .dim {
   color: var(--text-2);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
   margin: 0;
 }
@@ -138,12 +147,12 @@
 }
 .tpl-presenter-mode-reveal .feature-row b {
   display: block;
-  font-size: 17px;
+  font-size: 18px;
   margin-bottom: 4px;
   color: var(--text-1);
 }
 .tpl-presenter-mode-reveal .feature-row .dim {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-2);
   line-height: 1.55;
   margin: 0;
@@ -174,12 +183,12 @@
 }
 .tpl-presenter-mode-reveal .rule-row b {
   display: block;
-  font-size: 18px;
+  font-size: 19px;
   margin-bottom: 6px;
   color: var(--text-1);
 }
 .tpl-presenter-mode-reveal .rule-row .dim {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--text-2);
   line-height: 1.6;
   margin: 0;
@@ -192,7 +201,7 @@
   border-radius: 12px;
   padding: 20px 26px;
   font-family: var(--font-mono, "SF Mono", monospace);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.8;
   color: #e6edf3;
   white-space: pre-wrap;
@@ -226,32 +235,32 @@
   color: #fff;
 }
 .tpl-presenter-mode-reveal .bleed .cap .sub {
-  margin: 0; font-size: 20px; line-height: 1.4; letter-spacing: .01em; opacity: .92;
+  margin: 0; font-size: 21px; line-height: 1.4; letter-spacing: .01em; opacity: .92;
   text-shadow: 0 1px 14px rgba(8, 10, 25, .6);
 }
 .tpl-presenter-mode-reveal .bleed .cap .pill {
   flex-shrink: 0; padding: 8px 18px; border-radius: 999px;
-  font-family: var(--font-mono, monospace); font-size: 14px; letter-spacing: .04em;
+  font-family: var(--font-mono, monospace); font-size: 15px; letter-spacing: .04em;
   background: rgba(255, 255, 255, .14); color: #fff;
   border: 1px solid rgba(255, 255, 255, .28);
   backdrop-filter: blur(6px); text-shadow: 0 1px 8px rgba(8, 10, 25, .5);
 }
 
 /* ===== S2 今天的地图 · 流水线环 ===== */
-.tpl-presenter-mode-reveal .pipeline { margin-top: 36px; }
+.tpl-presenter-mode-reveal .pipeline { margin-top: 28px; }
 .tpl-presenter-mode-reveal .pipe-row {
   display: flex; align-items: stretch; justify-content: center; gap: 6px;
 }
 .tpl-presenter-mode-reveal .node {
   flex: 1; text-align: center; padding: 18px 8px;
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); font-size: 19px; font-weight: 600; color: var(--text-1);
+  border-radius: var(--radius); font-size: 20px; font-weight: 600; color: var(--text-1);
 }
 .tpl-presenter-mode-reveal .node:first-child,
 .tpl-presenter-mode-reveal .node:last-child { border-color: var(--border-strong); }
 .tpl-presenter-mode-reveal .pipe-arrow {
   align-self: center; flex: 0 0 auto; padding: 0 2px;
-  color: var(--text-3); font-size: 17px;
+  color: var(--text-3); font-size: 18px;
 }
 .tpl-presenter-mode-reveal .pipe-return {
   position: relative; height: 42px; margin: 0 9%;
@@ -268,13 +277,13 @@
 }
 .tpl-presenter-mode-reveal .ret-arrow {
   position: absolute; top: -13px;
-  color: var(--accent); font-size: 12px; line-height: 1;
+  color: var(--accent); font-size: 13px; line-height: 1;
 }
 .tpl-presenter-mode-reveal .ret-arrow.up { left: -7px; }
 .tpl-presenter-mode-reveal .ret-arrow.down { right: -7px; }
 .tpl-presenter-mode-reveal .ret-tag {
   position: absolute; bottom: -13px; transform: translateX(-50%); white-space: nowrap;
-  padding: 4px 13px; border-radius: 999px; font-size: 12px; letter-spacing: .02em;
+  padding: 4px 13px; border-radius: 999px; font-size: 13px; letter-spacing: .02em;
   background: var(--bg); color: var(--accent-3);
   border: 1px dashed var(--accent);
 }
@@ -285,7 +294,7 @@
 
 /* ===== S3 互动提问 · 选项卡 ===== */
 .tpl-presenter-mode-reveal .quiz-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 30px;
 }
 .tpl-presenter-mode-reveal .quiz-card {
   text-align: center; padding: 30px 16px 26px;
@@ -293,7 +302,7 @@
   border-radius: var(--radius);
 }
 .tpl-presenter-mode-reveal .quiz-card .letter {
-  display: inline-block; font-family: var(--font-mono, monospace); font-size: 13px;
+  display: inline-block; font-family: var(--font-mono, monospace); font-size: 14px;
   color: var(--accent); border: 1px solid var(--border-strong);
   padding: 2px 12px; border-radius: 999px; margin-bottom: 14px; letter-spacing: .12em;
 }
@@ -302,7 +311,7 @@
 }
 .tpl-presenter-mode-reveal .hint {
   margin-top: 34px; font-family: var(--font-mono, monospace);
-  font-size: 13px; color: var(--text-3); letter-spacing: .02em;
+  font-size: 14px; color: var(--text-3); letter-spacing: .02em;
 }
 
 /* ===== S4 揭底 · 80% 在数据 ===== */
@@ -317,15 +326,15 @@
 }
 .tpl-presenter-mode-reveal .reveal-num .sign { font-size: .55em; }
 .tpl-presenter-mode-reveal .reveal-cap {
-  margin: 10px 0 0; font-size: 17px; color: var(--text-2); letter-spacing: .02em;
+  margin: 10px 0 0; font-size: 18px; color: var(--text-2); letter-spacing: .02em;
 }
-.tpl-presenter-mode-reveal .llm-echo { margin-top: 38px; font-size: 15px; line-height: 1.65; }
+.tpl-presenter-mode-reveal .llm-echo { margin-top: 38px; font-size: 16px; line-height: 1.65; }
 .tpl-presenter-mode-reveal .llm-echo b { color: var(--accent-3); }
 
 /* ===== S5 收获预告（rule-row 版式，mini-map 呼应 S2） ===== */
 .tpl-presenter-mode-reveal .mini-map {
   margin: 12px 0 0; font-family: var(--font-mono, monospace);
-  font-size: 13px; color: var(--accent-3); letter-spacing: .01em;
+  font-size: 14px; color: var(--accent-3); letter-spacing: .01em;
 }
 
 /* ===== S6 章节页 ===== */
@@ -339,9 +348,9 @@
 }
 .tpl-presenter-mode-reveal .section-head .t h2 { margin: 0; }
 .tpl-presenter-mode-reveal .section-head .t .sub {
-  margin: 12px 0 0; color: var(--text-2); font-size: 17px;
+  margin: 12px 0 0; color: var(--text-2); font-size: 18px;
 }
-.tpl-presenter-mode-reveal .pipeline.lg { margin-top: 66px; }
+.tpl-presenter-mode-reveal .pipeline.lg { margin-top: 52px; }
 .tpl-presenter-mode-reveal .pipeline.lg .node { font-size: 22px; padding: 26px 8px; }
 
 /* ===== S7 Google 8 步 ===== */
@@ -355,24 +364,24 @@
 }
 .tpl-presenter-mode-reveal .step-chip .n {
   display: block; font-family: var(--font-mono, monospace);
-  font-size: 11px; color: var(--text-3); margin-bottom: 7px; letter-spacing: .08em;
+  font-size: 12px; color: var(--text-3); margin-bottom: 7px; letter-spacing: .08em;
 }
 .tpl-presenter-mode-reveal .step-chip .t {
-  display: block; font-size: 15px; font-weight: 600; color: var(--text-1);
+  display: block; font-size: 16px; font-weight: 600; color: var(--text-1);
 }
 .tpl-presenter-mode-reveal .step-chip.last { border-color: var(--accent); }
 .tpl-presenter-mode-reveal .step-arrow {
-  align-self: center; color: var(--text-3); font-size: 13px; flex: 0 0 auto;
+  align-self: center; color: var(--text-3); font-size: 14px; flex: 0 0 auto;
 }
-.tpl-presenter-mode-reveal .step-notes { margin-top: 30px; font-size: 14px; line-height: 1.6; }
-.tpl-presenter-mode-reveal .maturity-callout { margin-top: 22px; font-size: 16px; }
+.tpl-presenter-mode-reveal .step-notes { margin-top: 30px; font-size: 15px; line-height: 1.6; }
+.tpl-presenter-mode-reveal .maturity-callout { margin-top: 22px; font-size: 17px; }
 .tpl-presenter-mode-reveal .maturity-callout b { color: var(--accent-3); }
 
 /* ===== S8 CRISP-DM ===== */
-.tpl-presenter-mode-reveal .phase-row { margin-top: 34px; }
+.tpl-presenter-mode-reveal .phase-row { margin-top: 26px; }
 .tpl-presenter-mode-reveal .iter-quote {
   margin: 26px 0 0; text-align: center;
-  font-family: var(--font-mono, monospace); font-size: 13px;
+  font-family: var(--font-mono, monospace); font-size: 14px;
   color: var(--accent-3); letter-spacing: .02em;
 }
 
@@ -382,10 +391,10 @@
   padding: 13px 20px; border: 1px solid var(--border); border-radius: var(--radius);
   margin-bottom: 10px; background: var(--surface);
 }
-.tpl-presenter-mode-reveal .task-row b { font-size: 16px; color: var(--text-1); }
-.tpl-presenter-mode-reveal .task-row .dim { margin: 0; font-size: 14px; }
+.tpl-presenter-mode-reveal .task-row b { font-size: 17px; color: var(--text-1); }
+.tpl-presenter-mode-reveal .task-row .dim { margin: 0; font-size: 15px; }
 .tpl-presenter-mode-reveal .task-row .tag {
-  font-family: var(--font-mono, monospace); font-size: 11px; white-space: nowrap;
+  font-family: var(--font-mono, monospace); font-size: 12px; white-space: nowrap;
   padding: 3px 11px; border-radius: 999px;
   background: var(--accent); color: var(--accent-ink);
 }
@@ -399,30 +408,30 @@
   color: transparent;
 }
 .tpl-presenter-mode-reveal .fs-num .u {
-  font-size: 17px; font-weight: 600; margin-left: 12px; letter-spacing: 0;
+  font-size: 18px; font-weight: 600; margin-left: 12px; letter-spacing: 0;
   background: none; -webkit-text-fill-color: var(--text-2); color: var(--text-2);
 }
 .tpl-presenter-mode-reveal .fs-hero .dim { margin-top: 12px; }
 .tpl-presenter-mode-reveal .stack-line {
   margin: 16px 0 0; font-family: var(--font-mono, monospace);
-  font-size: 12px; color: var(--text-3); letter-spacing: .02em;
+  font-size: 13px; color: var(--text-3); letter-spacing: .02em;
 }
-.tpl-presenter-mode-reveal .fs-foot { margin-top: 20px; font-size: 15px; line-height: 1.65; }
+.tpl-presenter-mode-reveal .fs-foot { margin-top: 20px; font-size: 16px; line-height: 1.65; }
 .tpl-presenter-mode-reveal .fs-foot b { color: var(--accent-3); }
 
 /* ===== S11 训练与实验管理 ===== */
 .tpl-presenter-mode-reveal .grid.g4 { grid-template-columns: repeat(4, 1fr); }
-.tpl-presenter-mode-reveal .grid.g4 .card h4 { font-size: 17px; }
+.tpl-presenter-mode-reveal .grid.g4 .card h4 { font-size: 18px; }
 .tpl-presenter-mode-reveal .stat-chips {
   display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 12px;
 }
 .tpl-presenter-mode-reveal .stat-chips span {
-  font-family: var(--font-mono, monospace); font-size: 12px;
+  font-family: var(--font-mono, monospace); font-size: 13px;
   color: var(--accent-3); border: 1px solid var(--border-strong);
   border-radius: 999px; padding: 4px 12px; white-space: nowrap;
 }
 .tpl-presenter-mode-reveal .era-note {
-  margin: 26px 0 0; font-size: 14px; line-height: 1.6; color: var(--text-3);
+  margin: 26px 0 0; font-size: 15px; line-height: 1.6; color: var(--text-3);
 }
 
 /* ===== S12 部署 ===== */
@@ -439,10 +448,10 @@
 }
 .tpl-presenter-mode-reveal .qps-band .stat .k {
   margin-top: 10px; font-family: var(--font-mono, monospace);
-  font-size: 12px; color: var(--text-3); white-space: nowrap;
+  font-size: 13px; color: var(--text-3); white-space: nowrap;
 }
 .tpl-presenter-mode-reveal .qps-band .src {
-  margin: 0; font-size: 14px; line-height: 1.6; color: var(--text-2);
+  margin: 0; font-size: 15px; line-height: 1.6; color: var(--text-2);
 }
 
 /* ===== S15 故障分类 ===== */
@@ -451,7 +460,7 @@
 }
 .tpl-presenter-mode-reveal .fail-list li {
   padding: 9px 0; border-bottom: 1px solid var(--border);
-  font-size: 14px; line-height: 1.55; color: var(--text-2);
+  font-size: 15px; line-height: 1.55; color: var(--text-2);
 }
 .tpl-presenter-mode-reveal .fail-list li:last-child { border-bottom: none; }
 .tpl-presenter-mode-reveal .fail-list li b { color: var(--text-1); }
@@ -467,11 +476,11 @@
   font-size: 34px; font-weight: 700; color: var(--accent); line-height: 1;
 }
 .tpl-presenter-mode-reveal .join-mid .w {
-  font-family: var(--font-mono, monospace); font-size: 12px;
+  font-family: var(--font-mono, monospace); font-size: 13px;
   color: var(--text-3); letter-spacing: .12em;
 }
 .tpl-presenter-mode-reveal .log-row {
-  margin: 8px 0 0; padding: 6px 10px; font-size: 13px; line-height: 1.45;
+  margin: 8px 0 0; padding: 6px 10px; font-size: 14px; line-height: 1.45;
   color: var(--text-2); background: var(--bg-soft);
   border: 1px solid var(--border); border-radius: 8px; white-space: nowrap;
 }
@@ -484,17 +493,17 @@
 .tpl-presenter-mode-reveal .lvl .badge {
   flex: 0 0 auto; width: 46px; height: 30px; border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono, monospace); font-size: 13px; font-weight: 700;
+  font-family: var(--font-mono, monospace); font-size: 14px; font-weight: 700;
   background: color-mix(in srgb, var(--accent) var(--lv, 40%), transparent);
   color: var(--text-1);
 }
 .tpl-presenter-mode-reveal .lvl .badge.solid { background: var(--accent); color: var(--accent-ink); }
-.tpl-presenter-mode-reveal .lvl p { margin: 0; font-size: 14px; color: var(--text-2); }
-.tpl-presenter-mode-reveal .scope-note { margin-top: 14px; font-size: 12.5px; }
+.tpl-presenter-mode-reveal .lvl p { margin: 0; font-size: 15px; color: var(--text-2); }
+.tpl-presenter-mode-reveal .scope-note { margin-top: 14px; font-size: 13.5px; }
 
 /* ===== S19 章节页 · 三站进度 ===== */
 .tpl-presenter-mode-reveal .stage-flow {
-  display: flex; align-items: stretch; gap: 18px; margin-top: 64px;
+  display: flex; align-items: stretch; gap: 18px; margin-top: 44px;
 }
 .tpl-presenter-mode-reveal .stage {
   flex: 1; text-align: center; padding: 28px 12px;
@@ -502,10 +511,10 @@
   border-radius: var(--radius);
 }
 .tpl-presenter-mode-reveal .stage b { font-size: 22px; color: var(--text-1); }
-.tpl-presenter-mode-reveal .stage p { margin: 12px 0 0; font-size: 13px; color: var(--text-3); }
+.tpl-presenter-mode-reveal .stage p { margin: 12px 0 0; font-size: 14px; color: var(--text-3); }
 .tpl-presenter-mode-reveal .stage.hot { border-color: var(--accent); }
 .tpl-presenter-mode-reveal .stage-flow .stage-arrow {
-  align-self: center; color: var(--text-3); font-size: 20px; flex: 0 0 auto;
+  align-self: center; color: var(--text-3); font-size: 21px; flex: 0 0 auto;
 }
 
 /* ===== S21 三个数字 ===== */
@@ -520,13 +529,13 @@
 }
 .tpl-presenter-mode-reveal .tri .v.sm { font-size: 42px; padding: 10px 0; }
 .tpl-presenter-mode-reveal .tri .k {
-  margin: 14px 0 0; font-size: 14px; color: var(--text-2); line-height: 1.55;
+  margin: 14px 0 0; font-size: 15px; color: var(--text-2); line-height: 1.55;
 }
 .tpl-presenter-mode-reveal .tri .card.hot { border-color: var(--accent); }
 
 /* ===== S23 RAG 流水线 ===== */
 .tpl-presenter-mode-reveal .rag-flow {
-  display: flex; align-items: stretch; gap: 8px; margin-top: 40px;
+  display: flex; align-items: stretch; gap: 8px; margin-top: 30px;
 }
 .tpl-presenter-mode-reveal .rag-chip {
   flex: 1; text-align: center; padding: 22px 10px 18px;
@@ -534,16 +543,16 @@
   border-radius: var(--radius);
 }
 .tpl-presenter-mode-reveal .rag-chip .t {
-  display: block; font-size: 17px; font-weight: 700; color: var(--text-1);
+  display: block; font-size: 18px; font-weight: 700; color: var(--text-1);
 }
 .tpl-presenter-mode-reveal .rag-chip .d {
-  display: block; margin-top: 9px; font-size: 12px; line-height: 1.5; color: var(--text-3);
+  display: block; margin-top: 9px; font-size: 13px; line-height: 1.5; color: var(--text-3);
 }
 
 /* ===== S26 定义引文 ===== */
 .tpl-presenter-mode-reveal .def-quote {
   margin: 14px 0 0; font-family: var(--font-mono, monospace);
-  font-size: 12px; color: var(--text-3); letter-spacing: .01em;
+  font-size: 13px; color: var(--text-3); letter-spacing: .01em;
 }
 .tpl-presenter-mode-reveal .card.hot { border-color: var(--accent); }
 
@@ -558,51 +567,51 @@
 }
 .tpl-presenter-mode-reveal .pat .pn {
   display: inline-block; font-family: var(--font-mono, monospace);
-  font-size: 11px; color: var(--accent); border: 1px solid var(--border-strong);
+  font-size: 12px; color: var(--accent); border: 1px solid var(--border-strong);
   padding: 1px 9px; border-radius: 999px; margin-bottom: 12px;
 }
 .tpl-presenter-mode-reveal .pat b {
-  display: block; font-size: 15px; line-height: 1.3; color: var(--text-1); min-height: 40px;
+  display: block; font-size: 16px; line-height: 1.3; color: var(--text-1); min-height: 40px;
 }
 .tpl-presenter-mode-reveal .pat code {
   display: block; font-family: var(--font-mono, monospace);
-  font-size: 12px; color: var(--accent-3); margin: 8px 0 10px; white-space: nowrap;
+  font-size: 13px; color: var(--accent-3); margin: 8px 0 10px; white-space: nowrap;
 }
 .tpl-presenter-mode-reveal .pat p {
-  margin: 0; font-size: 12px; line-height: 1.55; color: var(--text-3);
+  margin: 0; font-size: 13px; line-height: 1.55; color: var(--text-3);
 }
 
 /* ===== S28 ReAct 轨迹 ===== */
 .tpl-presenter-mode-reveal .code-block.trace {
-  font-size: 13px; line-height: 1.9; white-space: pre-wrap;
+  font-size: 14px; line-height: 1.9; white-space: pre-wrap;
 }
 
 /* ===== S29 MCP 架构图 ===== */
 .tpl-presenter-mode-reveal .mcp-arch {
   display: grid; grid-template-columns: 1fr 150px 1fr; gap: 14px;
-  align-items: center; margin-top: 34px;
+  align-items: center; margin-top: 26px;
 }
 .tpl-presenter-mode-reveal .mcp-side {
   display: flex; flex-direction: column; gap: 8px;
 }
 .tpl-presenter-mode-reveal .mcp-side .chip {
   padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-  background: var(--surface); font-size: 13.5px; text-align: center; color: var(--text-1);
+  background: var(--surface); font-size: 14.5px; text-align: center; color: var(--text-1);
 }
 .tpl-presenter-mode-reveal .mcp-hub {
   padding: 18px 0; text-align: center; border: 1px solid var(--accent);
   border-radius: var(--radius); background: var(--surface);
-  font-size: 19px; font-weight: 800; color: var(--accent); letter-spacing: .06em;
+  font-size: 20px; font-weight: 800; color: var(--accent); letter-spacing: .06em;
 }
 .tpl-presenter-mode-reveal .mcp-hub span {
-  display: block; margin-top: 5px; font-size: 11.5px; font-weight: 400;
+  display: block; margin-top: 5px; font-size: 12.5px; font-weight: 400;
   color: var(--text-3); letter-spacing: .2em;
 }
 
 /* ===== S31 多智能体 ===== */
 .tpl-presenter-mode-reveal .ma-diagram { padding: 6px 0 2px; }
 .tpl-presenter-mode-reveal .ma-node {
-  padding: 11px 12px; text-align: center; font-size: 14px; color: var(--text-1);
+  padding: 11px 12px; text-align: center; font-size: 15px; color: var(--text-1);
   background: var(--bg-soft); border: 1px solid var(--border);
   border-radius: var(--radius-sm);
 }
@@ -613,7 +622,7 @@
 }
 .tpl-presenter-mode-reveal .ma-fan {
   display: flex; justify-content: space-around;
-  color: var(--text-3); font-size: 11px; padding: 4px 0; line-height: 1;
+  color: var(--text-3); font-size: 12px; padding: 4px 0; line-height: 1;
 }
 .tpl-presenter-mode-reveal .stat-card { text-align: center; padding: 26px 18px 22px; }
 .tpl-presenter-mode-reveal .stat-card + .stat-card { margin-top: 16px; }
@@ -623,7 +632,7 @@
   color: transparent;
 }
 .tpl-presenter-mode-reveal .stat-card .k {
-  margin: 12px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--text-2);
+  margin: 12px 0 0; font-size: 14.5px; line-height: 1.55; color: var(--text-2);
 }
 
 /* ===== S32 成本条形图 ===== */
@@ -632,7 +641,7 @@
   display: grid; grid-template-columns: 90px 1fr 58px; gap: 16px;
   align-items: center; padding: 9px 0;
 }
-.tpl-presenter-mode-reveal .cost-row .l { font-size: 14px; color: var(--text-2); }
+.tpl-presenter-mode-reveal .cost-row .l { font-size: 15px; color: var(--text-2); }
 .tpl-presenter-mode-reveal .cost-row.hot .l { color: var(--text-1); font-weight: 700; }
 .tpl-presenter-mode-reveal .cost-track {
   height: 22px; background: var(--bg-soft);
@@ -646,10 +655,10 @@
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
 }
 .tpl-presenter-mode-reveal .cost-row .val {
-  font-family: var(--font-mono, monospace); font-size: 15px;
+  font-family: var(--font-mono, monospace); font-size: 16px;
   color: var(--accent-3); text-align: right;
 }
-.tpl-presenter-mode-reveal .cost-chart .cap { margin: 14px 0 0; font-size: 12.5px; }
+.tpl-presenter-mode-reveal .cost-chart .cap { margin: 14px 0 0; font-size: 13.5px; }
 
 /* ===== S36 显存布局对比 ===== */
 .tpl-presenter-mode-reveal .mem-grid {
@@ -679,10 +688,10 @@
 .tpl-presenter-mode-reveal .fw-table th,
 .tpl-presenter-mode-reveal .fw-table td {
   padding: 15px 18px; text-align: left; vertical-align: top;
-  border-bottom: 1px solid var(--border); font-size: 14.5px; line-height: 1.55;
+  border-bottom: 1px solid var(--border); font-size: 15.5px; line-height: 1.55;
 }
 .tpl-presenter-mode-reveal .fw-table thead th {
-  font-size: 13px; font-weight: 600; color: var(--text-3);
+  font-size: 14px; font-weight: 600; color: var(--text-3);
   letter-spacing: .05em; border-bottom: 1px solid var(--border-strong);
 }
 .tpl-presenter-mode-reveal .fw-table thead th.agent { color: var(--accent-3); }
@@ -698,8 +707,8 @@
 
 /* ===== S45 小结 ===== */
 .tpl-presenter-mode-reveal .rule-row.sum { padding: 26px 26px; }
-.tpl-presenter-mode-reveal .rule-row.sum b { font-size: 21px; }
-.tpl-presenter-mode-reveal .rule-row.sum .dim { font-size: 15px; margin-top: 8px; }
+.tpl-presenter-mode-reveal .rule-row.sum b { font-size: 22px; }
+.tpl-presenter-mode-reveal .rule-row.sum .dim { font-size: 16px; margin-top: 8px; }
 
 /* ===== S46 双流水线 ===== */
 .tpl-presenter-mode-reveal .duo-grid {
@@ -707,14 +716,14 @@
 }
 .tpl-presenter-mode-reveal .duo-head span {
   text-align: center; font-family: var(--font-mono, monospace);
-  font-size: 12px; color: var(--text-3); letter-spacing: .1em; padding: 2px 0;
+  font-size: 13px; color: var(--text-3); letter-spacing: .1em; padding: 2px 0;
 }
 .tpl-presenter-mode-reveal .duo-label {
-  margin: 18px 0 8px; font-size: 14px; font-weight: 600; color: var(--text-2);
+  margin: 18px 0 8px; font-size: 15px; font-weight: 600; color: var(--text-2);
 }
 .tpl-presenter-mode-reveal .duo-label.llm { color: var(--accent-3); }
 .tpl-presenter-mode-reveal .duo-cell {
-  padding: 13px 6px; text-align: center; font-size: 13px; color: var(--text-1);
+  padding: 13px 6px; text-align: center; font-size: 14px; color: var(--text-1);
   background: var(--bg-soft); border: 1px solid var(--border);
   border-radius: var(--radius-sm); line-height: 1.4;
 }
@@ -742,7 +751,17 @@
   align-items: center; justify-content: center;
   gap: 36px;
 }
-.tpl-presenter-mode-reveal .qa-center .qa-final { margin-top: 0; font-size: 56px; }
+/* S47 收尾：大号普通字重、纯色（去掉渐变加粗，投影可读） */
+.tpl-presenter-mode-reveal .qa-center .qa-final {
+  margin-top: 0;
+  font-size: 96px;
+  font-weight: 400;
+  letter-spacing: .08em;
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  color: var(--text-1);
+}
 .tpl-presenter-mode-reveal .qa-qr {
   width: 400px; --img-ratio: 1/1;
   background: #fff; border: none;
@@ -757,7 +776,7 @@
   border: 2px dashed color-mix(in srgb, var(--accent) 45%, transparent);
   border-radius: var(--radius-sm);
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono, monospace); font-size: 13px;
+  font-family: var(--font-mono, monospace); font-size: 14px;
   color: var(--text-3); letter-spacing: .06em;
 }
 .tpl-presenter-mode-reveal .duo-cell.done { border-color: color-mix(in srgb, var(--good) 55%, transparent); }
@@ -778,7 +797,7 @@
 }
 .tpl-presenter-mode-reveal .att-frac .frac .top,
 .tpl-presenter-mode-reveal .att-frac .frac .bot {
-  font-size: 21px; font-weight: 700; color: var(--text-1);
+  font-size: 22px; font-weight: 700; color: var(--text-1);
 }
 .tpl-presenter-mode-reveal .att-frac .frac .bar {
   width: 100%; height: 2px; background: var(--accent);
@@ -794,17 +813,17 @@
 .tpl-presenter-mode-reveal .pass-num {
   font-size: 26px; font-weight: 800; color: var(--accent); line-height: 1;
 }
-.tpl-presenter-mode-reveal .pass-head b { display: block; font-size: 18px; color: var(--text-1); }
+.tpl-presenter-mode-reveal .pass-head b { display: block; font-size: 19px; color: var(--text-1); }
 .tpl-presenter-mode-reveal .pass-meta {
-  font-family: var(--font-mono, monospace); font-size: 12px; color: var(--text-3);
+  font-family: var(--font-mono, monospace); font-size: 13px; color: var(--text-3);
 }
 .tpl-presenter-mode-reveal .card .teaser {
-  margin: 12px 0 0; font-size: 15px; font-weight: 600; color: var(--accent-3);
+  margin: 12px 0 0; font-size: 16px; font-weight: 600; color: var(--accent-3);
   font-family: var(--font-mono, monospace); letter-spacing: .01em;
 }
 
 /* ===== S8 特征页：适配 1600x900 画布，收紧纵向留白防裁切 ===== */
-.tpl-presenter-mode-reveal section[data-title="S8 特征与训练服务一致性"] { padding: 46px 88px; }
+.tpl-presenter-mode-reveal section[data-title="S8 特征与训练服务一致性"] { padding: 44px 64px; }
 .tpl-presenter-mode-reveal section[data-title="S8 特征与训练服务一致性"] .stage { padding: 18px 12px; }
 .tpl-presenter-mode-reveal section[data-title="S8 特征与训练服务一致性"] .grid.g3 { gap: 14px; margin-top: 14px; }
 .tpl-presenter-mode-reveal section[data-title="S8 特征与训练服务一致性"] .grid.g3 .card { padding: 14px 18px; }
@@ -817,11 +836,11 @@
 .tpl-presenter-mode-reveal section[data-title="S14 Michelangelo 闭环实现"] .fs-foot { margin-top: 14px; }
 
 /* ===== 案例大图页（S19-S22）===== */
-.tpl-presenter-mode-reveal .case-shot { padding: 44px 72px 60px; }
+.tpl-presenter-mode-reveal .case-shot { padding: 40px 60px 48px; }
 .tpl-presenter-mode-reveal .case-shot .big-shot { flex: 1 1 auto; min-height: 0; aspect-ratio: auto; }
 .tpl-presenter-mode-reveal .shot-cap {
   display: flex; justify-content: space-between; gap: 16px;
-  margin-top: 14px; font-size: 14px; color: var(--text-3); line-height: 1.5;
+  margin-top: 14px; font-size: 15px; color: var(--text-3); line-height: 1.5;
 }
 .tpl-presenter-mode-reveal .shot-cap b { color: var(--text-2); }
 
@@ -830,7 +849,51 @@
 .tpl-presenter-mode-reveal .slide[data-title="S39 幻觉检测"] .card h4 { margin-bottom: 4px; }
 .tpl-presenter-mode-reveal .slide[data-title="S39 幻觉检测"] .stat-card { padding: 16px 14px 14px; }
 .tpl-presenter-mode-reveal .slide[data-title="S39 幻觉检测"] .stat-card .v { font-size: 38px; }
-.tpl-presenter-mode-reveal .slide[data-title="S39 幻觉检测"] .stat-card .k { margin-top: 8px; font-size: 12.5px; }
+.tpl-presenter-mode-reveal .slide[data-title="S39 幻觉检测"] .stat-card .k { margin-top: 8px; font-size: 13.5px; }
 .tpl-presenter-mode-reveal .slide[data-title="S39 幻觉检测"] .feature-row { padding: 7px 0; }
-.tpl-presenter-mode-reveal .slide[data-title="S39 幻觉检测"] .feature-row .dim { font-size: 13px; line-height: 1.5; }
+.tpl-presenter-mode-reveal .slide[data-title="S39 幻觉检测"] .feature-row .dim { font-size: 14px; line-height: 1.5; }
 .tpl-presenter-mode-reveal .slide[data-title="S39 幻觉检测"] .era-note { margin-top: 12px; }
+
+/* ===== 大屏可读性 II：稀疏页整体放大（zoom 只缩放版式，文字内容不动） =====
+ * 按逐页实测底部剩余空间分档：≥130px 放大 15%，90-129px 放大 12%；密集页不动。 */
+.tpl-presenter-mode-reveal section[data-title="S2 今天的主题"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S3 第 1 节 传统机器学习"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S4 Google 的 8 步"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S5 互动提问"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S6 答案 80% 在数据"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S9 训练与实验管理"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S10 部署上线"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S11 上线验证策略"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S12 模型漂移"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S25 第 2 节 LLM 时代"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S26 模型从哪来"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S27 三个数字"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S29 ACI 工具设计"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S32 执行环境与安全"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S36 第 3 节 上线之后"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S37 推理速览"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S38 监控四维度"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S45 一条生命周期两个时代"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S46 什么变了什么没变"] > *:not(.notes) { zoom: 1.15; }
+
+.tpl-presenter-mode-reveal section[data-title="S7 数据环节"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S13 故障分类与代理指标"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S16 成熟度模型"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S23 案例·部署优化三板斧"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S31 上下文工程"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S33 五种编排模式"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S35 工程忠告"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S42 数据飞轮对照"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S43 发布流程"] > *:not(.notes),
+.tpl-presenter-mode-reveal section[data-title="S44 第 3 节小结"] > *:not(.notes) { zoom: 1.12; }
+
+/* 页脚出处行 10.8px 太小，提到 13px；mono 不设下限会跟着缩 */
+.tpl-presenter-mode-reveal .deck-footer { font-size: 13px; }
+.tpl-presenter-mode-reveal .mono { font-size: max(0.9em, 13px); }
+
+/* 页脚左下注释说明已注释：页码钉在右下角 */
+.tpl-presenter-mode-reveal .deck-footer .slide-number { margin-left: auto; }
+
+/* S28 MCP：内容微超约 5px，收紧两侧 chip 内边距 */
+.tpl-presenter-mode-reveal section[data-title="S28 MCP"] .mcp-side .chip { padding: 6px 14px; }
+.tpl-presenter-mode-reveal section[data-title="S28 MCP"] .mcp-side { gap: 6px; }
